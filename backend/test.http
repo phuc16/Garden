@@ -1,0 +1,10 @@
+POST http://localhost:5000/data
+Content-Type: application/json
+
+{
+    "id" : 2,
+    "category": "Light",
+    "value" : 15,
+    "id_garden" : 1,
+    "time" : "2001-08-20"
+}

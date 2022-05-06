@@ -3,6 +3,6 @@ const router = express.Router();
 
 const garden = require('../app/controllers/garden.controller');
 
-router.get('/:id', garden.getGardenStatistic)
+router.get('/', garden.getGardenStatistic)
 
 module.exports = router;

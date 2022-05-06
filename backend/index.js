@@ -1,12 +1,13 @@
-const path = require('path')
 const express = require("express");
 const cors = require("cors");
 var cookieParser = require("cookie-parser"); 
 const route = require('./routes')
 
+const db = require('./config/db')
+
 const app = express();
 
-app.use(express.static(path.join(__dirname, 'public')));
+db.connect();
 
 app.use(cookieParser());
 

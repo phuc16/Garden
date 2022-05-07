@@ -8,9 +8,9 @@ exports.findById = (id, result) => {
             return;
         }
 
-        if (res.length) {
-            console.log("found device: ", res[0]);
-            result(null, res[0]);
+        if (res.rowCount) {
+            console.log("found device: ", res);
+            result(null, res);
             return;
         }
 

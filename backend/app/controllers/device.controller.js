@@ -1,5 +1,5 @@
-const service = require('./insertService')
-const device = require('../models/device.model')
+const service = require('./insertService');
+const device = require('../models/device.model');
 
 exports.getAllDevices = (req, res) => {
     device.getAll((err, data) => {
@@ -8,7 +8,7 @@ exports.getAllDevices = (req, res) => {
             message:
                 err.message || "Some errors occurred while retrieving device."
             });
-        else res.send(data);
+        else res.send(data.rows);
     });
 }
 
@@ -26,7 +26,7 @@ exports.getDeviceById = (req, res) => {
                 });
             }
         } 
-        else res.send(data);
+        else res.send(data.rows);
     }); 
 }
 

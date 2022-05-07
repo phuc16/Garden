@@ -1,5 +1,6 @@
 const device = require('../models/device.model');
-const schedule = require('../models/schedule.model')
+const schedule = require('../models/schedule.model');
+const service = require('./insertService');
 
 exports.getScheduleByDeviceId = (req, res, err) => {
     if (!req.query.startDay || !req.query.endDay) {
@@ -18,7 +19,7 @@ exports.getScheduleByDeviceId = (req, res, err) => {
         return
     }
 
-    device.findById(req.params.device_id, (err, data) => {
+    schedule.findById(req.params.device_id, (err, data) => {
         if (err) {
             if (err.kind === "not_found") {
                 res.status(404).send({
@@ -44,14 +45,14 @@ exports.getScheduleByDeviceId = (req, res, err) => {
                         message:
                             err.message || "Some error occurred while retrieving device."
                     });
-                else res.send(data);
+                else res.send(data.rows);
             });
         }
     });
 }
 
 exports.getScheduleById = (req, res) => {
-    device.findById(req.params.id, (err, data) => {
+    schedule.findById(req.params.id, (err, data) => {
         if (err) {
             if (err.kind === "not_found") {
                 res.status(404).send({
@@ -64,7 +65,7 @@ exports.getScheduleById = (req, res) => {
                 });
             }
         } 
-        else res.send(data);
+        else res.send(data.rows);
     }); 
 }
 
@@ -96,7 +97,7 @@ exports.getAllSchedules = (req, res, err) => {
                 message:
                     err.message || "Some error occurred while retrieving device."
             });
-        else res.send(data);
+        else res.send(data.rows);
     });
 }
 

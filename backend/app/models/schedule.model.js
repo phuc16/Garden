@@ -23,9 +23,9 @@ exports.findById = (id, result) => {
             return;
         }
 
-        if (res.length) {
-            console.log("found schedule: ", res[0]);
-            result(null, res[0]);
+        if (res.rowCount) {
+            console.log("found schedule: ", res);
+            result(null, res);
             return;
         }
 

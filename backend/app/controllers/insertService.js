@@ -34,7 +34,6 @@ exports.insertIntoTable = (tableName, data) => {
 
 
 exports.updateById = (tableName, data, id) => {
-
     db.query(`SELECT * FROM gardens WHERE id = ${id}`, (err,result) => {
         if (err) console.log("1 " , err)
         else {

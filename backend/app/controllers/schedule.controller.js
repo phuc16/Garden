@@ -18,22 +18,22 @@ exports.getSchedule = (req, res, err) => {
         return
     }
 
-    device.findById(req.params.id, (err, data) => {
+    device.findById(req.params.device_id, (err, data) => {
         if (err) {
             if (err.kind === "not_found") {
                 res.status(404).send({
-                    message: `Not found Device with id ${req.params.id}.`
+                    message: `Not found Device with id ${req.params.device_id}.`
                 });
             } 
             else {
                 res.status(500).send({
-                    message: `Error retrieving Device with id ${req.params.id}.`
+                    message: `Error retrieving Device with id ${req.params.device_id}.`
                 });
             }
         } 
         else {
             body = {
-                id: req.params.id,
+                id: req.params.device_id,
                 startDate: req.query.startDay,
                 endDate: req.query.endDate
             };

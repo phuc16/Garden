@@ -35,7 +35,7 @@ exports.getSchedule = (req, res, err) => {
             body = {
                 id: req.params.device_id,
                 startDate: req.query.startDay,
-                endDate: req.query.endDate
+                endDate: req.query.endDay
             };
 
             schedule.getSchedule(body, (err, data) => {

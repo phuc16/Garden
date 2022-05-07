@@ -8,3 +8,9 @@ Content-Type: application/json
     "id_garden" : 1,
     "time" : "2001-08-20"
 }
+
+###
+GET http://localhost:5000/data/search?idGarden=1&startDay=2000-01-01&endDay=2010-03-05
+
+###
+GET http://localhost:5000/garden

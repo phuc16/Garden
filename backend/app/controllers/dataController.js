@@ -1,25 +1,37 @@
 const db = require('../../config/db');
 const { insertIntoTable } = require('./insertService')
 
+
+// GET /search?idGarden=&startDay=&endDay=
 exports.getDataInfo = (req, res) => {
     if (!req.query.startDay || !req.query.endDay) {
-        // res.send("Miss Day")
-        res.send(req.query)
-        res.status(400)
+        res.status(400).send({
+            message:
+              err.message || "Miss date!"
+          });
         return
     }
 
-    db.query(`SELECT * FROM datas WHERE time > '${req.query.startDay}' AND time < '${req.query.endDay}'`, (err,result) => {
-        console.log(result);  
-        res.send(result)
+    if (new Date(req.query.startDay) > new Date(req.query.endDay)) {
+        res.status(400).send({
+            message:
+              err.message || "Invalid date!"
+          });
+        return
+    }
+
+    db.query(`SELECT * FROM datas WHERE id_garden = ${req.query.idGarden}
+              AND time > '${req.query.startDay}' AND time < '${req.query.endDay}'`, (err,result) => {
+                  if (err) res.send({"error" : err})
+                  else res.send(result.rows)
     })
 }
 
 
 exports.getAlldata = (req, res) => {
     db.query("SELECT * FROM datas" , (err,result) => {
-        console.log(result);  
-        res.send(result)
+        if (err) res.send({"error" : err})
+        else res.send(result.rows)
     })
 }
 

@@ -1,10 +1,10 @@
 const gardenRouter = require('./garden.router')
-const deviceRouter = require('./device.router')
+const scheduleRouter = require('./schedule.router')
 const dataRouter = require('./data.router.js')
 
 function route(app) {
     app.use('/garden', gardenRouter)
-    app.use('/device', deviceRouter)
+    app.use('/schedule', scheduleRouter)
     app.use('/data', dataRouter)
 }
 

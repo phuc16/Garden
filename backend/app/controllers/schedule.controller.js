@@ -45,7 +45,13 @@ exports.getScheduleByDeviceId = (req, res, err) => {
                         message:
                             err.message || "Some error occurred while retrieving device."
                     });
-                else res.send(data.rows);
+                else {
+                    for (let row of data.rows){
+                        row['time_start'] = row['time_start'].toLocaleString('en-GB');
+                        row['time_end'] = row['time_end'].toLocaleString('en-GB');
+                    }
+                    res.send(data.rows);
+                }
             });
         }
     });
@@ -65,7 +71,13 @@ exports.getScheduleById = (req, res) => {
                 });
             }
         } 
-        else res.send(data.rows);
+        else {
+            for (let row of data.rows){
+                row['time_start'] = row['time_start'].toLocaleString('en-GB');
+                row['time_end'] = row['time_end'].toLocaleString('en-GB');
+            }
+            res.send(data.rows);
+        }
     }); 
 }
 
@@ -97,7 +109,13 @@ exports.getAllSchedules = (req, res, err) => {
                 message:
                     err.message || "Some error occurred while retrieving device."
             });
-        else res.send(data.rows);
+            else {
+                for (let row of data.rows){
+                    row['time_start'] = row['time_start'].toLocaleString('en-GB');
+                    row['time_end'] = row['time_end'].toLocaleString('en-GB');
+                }
+                res.send(data.rows);
+            }
     });
 }
 

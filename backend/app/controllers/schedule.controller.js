@@ -119,12 +119,44 @@ exports.getAllSchedules = (req, res, err) => {
     });
 }
 
-exports.insertSchedule = (req, res) => {
+exports.insertSchedule = (req, res, err) => {
+    if (!req.body.time_start || !req.body.time_end) {
+        res.status(400).send({
+            message:
+              err.message || "Miss date!"
+          });
+        return
+    }
+
+    if (new Date(req.body.time_start) > new Date(req.body.time_end)) {
+        res.status(400).send({
+            message:
+              err.message || "Invalid date!"
+          });
+        return
+    }
+
     service.insertIntoTable('schedules', req.body)
     res.send(req.body)
 }
 
-exports.updateSchedule = (req, res) => {
+exports.updateSchedule = (req, res, err) => {
+    if (!req.body.time_start || !req.body.time_end) {
+        res.status(400).send({
+            message:
+              err.message || "Miss date!"
+          });
+        return
+    }
+
+    if (new Date(req.body.time_start) > new Date(req.body.time_end)) {
+        res.status(400).send({
+            message:
+              err.message || "Invalid date!"
+          });
+        return
+    }
+
     service.updateById('schedules', req.body, req.params.id)
     res.send(req.body)
 }

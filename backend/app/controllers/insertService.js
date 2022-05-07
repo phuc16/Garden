@@ -8,7 +8,7 @@ exports.insertIntoTable = (tableName, data) => {
         WHERE table_name   = ($1)`, [tableName], (err, result) => {
             if (err) {
                 console.log(err)
-                return 
+                throw err 
             }
             let columns = ""
             let datas = ""
@@ -35,7 +35,7 @@ exports.insertIntoTable = (tableName, data) => {
             let queryString = `INSERT INTO ${tableName}(${columns.slice(1)}) VALUES (${datas.slice(1)})`
             console.log(queryString)
             db.query(queryString, (err,result) => {
-                if (err) console.log(err)
+                if (err) throw err 
                 else {
                     console.log(result);  
                 }

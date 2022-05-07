@@ -7,6 +7,8 @@ router.get('/statistic', garden.getGardenStatistic)
 
 router.get('/', garden.getAllGarden)
 
+router.get('/:id', garden.getGardenById)
+
 router.post('/', garden.insertGarden)
 
 router.put('/:id', garden.updateGarden)

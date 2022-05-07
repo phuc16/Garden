@@ -10,16 +10,25 @@ exports.getDataInfo = (req, res) => {
     }
 
     db.query(`SELECT * FROM datas WHERE time > '${req.query.startDay}' AND time < '${req.query.endDay}'`, (err,result) => {
-        console.log(result);  
-        res.send(result)
+        console.log(result.rows);  
+        res.send(result.rows)
     })
 }
 
 
+exports.getDatabyGarden = (req, res) => {
+    db.query(`SELECT * FROM datas WHERE id_garden = ${req.params.id}` , (err,result) => {
+        console.log(result.rows);  
+        res.send(result.rows)
+    })
+}
+
+
+
 exports.getAlldata = (req, res) => {
     db.query("SELECT * FROM datas" , (err,result) => {
-        console.log(result);  
-        res.send(result)
+        console.log(result.rows);  
+        res.send(result.rows)
     })
 }
 

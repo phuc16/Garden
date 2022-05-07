@@ -5,9 +5,12 @@ const user = require('../app/controllers/user.controller');
 
 
 
-router.get('/:id', user.getUserById)
 
 router.get('/search-by-garden/:id', user.getUserByGarden)
+
+router.get('/:id', user.getUserById)
+
+router.get('/garden', user.getGardenByUser)
 
 router.post('/', user.insertUser)
 

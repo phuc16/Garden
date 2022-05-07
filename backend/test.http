@@ -14,3 +14,44 @@ GET http://localhost:5000/data/search?idGarden=1&startDay=2000-01-01&endDay=2010
 
 ###
 GET http://localhost:5000/garden
+
+###
+POST http://localhost:5000/garden
+Content-Type: application/json
+
+{
+    "id": 2,
+    "area": 100,
+    "name": "TM"
+}
+
+###
+PUT http://localhost:5000/garden/2
+Content-Type: application/json
+
+{
+    "id": 2,
+    "area": 1111,
+    "name": "hehehe siuuuuu"
+}
+
+
+###
+DELETE http://localhost:5000/garden/2
+
+
+###
+GET http://localhost:5000/user/search-by-garden/2
+
+###
+POST http://localhost:5000/user
+Content-Type: application/json
+
+{
+    "id": 1,
+    "account": "tienminh0801",
+    "password": "password",
+    "role" : "ADMIN"
+}
+
+###

@@ -11,5 +11,8 @@ router.post('/', garden.insertGarden)
 
 router.put('/:id', garden.updateGarden)
 
+router.delete('/:id', garden.deleteGarden)
+
+
 
 module.exports = router;

@@ -3,15 +3,9 @@ const cors = require("cors");
 var cookieParser = require("cookie-parser"); 
 const route = require('./routes')
 
-
 const app = express();
 
-
-
-
 app.use(cookieParser());
-
-
 
 var allowCrossDomain = (req, res, next) => {
   res.header('Access-Control-Allow-Origin', 'http://localhost:3000');

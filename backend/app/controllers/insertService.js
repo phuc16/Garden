@@ -16,14 +16,12 @@ exports.insertIntoTable = (tableName, data) => {
                 if (x.column_name === 'id') continue;
                 console.log(x.column_name)
 
-                // đoạn này khác múi giờ nên t phải +1 day lên
-                if (x.column_name.includes('time')){
-                    day = new Date(data[x.column_name])
-                    day.setDate(day.getDate() + 1);
-                    data[x.column_name] = day.toISOString()
-                    console.log(data[x.column_name])
-                }
-                //
+                // if (x.column_name.includes('time')){
+                //     day = new Date(data[x.column_name])
+                //     day.setDate(day.getDate() + 1);
+                //     data[x.column_name] = day.toISOString()
+                //     console.log(data[x.column_name])
+                // }
 
                 if (typeof data[x.column_name] === 'string')                     
                     datas += ",'" + data[x.column_name] + "'"
@@ -138,14 +136,12 @@ exports.updateById = (tableName, data, id) => {
                         if (x.column_name === 'id') continue;
                         console.log(x.column_name)
 
-                        // đoạn này khác múi giờ nên t phải +1 day lên
-                        if (x.column_name.includes('time')){
-                            day = new Date(data[x.column_name])
-                            day.setDate(day.getDate() + 1);
-                            data[x.column_name] = day.toISOString()
-                            console.log(data[x.column_name])
-                        }
-                        //
+                        // if (x.column_name.includes('time')){
+                        //     day = new Date(data[x.column_name])
+                        //     day.setDate(day.getDate() + 1);
+                        //     data[x.column_name] = day.toISOString()
+                        //     console.log(data[x.column_name])
+                        // }
                         
                         updateString += `, ${x.column_name} = ${(typeof data[x.column_name] === 'string') ? `'${data[x.column_name]}'`
                         : data[x.column_name]}` 
@@ -154,11 +150,11 @@ exports.updateById = (tableName, data, id) => {
                     let queryString = `UPDATE ${tableName} SET${updateString.slice(1)} WHERE id = ${id}`
                     console.log(queryString)
                     db.query(queryString, (err,result) => {
-                            if (err) console.log(err)
-                            else {
-                                console.log(result);  
-                            }
-                        })
+                        if (err) console.log(err)
+                        else {
+                            console.log(result);  
+                        }
+                    })
                 })                
             }
         }

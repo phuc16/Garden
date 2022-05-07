@@ -31,7 +31,6 @@ exports.getDeviceById = (req, res) => {
 }
 
 exports.insertDevice = (req, res) => {
-    // console.log ()
     service.insertIntoTable('devices', req.body)
     res.send(req.body)
 }

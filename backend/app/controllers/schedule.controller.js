@@ -45,7 +45,13 @@ exports.getScheduleByDeviceId = (req, res, err) => {
                         message:
                             err.message || "Some error occurred while retrieving device."
                     });
-                else res.send(data.rows);
+                else {
+                    for (let row of data.rows){
+                        row['time_start'] = row['time_start'].toLocaleString('en-GB');
+                        row['time_end'] = row['time_end'].toLocaleString('en-GB');
+                    }
+                    res.send(data.rows);
+                }
             });
         }
     });
@@ -65,7 +71,13 @@ exports.getScheduleById = (req, res) => {
                 });
             }
         } 
-        else res.send(data.rows);
+        else {
+            for (let row of data.rows){
+                row['time_start'] = row['time_start'].toLocaleString('en-GB');
+                row['time_end'] = row['time_end'].toLocaleString('en-GB');
+            }
+            res.send(data.rows);
+        }
     }); 
 }
 
@@ -97,16 +109,54 @@ exports.getAllSchedules = (req, res, err) => {
                 message:
                     err.message || "Some error occurred while retrieving device."
             });
-        else res.send(data.rows);
+            else {
+                for (let row of data.rows){
+                    row['time_start'] = row['time_start'].toLocaleString('en-GB');
+                    row['time_end'] = row['time_end'].toLocaleString('en-GB');
+                }
+                res.send(data.rows);
+            }
     });
 }
 
-exports.insertSchedule = (req, res) => {
+exports.insertSchedule = (req, res, err) => {
+    if (!req.body.time_start || !req.body.time_end) {
+        res.status(400).send({
+            message:
+              err.message || "Miss date!"
+          });
+        return
+    }
+
+    if (new Date(req.body.time_start) > new Date(req.body.time_end)) {
+        res.status(400).send({
+            message:
+              err.message || "Invalid date!"
+          });
+        return
+    }
+
     service.insertIntoTable('schedules', req.body)
     res.send(req.body)
 }
 
-exports.updateSchedule = (req, res) => {
+exports.updateSchedule = (req, res, err) => {
+    if (!req.body.time_start || !req.body.time_end) {
+        res.status(400).send({
+            message:
+              err.message || "Miss date!"
+          });
+        return
+    }
+
+    if (new Date(req.body.time_start) > new Date(req.body.time_end)) {
+        res.status(400).send({
+            message:
+              err.message || "Invalid date!"
+          });
+        return
+    }
+
     service.updateById('schedules', req.body, req.params.id)
     res.send(req.body)
 }

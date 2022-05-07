@@ -107,7 +107,7 @@ exports.insertSchedule = (req, res) => {
 }
 
 exports.updateSchedule = (req, res) => {
-    service.updateById('schedules', res.body, req.params.id)
+    service.updateById('schedules', req.body, req.params.id)
     res.send(req.body)
 }
 

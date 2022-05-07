@@ -31,12 +31,13 @@ exports.getDeviceById = (req, res) => {
 }
 
 exports.insertDevice = (req, res) => {
+    // console.log ()
     service.insertIntoTable('devices', req.body)
     res.send(req.body)
 }
 
 exports.updateDevice = (req, res) => {
-    service.updateById('devices', res.body, req.params.id)
+    service.updateById('devices', req.body, req.params.id)
     res.send(req.body)
 }
 

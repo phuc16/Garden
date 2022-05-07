@@ -34,8 +34,8 @@ exports.getScheduleByDeviceId = (req, res, err) => {
         else {
             body = {
                 id: req.params.device_id,
-                startDate: req.query.startDay,
-                endDate: req.query.endDay
+                startDay: req.query.startDay,
+                endDay: req.query.endDay
             };
 
             schedule.getScheduleByDeviceId(body, (err, data) => {
@@ -86,8 +86,8 @@ exports.getAllSchedules = (req, res, err) => {
     }
 
     body = {
-        startDate: req.query.startDay,
-        endDate: req.query.endDay
+        startDay: req.query.startDay,
+        endDay: req.query.endDay
     };
 
     schedule.getAll(body, (err, data) => {

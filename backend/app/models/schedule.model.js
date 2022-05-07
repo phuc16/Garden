@@ -1,7 +1,7 @@
 const db = require('../../config/db');
 
 exports.getScheduleByDeviceId = (body, result) =>{
-    let query = `SELECT * FROM schedules WHERE id_device = ${body.id} AND time > '${body.startDay}' AND time < '${body.endDay}`;
+    let query = `SELECT * FROM schedules WHERE id_device = ${body.id} AND time_start >= '${body.startDay}' AND time_end <= '${body.endDay}'`;
 
     db.query(query, (err, res) => {
         if (err) {
@@ -34,7 +34,7 @@ exports.findById = (id, result) => {
 };
 
 exports.getAll = (body, result) =>{
-    let query = `SELECT * FROM schedules WHERE time > '${body.startDay}' AND time < '${body.endDay}`;
+    let query = `SELECT * FROM schedules WHERE time_start >= '${body.startDay}' AND time_end <= '${body.endDay}'`;
 
     db.query(query, (err, res) => {
         if (err) {

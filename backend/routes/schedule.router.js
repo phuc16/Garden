@@ -3,9 +3,9 @@ const router = express.Router();
 
 const schedule = require('../app/controllers/schedule.controller');
 
-router.get('/device/:device_id', schedule.getScheduleByDeviceId)
+router.get('/device/:device_id', schedule.getScheduleByDeviceId) //with start and end dates
 
-router.get('/', schedule.getAllSchedules)
+router.get('/', schedule.getAllSchedules) //with start and end dates
 
 router.get('/:id', schedule.getScheduleById)
 

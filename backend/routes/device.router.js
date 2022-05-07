@@ -15,5 +15,4 @@ router.delete('/', device.deleteAll);
 
 router.delete('/:id', device.deleteId);
 
-
 module.exports = router;

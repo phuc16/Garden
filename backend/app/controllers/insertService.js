@@ -115,50 +115,40 @@ exports.insertIntoTable = (tableName, data) => {
 // }
 
 exports.updateById = (tableName, data, id) => {
-    db.query(`SELECT * FROM gardens WHERE id = ${id}`, (err,result) => {
-        if (err) console.log("1 " , err)
-        else {
-            if (result.rows.length == 0) {
-                insertIntoTable('gardens', req.body)
-            }
-            else {        
-                db.query(`
-                SELECT column_name 
-                FROM information_schema.columns 
-                WHERE table_name   = ($1)`, [tableName], (err,result) => {
-                    if (err) {
-                        console.log(err)
-                        return 
-                    }
-                    let updateString = ""
-                    console.log(result)
-                    for (let x of result.rows) {
-                        if (x.column_name === 'id') continue;
-                        console.log(x.column_name)
-
-                        // if (x.column_name.includes('time')){
-                        //     day = new Date(data[x.column_name])
-                        //     day.setDate(day.getDate() + 1);
-                        //     data[x.column_name] = day.toISOString()
-                        //     console.log(data[x.column_name])
-                        // }
-                        
-                        updateString += `, ${x.column_name} = ${(typeof data[x.column_name] === 'string') ? `'${data[x.column_name]}'`
-                        : data[x.column_name]}` 
-                                        
-                    }
-                    let queryString = `UPDATE ${tableName} SET${updateString.slice(1)} WHERE id = ${id}`
-                    console.log(queryString)
-                    db.query(queryString, (err,result) => {
-                        if (err) console.log(err)
-                        else {
-                            console.log(result);  
-                        }
-                    })
-                })                
-            }
+     
+    db.query(`
+    SELECT column_name 
+    FROM information_schema.columns 
+    WHERE table_name   = ($1)`, [tableName], (err,result) => {
+        if (err) {
+            console.log(err)
+            return 
         }
-    })
+        let updateString = ""
+        console.log(result)
+        for (let x of result.rows) {
+            if (x.column_name === 'id') continue;
+            console.log(x.column_name)
 
+            // if (x.column_name.includes('time')){
+            //     day = new Date(data[x.column_name])
+            //     day.setDate(day.getDate() + 1);
+            //     data[x.column_name] = day.toISOString()
+            //     console.log(data[x.column_name])
+            // }
+            
+            updateString += `, ${x.column_name} = ${(typeof data[x.column_name] === 'string') ? `'${data[x.column_name]}'`
+            : data[x.column_name]}` 
+                            
+        }
+        let queryString = `UPDATE ${tableName} SET${updateString.slice(1)} WHERE id = ${id}`
+        console.log(queryString)
+        db.query(queryString, (err,result) => {
+            if (err) console.log(err)
+            else {
+                console.log(result);  
+            }
+        })
+    })                
 }
 

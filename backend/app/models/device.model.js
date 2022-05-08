@@ -39,7 +39,7 @@ exports.deleteById = (id, result) => {
             return;
         }
 
-        if (res.affectedRows == 0) {
+        if (res.rowCount == 0) {
             result({ kind: "not_found" }, null);
             return;
         }

@@ -55,8 +55,8 @@ exports.deleteById = (id, result) => {
             result(null, err);
             return;
         }
-
-        if (res.affectedRows == 0) {
+        console.log(res)
+        if (res.rowCount == 0) {
             result({ kind: "not_found" }, null);
             return;
         }

@@ -19,7 +19,7 @@ exports.getScheduleByDeviceId = (req, res, err) => {
         return
     }
 
-    schedule.findById(req.params.device_id, (err, data) => {
+    device.findById(req.params.device_id, (err, data) => {
         if (err) {
             if (err.kind === "not_found") {
                 res.status(404).send({

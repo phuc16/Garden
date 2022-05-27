@@ -1,6 +1,7 @@
 const device = require('../models/device.model');
 const schedule = require('../models/schedule.model');
 const service = require('./Service');
+const axios = require('axios')
 
 exports.getScheduleByDeviceId = (req, res, err) => {
     if (!req.query.startDay || !req.query.endDay) {
@@ -119,6 +120,12 @@ exports.getAllSchedules = (req, res, err) => {
     });
 }
 
+
+exports.getAllScheduleUnfulfilled = (req, res, err) => {
+    schedule.getAllScheduleUnfulfilled(res)
+}
+
+
 exports.insertSchedule = (req, res, err) => {
     if (!req.body.time_start || !req.body.time_end) {
         res.status(400).send({
@@ -135,7 +142,14 @@ exports.insertSchedule = (req, res, err) => {
           });
         return
     }
-
+    axios.get(`https://io.adafruit.com/api/v2/mp5navy/feeds/sync/data/last`
+            , { headers : { "X-AIO-Key": "aio_rKEU43c1eB2HeL1fYuMm4JPjOket" } })
+            .then(adafruitResponse => {
+                axios.put(`https://io.adafruit.com/api/v2/mp5navy/feeds/sync/data/${adafruitResponse.data.id}`
+                            , { "datum" : { "value" : "1" } }
+                            , { headers : { "X-AIO-Key": "aio_rKEU43c1eB2HeL1fYuMm4JPjOket" } })
+                    .catch(err => console.log(err))
+            })
     service.insertIntoTable('schedules', req.body)
     res.send(req.body)
 }

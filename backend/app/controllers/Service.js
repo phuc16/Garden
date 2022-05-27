@@ -1,4 +1,5 @@
 const db = require('../../config/db');
+const device = require('../models/device.model')
 
 
 exports.insertIntoTable = (tableName, data) => {
@@ -98,4 +99,30 @@ exports.updateById = (tableName, data, id) => {
     })                
 }
 
+
+exports.responseSchedule = (schedule, response) => {
+    let myArray = []
+    let len = schedule.length
+    for (let i = 0; i < len ; i++){
+        device.findById(schedule[i].id_device, (err, data) => {
+            let responseData = {
+                id : schedule[i].id
+            }
+            let typeDevice = data.rows[0].category
+            let command = `${typeDevice}:1/${typeDevice}:0/FOR/${(schedule[i].time_end - schedule[i].time_start)/1000}`
+            responseData['command'] = command
+            responseData.time = `${schedule[i].time_start.getDay()}:${schedule[i].time_start.getMonth()+1}:${schedule[i].time_start.getYear()+1900}:` 
+                                + schedule[i].time_start.toLocaleTimeString()
+            responseData.status = schedule[i].status
+            console.log(responseData)
+            myArray.push(responseData)
+            // response.send(myArray)
+            // response.send(responseData)
+            console.log(myArray)
+            if (i == len - 1) response.send(myArray)
+        })
+    }
+
+    
+}
 

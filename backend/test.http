@@ -90,3 +90,24 @@ Content-Type: application/json
 
 ### 
 GET http://localhost:5000/device/13
+
+### 
+GET http://localhost:5000/schedule
+
+### 
+POST http://localhost:5000/schedule
+Content-Type: application/json
+
+{
+    "id_device" : 13 ,
+    "time_start" : "2011-08-01 00:45:00",
+    "time_end" : "2011-08-01 00:46:20",
+    "status" : 0
+}
+
+
+### 
+GET http://localhost:5000/schedule/unfulfilled
+
+### 
+

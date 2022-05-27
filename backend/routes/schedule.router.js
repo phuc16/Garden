@@ -7,6 +7,8 @@ router.get('/device/:device_id', schedule.getScheduleByDeviceId) //with start an
 
 router.get('/', schedule.getAllSchedules) //with start and end dates
 
+router.get('/unfulfilled', schedule.getAllScheduleUnfulfilled) //with start and end dates
+
 router.get('/:id', schedule.getScheduleById)
 
 router.post('/', schedule.insertSchedule)

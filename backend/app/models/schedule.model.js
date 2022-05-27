@@ -1,4 +1,5 @@
 const db = require('../../config/db');
+const service = require('../controllers/Service')
 
 exports.getScheduleByDeviceId = (body, result) =>{
     let query = `SELECT * FROM schedules WHERE id_device = ${body.id} AND time_start >= '${body.startDay}' AND time_end <= '${body.endDay}'`;
@@ -43,10 +44,25 @@ exports.getAll = (body, result) =>{
             return;
         }
 
-        console.log("schedules: ", res);
+        // console.log("schedules: ", res);
         result(null, res);
     });
 }
+
+
+exports.getAllScheduleUnfulfilled = (res) =>{
+    let query = `SELECT * FROM schedules WHERE status = 0`;
+
+    db.query(query, (err, result) => {
+        if (err) {
+            console.log("error: ", err);
+            return;
+        }
+        // console.log("schedules: ", result);
+        service.responseSchedule(result.rows,res)
+    });
+}
+
 
 exports.deleteById = (id, result) => {
     db.query(`DELETE FROM schedules WHERE id = ${id}`, (err, res) => {

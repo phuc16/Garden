@@ -70,12 +70,12 @@ exports.updateDevice = (req, res) => {
             console.log(`https://io.adafruit.com/api/v2/mp5navy/feeds/${feed_key}/data/last`)
             axios.get(`https://io.adafruit.com/api/v2/mp5navy/feeds/${feed_key}/data/last`
             , { headers : { "X-AIO-Key": "aio_rKEU43c1eB2HeL1fYuMm4JPjOket" } })
-            .then(adafruitRespone => {
-                // console.log(req.body.status + ' And ' + adafruitRespone.data.value)
-                // console.log(req.body.status != adafruitRespone.data.value)
-                if (req.body.status != undefined && req.body.status != adafruitRespone.data.value) {
-                    console.log(adafruitRespone.data.id)
-                    axios.put(`https://io.adafruit.com/api/v2/mp5navy/feeds/${feed_key}/data/${adafruitRespone.data.id}`
+            .then(adafruitResponse => {
+                // console.log(req.body.status + ' And ' + adafruitResponse.data.value)
+                // console.log(req.body.status != adafruitResponse.data.value)
+                if (req.body.status != undefined && req.body.status != adafruitResponse.data.value) {
+                    console.log(adafruitResponse.data.id)
+                    axios.put(`https://io.adafruit.com/api/v2/mp5navy/feeds/${feed_key}/data/${adafruitResponse.data.id}`
                     , { "datum" : { "value" : `${req.body.status}` } }
                     , { headers : { "X-AIO-Key": "aio_rKEU43c1eB2HeL1fYuMm4JPjOket" } })
 

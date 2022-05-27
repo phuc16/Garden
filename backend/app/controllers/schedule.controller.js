@@ -1,6 +1,6 @@
 const device = require('../models/device.model');
 const schedule = require('../models/schedule.model');
-const service = require('./insertService');
+const service = require('./Service');
 
 exports.getScheduleByDeviceId = (req, res, err) => {
     if (!req.query.startDay || !req.query.endDay) {

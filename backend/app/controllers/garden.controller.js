@@ -1,5 +1,6 @@
 const db = require('../../config/db');
-const { insertIntoTable, updateById } = require('./insertService')
+const { insertIntoTable, updateById } = require('./Service')
+const axios = require('axios')
 
 exports.getGardenStatistic = (req, res) => {
     
@@ -22,7 +23,17 @@ exports.getGardenById = (req, res) => {
 
 
 exports.insertGarden = (req, res) => {
-    insertIntoTable('gardens', req.body);
+    axios.put('https://io.adafruit.com/api/v2/mp5navy/feeds/sync/data/0F17Z6X3EZE3TKB5EH0CEM3KTV', 
+    {
+        "datum" : { "value" : "0" }
+    },
+    { headers : {
+        "X-AIO-Key": "aio_rKEU43c1eB2HeL1fYuMm4JPjOket"
+
+    }}
+    )
+    .then(res => console.log(res.data))
+    // insertIntoTable('gardens', req.body);
     res.send(req.body)
 }
 

@@ -58,3 +58,35 @@ Content-Type: application/json
 
 ###
 GET http://localhost:5000/user/1
+
+
+### 
+GET http://localhost:5000/device
+
+
+### 
+DELETE http://localhost:5000/device/12
+
+### 
+POST http://localhost:5000/device
+Content-Type: application/json
+
+{
+    "id" : 1 ,
+    "name" : "PUMP_TIENMINH",
+    "category" : "PUMP",
+    "status" : 0,
+    "id_garden" : 1
+}
+
+
+### 
+PUT http://localhost:5000/device/13
+Content-Type: application/json
+
+{
+    "status" : 0
+}
+
+### 
+GET http://localhost:5000/device/13

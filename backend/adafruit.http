@@ -1,0 +1,25 @@
+GET https://io.adafruit.com/api/v2/mp5navy/feeds/sync/data/last
+X-AIO-Key: aio_rKEU43c1eB2HeL1fYuMm4JPjOket
+
+###
+PUT https://io.adafruit.com/api/v2/mp5navy/feeds/sync/data/0F17Z6X3EZE3TKB5EH0CEM3KTV
+X-AIO-Key: aio_rKEU43c1eB2HeL1fYuMm4JPjOket
+Content-Type: application/json
+
+{
+    "datum" : { "value" : "1" }
+}
+
+###
+PUT https://io.adafruit.com/api/v2/mp5navy/feeds/pump/data/0F18WS8B5YE3NRPZ62K6KH18SH
+X-AIO-Key: aio_rKEU43c1eB2HeL1fYuMm4JPjOket
+Content-Type: application/json
+
+{
+    "datum" : { "value" : "0" }
+}
+
+###
+GET https://io.adafruit.com/api/v2/mp5navy/feeds/pump/data/last
+X-AIO-Key: aio_rKEU43c1eB2HeL1fYuMm4JPjOket
+

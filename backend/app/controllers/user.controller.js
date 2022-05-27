@@ -1,5 +1,5 @@
 const db = require('../../config/db');
-const { insertIntoTable, updateById } = require('./insertService')
+const { insertIntoTable, updateById } = require('./Service')
 
 exports.getAllUser = (req, res) => {
     db.query("SELECT * FROM users" , (err,result) => {

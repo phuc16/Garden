@@ -1,5 +1,5 @@
 const db = require('../../config/db');
-const { insertIntoTable } = require('./insertService')
+const { insertIntoTable } = require('./Service')
 
 exports.getDataInfo = (req, res) => {
     if (!req.query.startDay || !req.query.endDay) {

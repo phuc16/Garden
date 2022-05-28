@@ -1,0 +1,81 @@
+.sidebar .nav .soil-bar .nav-link .icon-bg .menu-icon{
+    background: -webkit-linear-gradient(#1579ff, #7922e5);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.sidebar .nav .soil-bar .nav-link .menu-title{
+    background: -webkit-linear-gradient(#1579ff, #7922e5);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.sidebar .nav .soil-bar.active > .nav-link:before{
+    background: linear-gradient(#1579ff, #7922e5)!important;
+}
+
+.sidebar .nav .soil-bar .nav-link .menu-title:hover{
+    text-shadow: 1px 1px 1px #ffffff;
+}
+
+/* AIR */
+.sidebar .nav .air-bar .nav-link .icon-bg .menu-icon{
+    background: -webkit-linear-gradient(#b4ec51, #429321);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.sidebar .nav .air-bar .nav-link .menu-title{
+    background: -webkit-linear-gradient(#b4ec51, #429321);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.sidebar .nav .air-bar.active > .nav-link:before{
+    background: -webkit-linear-gradient(#b4ec51, #429321);
+}
+
+.sidebar .nav .air-bar .nav-link .menu-title:hover{
+    text-shadow: 1px 1px 1px #ffffff;
+}
+
+/* TEMP */
+.sidebar .nav .temp-bar .nav-link .icon-bg .menu-icon{
+    background: -webkit-linear-gradient(#fad961, #f76b1c);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.sidebar .nav .temp-bar .nav-link .menu-title{
+    background: -webkit-linear-gradient(#fad961, #f76b1c);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.sidebar .nav .temp-bar.active > .nav-link:before{
+    background: -webkit-linear-gradient(#fad961, #f76b1c);
+}
+
+.sidebar .nav .temp-bar .nav-link .menu-title:hover{
+    text-shadow: 1px 1px 1px #ffffff;
+}
+/* LIGHT */
+.sidebar .nav .light-bar .nav-link .icon-bg .menu-icon{
+    background: -webkit-linear-gradient(#f5515f, #9f041b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.sidebar .nav .light-bar .nav-link .menu-title{
+    background: -webkit-linear-gradient(#f5515f, #9f041b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.sidebar .nav .light-bar.active > .nav-link:before{
+    background: -webkit-linear-gradient(#f5515f, #9f041b);
+}
+
+.sidebar .nav .light-bar .nav-link .menu-title:hover{
+    text-shadow: 1px 1px 1px #ffffff;
+}

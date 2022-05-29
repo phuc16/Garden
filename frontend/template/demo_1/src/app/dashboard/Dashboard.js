@@ -28,7 +28,6 @@ export class Dashboard extends Component {
   }
 
   componentDidMount() {
-    console.log('aaaaaaaaaaaaa')
     axios.get(`http://localhost:5000/device`)
       .then(res => {
         const temp = res.data;
@@ -38,11 +37,6 @@ export class Dashboard extends Component {
       })
     }
 
-  products = [
-    {'id': 1, 'function': 'aaaaaaa', 'arduino': 11111111, 'status': 'On', 'toggle': 'On'},
-    {'id': 2, 'function': 'aaaaaaa', 'arduino': 11111111, 'status': 'Off', 'toggle': 'On'},
-  ];
-  
   
   
   

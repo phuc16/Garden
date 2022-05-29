@@ -1,61 +1,175 @@
-import { Tabs, Tab } from "react-bootstrap"
+import { Tabs, Tab, Button } from "react-bootstrap"
 import BootstrapTable from "react-bootstrap-table-next"
 import React, { Component } from 'react';
 import './time-setting.css'
-import TimePicker from 'react-bootstrap-time-picker';
+// import TimePicker from 'react-bootstrap-time-picker';
+import axios from 'axios'
 
 class TimeSetting extends Component {
     
   constructor(props) {
       super(props);
       this.state = {
-        1 : {
-          on: 11111,
-          off: 2222
-        },
-        2: {
-          on: 33333,
-          off: 4444
-        }
+        reload: new Date(),
+        scheduled: [], 
+        settingDevice: [],
+        // time_start: [],
+        // time_end: []
       };
     }
 
+    componentDidMount() {
+      axios.get(`http://localhost:5000/schedule?startDay=2000-01-01&endDay=2023-01-01`)
+        .then(res => {
+          const temp = res.data; 
+          this.setState({ scheduled : temp });
+          console.log(this.state.scheduled)
+        })
+
+      axios.get(`http://localhost:5000/device`)
+        .then(res => {
+          const temp = res.data; 
+          this.setState({ settingDevice : temp });
+        })
+    }
+
+    
+
     render(){
-      const handleChangeTimeOn = (e) => {
-        let copy = { ...this.state[1]}
-        copy.on = e.target.value
-        this.setState({[1]: copy})
-        
+
+      
+      const handleDeleteSchedule = (e) => {
+        let index = e.target.value
+        axios.delete(`http://localhost:5000/schedule/${deviceInSchedule[e.target.value]['id']}`)
+        .then(res => {
+          console.log(res)
+
+          this.setState({ scheduled : [
+            ...this.state.scheduled.slice(0, index), 
+            ...this.state.scheduled.slice(index+1)
+          ]})
+
+          
+        })
+        .catch(err =>{
+          console.log(err)
+        })
       }
 
-    const products = [
-      {'id': 1, 'function': 'fan setting', 'on': <input type="datetime-local" onChange={handleChangeTimeOn}></input>, 'off': '2222222', '':'Setting'},
-      {'id': 2, 'function': 'mist setting', 'on': <input type="datetime-local" onChange={handleChangeTimeOn}></input>, 'off': '2222222', '':'Setting'},
-      {'id': 3, 'function': 'pumb setting', 'on': <input type="datetime-local" onChange={handleChangeTimeOn}></input>, 'off': '2222222', '':'Setting'},
-    ];
-    
+      const handleTimeStart = e => {
+        let index = parseInt(e.target.className)
+        deviceInSetting[index]['time_start'] = e.target.value
+      }
+
+      const handleTimeEnd = e => {
+        let index = parseInt(e.target.className)
+        deviceInSetting[index]['time_end'] = e.target.value
+      }
+
+      const handleSetSchedule = (e) => {
+        let index = e.target.value
+        let device_id = deviceInSetting[index]['id']
+        console.log(device_id)
+        let  update = false
+        if (deviceInSchedule.some(x => x['id_device'] == device_id)){
+          for (let i = 0; i < deviceInSchedule.length; i++){
+            if (
+            ((deviceInSetting[index]['time_start'] >= deviceInSchedule[i]['time_start'] && deviceInSetting[index]['time_start'] <= deviceInSchedule[i]['time_end']) ||
+            (deviceInSetting[index]['time_end'] >= deviceInSchedule[i]['time_start'] && deviceInSetting[index]['time_end'] <= deviceInSchedule[i]['time_end']) )){
+              update = true
+              axios.put(`http://localhost:5000/schedule/${deviceInSchedule[index]['id']}`, {
+                id_device: device_id,
+                time_start: deviceInSetting[index]['time_start'],
+                time_end: deviceInSetting[index]['time_end'],
+                status: deviceInSetting[index]['status']
+            })
+            }
+          }
+        }
+        if (!update){
+          console.log('insert')
+          axios.post(`http://localhost:5000/schedule`, {
+            id_device: device_id,
+            time_start: deviceInSetting[index]['time_start'],
+            time_end: deviceInSetting[index]['time_end'],
+            status: deviceInSetting[index]['status']
+          })
+        }
+      }
+
+      const deviceInSchedule = [
+        // {'id': 1, 'function': 'fan setting', 'on': <input type="datetime-local" onChange={handleChangeTimeOn}></input>, 'off': '2222222', '':'Setting'},
+        // {'id': 2, 'function': 'mist setting', 'on': <input type="datetime-local" onChange={handleChangeTimeOn}></input>, 'off': '2222222', '':'Setting'},
+        // {'id': 3, 'function': 'pumb setting', 'on': <input type="datetime-local" onChange={handleChangeTimeOn}></input>, 'off': '2222222', '':'Setting'},
+      ];
+
+
+      const deviceInSetting = []
+
+      for (let i = 0; i < this.state.scheduled.length ; i++){
+        deviceInSchedule.push({...this.state.scheduled[i],  
+        status: this.state.scheduled[i]['status'] == 0 ? 'Chưa thực thi' 
+        : (this.state.scheduled[i]['status'] == 1? 'Đang thực hiện' : 
+        ((this.state.scheduled[i]['status'] == 2? 'Hoàn thành' : 
+        (this.state.scheduled[i]['status'] == 3? 'Time Out' : 'Task LTT')))), 
+        setting:  this.state.scheduled[i]['status'] == 2 ?<Button value={i} onClick={handleDeleteSchedule}>Delete</Button>: '' })
+      }
+
+      for (let i = 0; i < this.state.settingDevice.length ; i++){
+          deviceInSetting.push({...this.state.settingDevice[i], 
+          time_start: <input type="datetime-local" onChange={handleTimeStart} className={i} step={1}></input>, 
+          time_end: <input type="datetime-local" onChange={handleTimeEnd}  className={i} step={1} ></input>,
+          setting:  <Button value={i} onClick={handleSetSchedule}>Set</Button> }) 
+      }
+      console.log(deviceInSchedule)
+
     const columns = [{
         dataField: 'id',
         text: 'ID'
       }, {
-        dataField: 'function',
-        text: 'Function'
-      }, {
-        dataField: 'on',
-        text: 'ON'
+        dataField: 'id_device',
+        text: 'Device ID'
+      }, 
+      {
+        dataField: 'time_start',
+        text: 'Time Start'
       },
       {
-        dataField: 'off',
-        text: 'OFF'
+        dataField: 'time_end',
+        text: 'Time End'
       },
       {
-        dataField: '',
-        text: 'Time'
+        dataField: 'status',
+        text: 'Status'
+      },
+      {
+        dataField: 'setting',
+        text: 'Setting'
+      }
+      ];
+    
+    const columns2 = [{
+        dataField: 'id',
+        text: 'ID'
+      }, 
+      {
+        dataField: 'name',
+        text: 'Device Name'
+      },
+      {
+        dataField: 'time_start',
+        text: 'Time Start'
+      },
+      {
+        dataField: 'time_end',
+        text: 'Time End'
+      },
+      {
+        dataField: 'setting',
+        text: 'Setting'
       }
       ];
 
-      
-      
         return(
             <div>
                 <div className='row'>
@@ -66,7 +180,7 @@ class TimeSetting extends Component {
                             <div className="card">
                             <div className="card-body text-center">
                             <h5 className="mb-2 text-dark font-weight-normal">Device Schedule</h5>
-                                <BootstrapTable keyField='id' data={ products } columns={ columns } />
+                                <BootstrapTable keyField='id' data={ deviceInSchedule } columns={ columns } />
                                 </div>
                             </div>
                             </Tab>
@@ -74,7 +188,7 @@ class TimeSetting extends Component {
                             <div className="card">
                             <div className="card-body text-center">
                             <h5 className="mb-2 text-dark font-weight-normal">Schedule Setting</h5>
-                                <BootstrapTable keyField='id' data={ products } columns={ columns } />
+                                <BootstrapTable keyField='id' data={ deviceInSetting } columns={ columns2 } />
                                 </div>
                             </div>
 

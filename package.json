@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "axios": "^0.27.2",
+    "react-bootstrap-time-picker": "^2.0.1"
+  }
+}

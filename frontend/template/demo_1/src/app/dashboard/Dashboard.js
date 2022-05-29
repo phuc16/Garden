@@ -19,11 +19,16 @@ export class Dashboard extends Component {
     super(props);
     this.state = {
       auto: true,
-      soil: 500,
-      air: 300,
-      temp: 50,
-      light: 420,
-      newProducts: []
+      soil: 0,
+      air: 0,
+      temp: 0,
+      light: 0,
+      nearestSoil: 0,
+      nearestAir: 0,
+      nearestTemp: 0,
+      nearestLight: 0,
+      newProducts: [],
+      allData: [],
     };
   }
 
@@ -35,6 +40,48 @@ export class Dashboard extends Component {
         this.setState({ newProducts : temp });
         console.log(this.state.newProducts)
       })
+    
+    axios.get(`http://localhost:5000/data/`)
+    .then(res => {
+      this.setState({allData: res.data})
+      let temp = this.state.allData
+      let listAir = [] 
+      let listSoil = []
+      let listTemp = []
+      let listLight = []
+      for (let i = 0; i < temp.length; i++){
+        if (temp[i]["category"] == "Humidity"){
+          listAir.push(temp[i]['value'])
+        }
+        if (temp[i]["category"] == "Soil"){
+          listSoil.push(temp[i]['value'])
+        }
+        if (temp[i]["category"] == "Light"){
+          listLight.push(temp[i]['value'])
+        }
+        if (temp[i]["category"] == "Temp"){
+          listTemp.push(temp[i]['value'])
+        }
+      }
+
+      
+      console.log(listTemp[listTemp.length-2])
+
+      this.setState({nearestAir: listAir[listAir.length-2], 
+        nearestSoil: listSoil[listSoil.length-2],
+        nearestTemp: listTemp[listTemp.length-2],
+        nearestLight: listLight[listLight.length-2]})
+    })
+
+    axios.get(`http://localhost:5000/data/last`)
+      .then(res => {
+        let x = []
+        x = res.data
+        this.setState({air: x[0]['value'], light: x[1]['value'], temp: x[2]['value']})
+        console.log(this.state.temp)
+      })
+    
+
     }
 
   
@@ -162,14 +209,14 @@ export class Dashboard extends Component {
                                   </defs>
                                 </svg>
                                 <CircularProgressbarWithChildren className="progress-order"
-                                value={70}>
+                                value={this.state.soil}>
                                   <div>
                                     <i className="mdi mdi-waves icon-md absolute-center text-dark"></i>
                                   </div>
                                 </CircularProgressbarWithChildren>
                               </div>
                               <p className="mt-4 mb-0">Incsreased by </p>
-                              <h3 className="mb-0 font-weight-bold mt-2 text-dark">0.1%</h3>
+                              <h3 className="mb-0 font-weight-bold mt-2 text-dark">{this.state.soil/this.state.nearestSoil*100} %</h3>
                             </div>
                           </div>
                           </Link>
@@ -190,14 +237,14 @@ export class Dashboard extends Component {
                                     </defs>
                                 </svg>
                                 <CircularProgressbarWithChildren className="progress-visitors"
-                                value={60}>
+                                value={this.state.air*10}>
                                   <div>
                                     <i className="mdi mdi-weather-rainy icon-md absolute-center text-dark"></i>
                                   </div>
                                 </CircularProgressbarWithChildren>
                                 </div>
-                              <p className="mt-4 mb-0">Increased since yesterday</p>
-                              <h3 className="mb-0 font-weight-bold mt-2 text-dark">50%</h3>
+                              <p className="mt-4 mb-0">Increased since last time</p>
+                              <h3 className="mb-0 font-weight-bold mt-2 text-dark">{(this.state.air-this.state.nearestAir)/this.state.nearestAir*100} %</h3>
                             </div>
                           </div>
                           </Link>
@@ -224,8 +271,8 @@ export class Dashboard extends Component {
                                     </div>
                                   </CircularProgressbarWithChildren>
                                 </div>                              
-                              <p className="mt-4 mb-0">Increased since yesterday</p>
-                              <h3 className="mb-0 font-weight-bold mt-2 text-dark">35%</h3>
+                              <p className="mt-4 mb-0">Increased since last time</p>
+                              <h3 className="mb-0 font-weight-bold mt-2 text-dark">{((this.state.temp-this.state.nearestTemp)/this.state.nearestTemp)*100}%</h3>
                             </div>
                           </div>
                         </Link>
@@ -247,14 +294,14 @@ export class Dashboard extends Component {
                                     </defs>
                                   </svg>
                                   <CircularProgressbarWithChildren className="progress-followers"
-                                  value={45}>
+                                  value={this.state.light/10}>
                                     <div>
                                       <i className="mdi mdi-weather-sunny icon-md absolute-center text-dark"></i>
                                     </div>
                                   </CircularProgressbarWithChildren>
                                 </div>  
-                              <p className="mt-4 mb-0">Decreased since yesterday</p>
-                              <h3 className="mb-0 font-weight-bold mt-2 text-dark">25%</h3>
+                              <p className="mt-4 mb-0">Decreased since last time</p>
+                              <h3 className="mb-0 font-weight-bold mt-2 text-dark">{(this.state.light-this.state.nearestLight)/this.state.nearestLight*100}%</h3>
                             </div>
                           </div>
                         </Link>

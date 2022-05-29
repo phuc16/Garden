@@ -25,6 +25,16 @@ exports.getDatabyGarden = (req, res) => {
 
 
 
+
+exports.getAllLastData = (req, res) => {
+    db.query(`SELECT * FROM datas WHERE time IN (SELECT MAX(time) FROM datas GROUP BY category)` , (err,result) => {
+        if (err) res.send(err)
+        else res.send(result.rows)
+    })
+}
+
+
+
 exports.getAlldata = (req, res) => {
     db.query("SELECT * FROM datas" , (err,result) => {
         console.log(result.rows);  

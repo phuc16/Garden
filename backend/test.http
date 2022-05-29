@@ -2,17 +2,20 @@ POST http://localhost:5000/data
 Content-Type: application/json
 
 {
-    "category": "Humidity",
-    "value" : 1.8,
+    "category": "Temp",
+    "value" : 28,
     "id_garden" : 1,
-    "time" : "2001-08-20"
+    "time" : "2022-05-29 23:40:00"
 }
 
 ###
 GET http://localhost:5000/data/search?idGarden=1&startDay=2000-01-01&endDay=2010-03-05
 
 ###
-GET http://localhost:5000/data/1
+GET http://localhost:5000/data
+
+###
+GET http://localhost:5000/data/last
 
 ###
 GET http://localhost:5000/garden

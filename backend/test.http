@@ -1,0 +1,113 @@
+POST http://localhost:5000/data
+Content-Type: application/json
+
+{
+    "category": "Humidity",
+    "value" : 1.8,
+    "id_garden" : 1,
+    "time" : "2001-08-20"
+}
+
+###
+GET http://localhost:5000/data/search?idGarden=1&startDay=2000-01-01&endDay=2010-03-05
+
+###
+GET http://localhost:5000/data/1
+
+###
+GET http://localhost:5000/garden
+
+###
+POST http://localhost:5000/garden
+Content-Type: application/json
+
+{
+    "id": 2,
+    "area": 100,
+    "name": "TM"
+}
+
+###
+PUT http://localhost:5000/garden/2
+Content-Type: application/json
+
+{
+    "id": 2,
+    "area": 1111,
+    "name": "hehehe siuuuuu"
+}
+
+
+###
+DELETE http://localhost:5000/garden/2
+
+
+###
+GET http://localhost:5000/user/search-by-garden/1
+
+###
+POST http://localhost:5000/user
+Content-Type: application/json
+
+{
+    "account": "tienhoang",
+    "password": "password",
+    "role" : "ADMIN",
+    "id_garden" : [10,20,30] 
+}
+
+###
+GET http://localhost:5000/user/1
+
+
+### 
+GET http://localhost:5000/device
+
+
+### 
+DELETE http://localhost:5000/device/12
+
+### 
+POST http://localhost:5000/device
+Content-Type: application/json
+
+{
+    "id" : 1 ,
+    "name" : "PUMP_TIENMINH",
+    "category" : "PUMP",
+    "status" : 0,
+    "id_garden" : 1
+}
+
+
+### 
+PUT http://localhost:5000/device/13
+Content-Type: application/json
+
+{
+    "status" : 0
+}
+
+### 
+GET http://localhost:5000/device/13
+
+### 
+GET http://localhost:5000/schedule
+
+### 
+POST http://localhost:5000/schedule
+Content-Type: application/json
+
+{
+    "id_device" : 13 ,
+    "time_start" : "2011-08-01 00:45:00",
+    "time_end" : "2011-08-01 00:46:20",
+    "status" : 0
+}
+
+
+### 
+GET http://localhost:5000/schedule/unfulfilled
+
+### 
+

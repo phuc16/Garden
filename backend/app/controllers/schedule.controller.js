@@ -127,7 +127,7 @@ exports.getAllScheduleUnfulfilled = (req, res, err) => {
 
 
 exports.insertSchedule = (req, res, err) => {
-    if (!req.body.time_start || !req.body.time_end) {
+    if (!req.body.time_start) {
         res.status(400).send({
             message:
               err.message || "Miss date!"
@@ -135,13 +135,18 @@ exports.insertSchedule = (req, res, err) => {
         return
     }
 
-    if (new Date(req.body.time_start) > new Date(req.body.time_end)) {
+    if (!req.body.time_end){
+        req.body.time_end = 'NULL'
+    }
+
+    if (req.body.time_end && new Date(req.body.time_start) > new Date(req.body.time_end)) {
         res.status(400).send({
             message:
               err.message || "Invalid date!"
           });
         return
     }
+
     axios.get(`https://io.adafruit.com/api/v2/mp5navy/feeds/sync/data/last`
             , { headers : { "X-AIO-Key": "aio_rKEU43c1eB2HeL1fYuMm4JPjOket" } })
             .then(adafruitResponse => {
@@ -155,7 +160,7 @@ exports.insertSchedule = (req, res, err) => {
 }
 
 exports.updateSchedule = (req, res, err) => {
-    if (!req.body.time_start || !req.body.time_end) {
+    if (!req.body.time_start) {
         res.status(400).send({
             message:
               err.message || "Miss date!"
@@ -163,7 +168,11 @@ exports.updateSchedule = (req, res, err) => {
         return
     }
 
-    if (new Date(req.body.time_start) > new Date(req.body.time_end)) {
+    if (!req.body.time_end){
+        req.body.time_end = 'NULL'
+    }
+
+    if (req.body.time_end && new Date(req.body.time_start) > new Date(req.body.time_end)) {
         res.status(400).send({
             message:
               err.message || "Invalid date!"

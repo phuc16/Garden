@@ -88,7 +88,7 @@ exports.updateById = (tableName, data, id) => {
             //     console.log(data[x.column_name])
             // }
             
-            updateString += `, ${x.column_name} = ${(typeof data[x.column_name] === 'string') ? `'${data[x.column_name]}'`
+            updateString += `, ${x.column_name} = ${data[x.column_name] === 'NULL' ? 'NULL' : (typeof data[x.column_name] === 'string') ? `'${data[x.column_name]}'`
             : data[x.column_name]}` 
                             
         }

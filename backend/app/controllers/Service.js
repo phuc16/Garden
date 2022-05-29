@@ -23,8 +23,12 @@ exports.insertIntoTable = (tableName, data) => {
                 //     data[x.column_name] = day.toISOString()
                 //     console.log(data[x.column_name])
                 // }
+                
+                if (data[x.column_name] === 'NULL'){
+                    datas += "," + (data[x.column_name])
+                }
 
-                if (typeof data[x.column_name] === 'string')                     
+                else if (typeof data[x.column_name] === 'string')                     
                     datas += ",'" + data[x.column_name] + "'"
                 else datas += "," + (data[x.column_name])
                 columns += "," + x.column_name
@@ -84,7 +88,7 @@ exports.updateById = (tableName, data, id) => {
             //     console.log(data[x.column_name])
             // }
             
-            updateString += `, ${x.column_name} = ${(typeof data[x.column_name] === 'string') ? `'${data[x.column_name]}'`
+            updateString += `, ${x.column_name} = ${data[x.column_name] === 'NULL' ? 'NULL' : (typeof data[x.column_name] === 'string') ? `'${data[x.column_name]}'`
             : data[x.column_name]}` 
                             
         }

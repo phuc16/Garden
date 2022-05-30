@@ -338,15 +338,17 @@ export class Dashboard extends Component {
                                         />
                                         <InputGroup.Text id="btnGroupAddon">Temperature</InputGroup.Text>
                                         <FormControl
+                                          disabled
                                           className='temp-input'
                                           type="number"
-                                          placeholder="temperature"
+                                          placeholder="not available now"
                                           aria-label="temperature"
                                           onChange={handleChangeValue}
                                           aria-describedby="btnGroupAddon"
                                         />
                                         <InputGroup.Text id="btnGroupAddon">Light intensity</InputGroup.Text>
                                         <FormControl
+                                          
                                           className='light-input'
                                           type="number"
                                           placeholder="light"

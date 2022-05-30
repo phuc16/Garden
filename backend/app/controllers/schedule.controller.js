@@ -47,10 +47,10 @@ exports.getScheduleByDeviceId = (req, res, err) => {
                             err.message || "Some error occurred while retrieving device."
                     });
                 else {
-                    for (let row of data.rows){
-                        row['time_start'] = row['time_start'].toLocaleString('en-GB');
-                        row['time_end'] = row['time_end'].toLocaleString('en-GB');
-                    }
+                    // for (let row of data.rows){
+                    //     row['time_start'] = row['time_start'].toLocaleString('en-GB');
+                    //     row['time_end'] = row['time_end'].toLocaleString('en-GB');
+                    // }
                     res.send(data.rows);
                 }
             });
@@ -73,10 +73,10 @@ exports.getScheduleById = (req, res) => {
             }
         } 
         else {
-            for (let row of data.rows){
-                row['time_start'] = row['time_start'].toLocaleString('en-GB');
-                row['time_end'] = row['time_end'].toLocaleString('en-GB');
-            }
+            // for (let row of data.rows){
+            //     row['time_start'] = row['time_start'].toLocaleString('en-GB');
+            //     row['time_end'] = row['time_end'].toLocaleString('en-GB');
+            // }
             res.send(data.rows);
         }
     }); 
@@ -111,10 +111,10 @@ exports.getAllSchedules = (req, res, err) => {
                     err.message || "Some error occurred while retrieving device."
             });
             else {
-                for (let row of data.rows){
-                    row['time_start'] = row['time_start'].toLocaleString('en-GB');
-                    row['time_end'] = row['time_end'].toLocaleString('en-GB');
-                }
+                // for (let row of data.rows){
+                //     row['time_start'] = row['time_start'].toLocaleString('en-GB');
+                //     row['time_end'] = row['time_end'].toLocaleString('en-GB');
+                // }
                 res.send(data.rows);
             }
     });

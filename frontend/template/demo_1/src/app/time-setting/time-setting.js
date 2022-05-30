@@ -58,6 +58,7 @@ class TimeSetting extends Component {
 
       const handleTimeStart = e => {
         let index = parseInt(e.target.className)
+        console.log(typeof(e.target.value))
         deviceInSetting[index]['time_start'] = e.target.value
       }
 
@@ -88,6 +89,9 @@ class TimeSetting extends Component {
         }
         if (!update){
           console.log('insert')
+          console.log(typeof(deviceInSetting[0]['time_start']))
+          console.log(deviceInSetting[index]['time_end'])
+          
           axios.post(`http://localhost:5000/schedule`, {
             id_device: device_id,
             time_start: deviceInSetting[index]['time_start'],
@@ -121,8 +125,8 @@ class TimeSetting extends Component {
           time_end: <input type="datetime-local" onChange={handleTimeEnd}  className={i} step={1} ></input>,
           setting:  <Button value={i} onClick={handleSetSchedule}>Set</Button> }) 
       }
-      console.log(deviceInSchedule)
 
+      console.log(typeof(this.state.scheduled[0]['time_start']))
     const columns = [{
         dataField: 'id',
         text: 'ID'

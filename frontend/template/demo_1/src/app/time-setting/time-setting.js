@@ -70,27 +70,31 @@ class TimeSetting extends Component {
       const handleSetSchedule = (e) => {
         let index = e.target.value
         let device_id = deviceInSetting[index]['id']
-        console.log(device_id)
+
         let  update = false
-        if (deviceInSchedule.some(x => x['id_device'] == device_id)){
-          for (let i = 0; i < deviceInSchedule.length; i++){
-            if (
-            ((deviceInSetting[index]['time_start'] >= deviceInSchedule[i]['time_start'] && deviceInSetting[index]['time_start'] <= deviceInSchedule[i]['time_end']) ||
-            (deviceInSetting[index]['time_end'] >= deviceInSchedule[i]['time_start'] && deviceInSetting[index]['time_end'] <= deviceInSchedule[i]['time_end']) )){
-              update = true
-              axios.put(`http://localhost:5000/schedule/${deviceInSchedule[index]['id']}`, {
-                id_device: device_id,
-                time_start: deviceInSetting[index]['time_start'],
-                time_end: deviceInSetting[index]['time_end'],
-                status: deviceInSetting[index]['status']
-            })
-            }
-          }
-        }
-        if (!update){
-          console.log('insert')
-          console.log(typeof(deviceInSetting[0]['time_start']))
-          console.log(deviceInSetting[index]['time_end'])
+        let startCompare = deviceInSetting[index]['time_start'] + '.000Z'
+        let endCompare = deviceInSetting[index]['time_end'] + '.000Z'
+        let schedule = this.state.scheduled
+
+        
+        // if (deviceInSchedule.some(x => x['id_device'] == device_id)){
+        //   for (let i = 0; i < deviceInSchedule.length; i++){
+        //     if (
+        //     ((startCompare >= schedule[i]['time_start'] && startCompare <= schedule[i]['time_end']) ||
+        //     (endCompare >= schedule[i]['time_start'] && endCompare <= schedule[i]['time_end']) )){
+        //       update = true
+        //       console.log('update')
+        //       axios.put(`http://localhost:5000/schedule/${deviceInSchedule[index]['id']}`, {
+        //         id_device: device_id,
+        //         time_start: deviceInSetting[index]['time_start'],
+        //         time_end: deviceInSetting[index]['time_end'],
+        //         status: deviceInSetting[index]['status']
+        //     })
+        //     }
+        //   }
+        // }
+        // if (!update){
+        //   console.log('insert')
           
           axios.post(`http://localhost:5000/schedule`, {
             id_device: device_id,
@@ -98,7 +102,7 @@ class TimeSetting extends Component {
             time_end: deviceInSetting[index]['time_end'],
             status: deviceInSetting[index]['status']
           })
-        }
+        
       }
 
       const deviceInSchedule = [
@@ -112,6 +116,8 @@ class TimeSetting extends Component {
 
       for (let i = 0; i < this.state.scheduled.length ; i++){
         deviceInSchedule.push({...this.state.scheduled[i],  
+        time_start: this.state.scheduled[i]['time_start'].replace('T', ', ').replace('.000Z', '') ,
+        time_end: this.state.scheduled[i]['time_end'].replace('T', ', ').replace('.000Z', '') ,
         status: this.state.scheduled[i]['status'] == 0 ? 'Chưa thực thi' 
         : (this.state.scheduled[i]['status'] == 1? 'Đang thực hiện' : 
         ((this.state.scheduled[i]['status'] == 2? 'Hoàn thành' : 
@@ -126,7 +132,7 @@ class TimeSetting extends Component {
           setting:  <Button value={i} onClick={handleSetSchedule}>Set</Button> }) 
       }
 
-      console.log(typeof(this.state.scheduled[0]['time_start']))
+      console.log(this.state.scheduled[0])
     const columns = [{
         dataField: 'id',
         text: 'ID'

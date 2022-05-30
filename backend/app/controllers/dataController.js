@@ -47,10 +47,12 @@ exports.getBeforeLastData = (req, res) => {
                 db.query(`SELECT * FROM datas WHERE category = '${categories[i].category}' ORDER BY time DESC LIMIT 2 `, (error, data) => {
                     if (error) console.log(error)
                     else {
-                        if ((data.rows)[0].value > (data.rows)[1].value) response.set(categories[i].category ,'increased' )
-                        else if ((data.rows)[0].value < (data.rows)[1].value) response.set(categories[i].category,'decreased' )
-                        else response.set(categories[i].category,'balanced' )
+                        // if ((data.rows)[0].value > (data.rows)[1].value) response.set(categories[i].category ,'increased' )
+                        // else if ((data.rows)[0].value < (data.rows)[1].value) response.set(categories[i].category,'decreased' )
+                        // else response.set(categories[i].category,'balanced' )
                         // console.log(response)
+                        response.set(categories[i].category , (data.rows)[1].value)
+
                         if ( i == len - 1) res.send(Object.fromEntries(response))
                     }
                 })

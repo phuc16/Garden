@@ -45,32 +45,6 @@ export class Dashboard extends Component {
     .then(res => {
       this.setState({allData: res.data})
       let temp = this.state.allData
-      let listAir = [] 
-      let listSoil = []
-      let listTemp = []
-      let listLight = []
-      for (let i = 0; i < temp.length; i++){
-        if (temp[i]["category"] == "Humidity"){
-          listAir.push(temp[i]['value'])
-        }
-        if (temp[i]["category"] == "Soil"){
-          listSoil.push(temp[i]['value'])
-        }
-        if (temp[i]["category"] == "Light"){
-          listLight.push(temp[i]['value'])
-        }
-        if (temp[i]["category"] == "Temp"){
-          listTemp.push(temp[i]['value'])
-        }
-      }
-
-      
-      console.log(listTemp[listTemp.length-2])
-
-      this.setState({nearestAir: listAir[listAir.length-2], 
-        nearestSoil: listSoil[listSoil.length-2],
-        nearestTemp: listTemp[listTemp.length-2],
-        nearestLight: listLight[listLight.length-2]})
     })
 
     axios.get(`http://localhost:5000/data/last`)
@@ -78,6 +52,13 @@ export class Dashboard extends Component {
         let x = []
         x = res.data
         this.setState({air: x[0]['value'], light: x[1]['value'], temp: x[2]['value']})
+        console.log(this.state.temp)
+      })
+
+    axios.get(`http://localhost:5000/data/before-last`)
+      .then(res => {
+        let x = res.data
+        this.setState({nearestAir: x['Humidity'], nearestLight: x['Light'], nearestTemp: x['Temp'], nearestSoil: x.length == 4 ? x['Soil']: 0})
         console.log(this.state.temp)
       })
     
@@ -107,8 +88,18 @@ export class Dashboard extends Component {
   }];
 
   
-  render () {
 
+  
+
+  
+  render () {
+    const changeData =[
+      this.state.soil - this.state.nearestSoil,
+      this.state.air - this.state.nearestAir,
+      this.state.temp - this.state.nearestTemp,
+      this.state.light - this.state.nearestLight,
+    ]
+    console.log(changeData)
     const productInTable = [
       // {'id': 1, 'function': 'Fan Control', 'arduino': 7, 'status': 'On', 'toggle': this.state.auto == true ? <Button>Auto</Button> :(this.products[0]['status'] == 'Off' ? <Button>Off</Button> : <Button>On</Button>)},
       // {'id': 2, 'function': 'Mist Control', 'arduino': 8, 'status': 'Off', 'toggle': this.state.auto == true ? <Button>Auto</Button> :(this.products[1]['status'] == 'Off' ? <Button>Off</Button> : <Button>On</Button>)},
@@ -164,7 +155,8 @@ export class Dashboard extends Component {
 
     const handleChangeValue = (e) => {
       if (e.target.className == 'soil-input form-control'){
-        this.setState({soil: e.target.value});
+        // this.setState({soil: e.target.value});
+        
       } 
       if (e.target.className == 'air-input form-control'){
         this.setState({air: e.target.value});
@@ -215,8 +207,8 @@ export class Dashboard extends Component {
                                   </div>
                                 </CircularProgressbarWithChildren>
                               </div>
-                              <p className="mt-4 mb-0">Incsreased by </p>
-                              <h3 className="mb-0 font-weight-bold mt-2 text-dark">{this.state.soil/this.state.nearestSoil*100} %</h3>
+                               <p className="mt-4 mb-0"> {changeData[0] >= 0 ? 'Increased since' : 'Decreased since' } last time</p>
+                              <h3 className="mb-0 font-weight-bold mt-2 text-dark">{Math.floor(Math.abs(changeData[0])/this.state.nearestSoil*100)} %</h3>
                             </div>
                           </div>
                           </Link>
@@ -243,8 +235,8 @@ export class Dashboard extends Component {
                                   </div>
                                 </CircularProgressbarWithChildren>
                                 </div>
-                              <p className="mt-4 mb-0">Increased since last time</p>
-                              <h3 className="mb-0 font-weight-bold mt-2 text-dark">{(this.state.air-this.state.nearestAir)/this.state.nearestAir*100} %</h3>
+                              <p className="mt-4 mb-0">{changeData[1] >= 0 ? 'Increased since' : 'Decreased since' } last time</p>
+                              <h3 className="mb-0 font-weight-bold mt-2 text-dark">{Math.floor(Math.abs(changeData[1])/this.state.nearestAir*100)} %</h3>
                             </div>
                           </div>
                           </Link>
@@ -271,8 +263,8 @@ export class Dashboard extends Component {
                                     </div>
                                   </CircularProgressbarWithChildren>
                                 </div>                              
-                              <p className="mt-4 mb-0">Increased since last time</p>
-                              <h3 className="mb-0 font-weight-bold mt-2 text-dark">{((this.state.temp-this.state.nearestTemp)/this.state.nearestTemp)*100}%</h3>
+                              <p className="mt-4 mb-0">{changeData[2] >= 0 ? 'Increased since' : 'Decreased since' } last time</p>
+                              <h3 className="mb-0 font-weight-bold mt-2 text-dark">{Math.floor(Math.abs(changeData[2])/this.state.nearestTemp*100)}%</h3>
                             </div>
                           </div>
                         </Link>
@@ -300,8 +292,8 @@ export class Dashboard extends Component {
                                     </div>
                                   </CircularProgressbarWithChildren>
                                 </div>  
-                              <p className="mt-4 mb-0">Decreased since last time</p>
-                              <h3 className="mb-0 font-weight-bold mt-2 text-dark">{(this.state.light-this.state.nearestLight)/this.state.nearestLight*100}%</h3>
+                              <p className="mt-4 mb-0">{changeData[3] >= 0 ? 'Increased since' : 'Decreased since' } last time</p>
+                              <h3 className="mb-0 font-weight-bold mt-2 text-dark">{Math.floor(Math.abs(changeData[3])/this.state.nearestLight*100)}%</h3>
                             </div>
                           </div>
                         </Link>

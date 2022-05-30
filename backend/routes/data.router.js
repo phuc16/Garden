@@ -7,6 +7,8 @@ router.get('/search', data.getDataInfo)
 
 router.get('/last', data.getAllLastData)
 
+router.get('/before-last', data.getBeforeLastData)
+
 router.get('/:id', data.getDatabyGarden)
 
 router.get('/', data.getAlldata)

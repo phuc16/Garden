@@ -35,6 +35,32 @@ exports.getAllLastData = (req, res) => {
 
 
 
+exports.getBeforeLastData = (req, res) => {
+    db.query(`SELECT category FROM datas GROUP BY category` , (err,result) => {
+        if (err) res.send(err)
+        else {
+            const response = new Map()
+            let categories = result.rows
+            let len = categories.length
+            // console.log(categories)
+            for (let i = 0; i< len; i++){
+                db.query(`SELECT * FROM datas WHERE category = '${categories[i].category}' ORDER BY time DESC LIMIT 2 `, (error, data) => {
+                    if (error) console.log(error)
+                    else {
+                        if ((data.rows)[0].value > (data.rows)[1].value) response.set(categories[i].category ,'increased' )
+                        else if ((data.rows)[0].value < (data.rows)[1].value) response.set(categories[i].category,'decreased' )
+                        else response.set(categories[i].category,'balanced' )
+                        // console.log(response)
+                        if ( i == len - 1) res.send(Object.fromEntries(response))
+                    }
+                })
+            }
+        }
+    })
+}
+
+
+
 exports.getAlldata = (req, res) => {
     db.query("SELECT * FROM datas" , (err,result) => {
         console.log(result.rows);  

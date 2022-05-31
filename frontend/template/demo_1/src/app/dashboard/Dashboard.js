@@ -94,16 +94,15 @@ export class Dashboard extends Component {
   
   render () {
     const changeData =[
-      this.state.soil - this.state.nearestSoil,
+      this.state.soil - this.state.nearestSoil, //save the gap between last 2 value
       this.state.air - this.state.nearestAir,
       this.state.temp - this.state.nearestTemp,
       this.state.light - this.state.nearestLight,
     ]
-    console.log(changeData)
-    const productInTable = [
-      // {'id': 1, 'function': 'Fan Control', 'arduino': 7, 'status': 'On', 'toggle': this.state.auto == true ? <Button>Auto</Button> :(this.products[0]['status'] == 'Off' ? <Button>Off</Button> : <Button>On</Button>)},
-      // {'id': 2, 'function': 'Mist Control', 'arduino': 8, 'status': 'Off', 'toggle': this.state.auto == true ? <Button>Auto</Button> :(this.products[1]['status'] == 'Off' ? <Button>Off</Button> : <Button>On</Button>)},
-    ]
+    var factorChange = {soil: this.state.soil, air: this.state.air, temp: this.state.temp, light: this.state.light}
+    var changeStatus = [0,0,0,0] //save as order soil, air, temp, light
+    const productInTable = [] //using for display data in table
+
     const handleOnOff = async (e) => {
       let stat = this.state.newProducts[e.target.value]['status']
       let index = e.target.value
@@ -155,21 +154,96 @@ export class Dashboard extends Component {
 
     const handleChangeValue = (e) => {
       if (e.target.className == 'soil-input form-control'){
+        if (this.state.soil < e.target.value){
+          changeStatus[0] = 1
+        } else if (this.state.soil > e.target.value){
+          changeStatus[0] = -1
+        } else changeStatus[0] = 0
+
+        factorChange['soil'] = e.target.value
         // this.setState({soil: e.target.value});
         
       } 
       if (e.target.className == 'air-input form-control'){
-        this.setState({air: e.target.value});
+        if (this.state.air < e.target.value){
+          changeStatus[1] = 1
+        } else if (this.state.air > e.target.value){
+          changeStatus[1] = -1
+        } else changeStatus[1] = 0
+        factorChange['air'] = e.target.value
+        // this.setState({air: e.target.value});
       } 
       if (e.target.className == 'temp-input form-control'){
-        this.setState({temp: e.target.value});
+        if (this.state.temp < e.target.value){
+          changeStatus[2] = 1
+        } else if (this.state.temp > e.target.value){
+          changeStatus[2] = -1
+        } else changeStatus[2] = 0
+        factorChange['temp'] = e.target.value
+        // this.setState({temp: e.target.value});
       } 
       if (e.target.className == 'light-input form-control'){
-        this.setState({light: e.target.value});
+        if (this.state.light < e.target.value){
+          changeStatus[3] = 1
+        } else if (this.state.light > e.target.value){
+          changeStatus[3] = -1
+        } else changeStatus[3] = 0
+
+        factorChange['light'] = e.target.value
+        // this.setState({light: e.target.value});
       } 
       
     }
-    
+    // var today = new Date();
+    // var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    // var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    // var dateTime = date+' '+time;
+    //   console.log(dateTime)
+    const submitFactor = () => {
+      var today = new Date();
+      var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+      var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+      var dateTime = date+' '+time;
+      console.log(dateTime)
+      
+      if (changeStatus[0] != 0){
+        axios.post(`http://localhost:5000/schedule/?condition=${factorChange[0]}&increased=${changeStatus[0]}`, {
+          id_device : 0,
+          time_start : dateTime,
+          status : 0
+        })
+        .then(
+          changeStatus= [0,0,0,0]
+        )
+          
+        
+      }
+      if (changeStatus[1] != 0){
+        axios.post(`http://localhost:5000/schedule/?condition=${factorChange[1]}&increased=${changeStatus[1]}`, {
+          id_device : 14,
+          time_start : dateTime,
+          status : 0
+        })
+        .then(
+          changeStatus= [0,0,0,0]
+        )
+      }
+      if (changeStatus[2] != 0){
+        axios.post(`http://localhost:5000/schedule/?condition=${factorChange[2]}&increased=${changeStatus[2]}`, {
+          id_device : 15,
+          time_start : dateTime,
+          status : 0
+        })
+      }
+      if (changeStatus[3] != 0){
+        axios.post(`http://localhost:5000/schedule/?condition=${factorChange[3]}&increased=${changeStatus[3]}`, {
+          id_device : 13,
+          time_start : dateTime,
+          status : 0
+        })
+      }
+      
+    }
     
     return (
       <div>
@@ -335,6 +409,7 @@ export class Dashboard extends Component {
                                           aria-label="air"
                                           aria-describedby="btnGroupAddon"
                                           onChange={handleChangeValue}
+                                          step={0.1}
                                         />
                                         <InputGroup.Text id="btnGroupAddon">Temperature</InputGroup.Text>
                                         <FormControl
@@ -345,6 +420,7 @@ export class Dashboard extends Component {
                                           aria-label="temperature"
                                           onChange={handleChangeValue}
                                           aria-describedby="btnGroupAddon"
+                                          step={0.1}
                                         />
                                         <InputGroup.Text id="btnGroupAddon">Light intensity</InputGroup.Text>
                                         <FormControl
@@ -358,7 +434,7 @@ export class Dashboard extends Component {
                                         />
                                       </InputGroup>
                                     </ButtonToolbar>
-                                    <Button variant="primary" type="submit">
+                                    <Button variant="primary" type="submit" onClick={submitFactor}>
                                       Submit
                                     </Button>
                                   </Form>

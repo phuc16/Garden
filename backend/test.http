@@ -78,9 +78,8 @@ POST http://localhost:5000/device
 Content-Type: application/json
 
 {
-    "id" : 1 ,
-    "name" : "PUMP_TIENMINH",
-    "category" : "PUMP",
+    "name" : "LAMP_TIENMINH",
+    "category" : "LAMP",
     "status" : 0,
     "id_garden" : 1
 }
@@ -106,8 +105,18 @@ Content-Type: application/json
 
 {
     "id_device" : 13 ,
-    "time_start" : "2011-08-01 00:45:00",
-    "time_end" : "2011-08-01 00:46:20",
+    "time_start" : "2022-05-30 00:41:00",
+    "status" : 0
+}
+
+
+### 
+POST http://localhost:5000/schedule/?condition=50&increased=-1
+Content-Type: application/json
+
+{
+    "id_device" : 14 ,
+    "time_start" : "2022-05-31 16:19:00",
     "status" : 0
 }
 

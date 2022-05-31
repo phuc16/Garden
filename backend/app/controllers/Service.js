@@ -113,16 +113,31 @@ exports.responseSchedule = (schedule, response) => {
                 id : schedule[i].id
             }
             let typeDevice = data.rows[0].category
-            let command = `${typeDevice}:1/${typeDevice}:0/FOR/${(schedule[i].time_end - schedule[i].time_start)/1000}`
-            responseData['command'] = command
+            var condition = ``
+            let command = ``
+            if (typeDevice == 'PUMP' || typeDevice == 'MIST' ) command += `${typeDevice}:1/${typeDevice}:0`
+            else if (typeDevice == 'LAMP') command += 'LAMP:150/LAMP:0'
+            if (schedule[i].time_end && schedule[i].time_end.getYear() < 100) {
+                if (typeDevice == 'PUMP') condition += `/MOIST`
+                else if (typeDevice == 'MIST') condition += `/HUMID`
+                else if (typeDevice == 'LAMP') condition += `/LIGHT`
+                let timeForCheck = new Date(schedule[i].time_end.getTime() - schedule[i].time_end.getTimezoneOffset()*60*1000)
+                // console.log(timeForCheck)
+                if (timeForCheck.getTime() >= 0) condition += `>${timeForCheck.getTime()/1000}`
+                else condition += `<${-timeForCheck.getTime()/1000}`
+            }
+            // console.log(condition)
+            // return
+            //`${typeDevice}:1/${typeDevice}:0/FOR/${(schedule[i].time_end - schedule[i].time_start)/1000}`
+            responseData['command'] = command + condition
             responseData.time = `${schedule[i].time_start.getDay()}:${schedule[i].time_start.getMonth()+1}:${schedule[i].time_start.getYear()+1900}:` 
                                 + schedule[i].time_start.toLocaleTimeString()
             responseData.status = schedule[i].status
-            console.log(responseData)
+            // console.log(responseData)
             myArray.push(responseData)
             // response.send(myArray)
             // response.send(responseData)
-            console.log(myArray)
+            // console.log(myArray)
             if (i == len - 1) response.send(myArray)
         })
     }

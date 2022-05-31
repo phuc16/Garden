@@ -111,10 +111,12 @@ exports.getAllSchedules = (req, res, err) => {
                     err.message || "Some error occurred while retrieving device."
             });
             else {
-                // for (let row of data.rows){
-                //     row['time_start'] = row['time_start'].toLocaleString('en-GB');
-                //     row['time_end'] = row['time_end'].toLocaleString('en-GB');
-                // }
+                for (let row of data.rows){
+                    if (row.time_end.getYear() < 100) row.time_end = 'null'
+                    // console.log(row.time_end.getYear())
+                    // row['time_start'] = row['time_start'].toLocaleString('en-GB');
+                    // row['time_end'] = row['time_end'].toLocaleString('en-GB');
+                }
                 res.send(data.rows);
             }
     });
@@ -135,10 +137,6 @@ exports.insertSchedule = (req, res, err) => {
         return
     }
 
-    if (!req.body.time_end){
-        req.body.time_end = 'NULL'
-    }
-
     if (req.body.time_end && new Date(req.body.time_start) > new Date(req.body.time_end)) {
         res.status(400).send({
             message:
@@ -146,6 +144,23 @@ exports.insertSchedule = (req, res, err) => {
           });
         return
     }
+   
+
+    
+    if (!req.body.time_end){   
+        // ?condition=300
+        if (req.query.condition != undefined) {
+            req.body.time_end = new Date()
+            req.body.time_end.setTime((req.query.condition * req.query.increased * 1000));
+            // console.log(req.body.time_end.toISOString().slice(0, 19).replace('T', ' '))
+            // return
+            req.body.time_end = req.body.time_end.toISOString().slice(0, 19).replace('T', ' ')
+            console.log(req.body.time_end)
+            // return
+        }
+        else req.body.time_end = 'NULL'
+    }
+
 
     axios.get(`https://io.adafruit.com/api/v2/mp5navy/feeds/sync/data/last`
             , { headers : { "X-AIO-Key": "aio_rKEU43c1eB2HeL1fYuMm4JPjOket" } })

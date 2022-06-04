@@ -102,6 +102,8 @@ export class Dashboard extends Component {
     var factorChange = {soil: this.state.soil, air: this.state.air, temp: this.state.temp, light: this.state.light}
     var changeStatus = [0,0,0,0] //save as order soil, air, temp, light
     const productInTable = [] //using for display data in table
+    
+    
 
     const handleOnOff = async (e) => {
       let stat = this.state.newProducts[e.target.value]['status']
@@ -165,12 +167,14 @@ export class Dashboard extends Component {
         
       } 
       if (e.target.className == 'air-input form-control'){
+        
         if (this.state.air < e.target.value){
           changeStatus[1] = 1
         } else if (this.state.air > e.target.value){
           changeStatus[1] = -1
         } else changeStatus[1] = 0
         factorChange['air'] = e.target.value
+
         // this.setState({air: e.target.value});
       } 
       if (e.target.className == 'temp-input form-control'){
@@ -194,20 +198,20 @@ export class Dashboard extends Component {
       } 
       
     }
-    // var today = new Date();
-    // var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-    // var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    // var dateTime = date+' '+time;
-    //   console.log(dateTime)
+    var today = new Date();
+    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    var dateTime = date+' '+time;
+    console.log(date)
     const submitFactor = () => {
-      var today = new Date();
-      var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-      var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-      var dateTime = date+' '+time;
-      console.log(dateTime)
+      // var today = new Date();
+      // var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+      // var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+      // var dateTime = date+' '+time;
+      
       
       if (changeStatus[0] != 0){
-        axios.post(`http://localhost:5000/schedule/?condition=${factorChange[0]}&increased=${changeStatus[0]}`, {
+        axios.post(`http://localhost:5000/schedule/?condition=${factorChange['soil']}&increased=${changeStatus[0]}`, {
           id_device : 0,
           time_start : dateTime,
           status : 0
@@ -219,7 +223,9 @@ export class Dashboard extends Component {
         
       }
       if (changeStatus[1] != 0){
-        axios.post(`http://localhost:5000/schedule/?condition=${factorChange[1]}&increased=${changeStatus[1]}`, {
+        console.log(factorChange['air'])
+
+          axios.post(`http://localhost:5000/schedule/?condition=${factorChange['air']}&increased=${changeStatus[1]}`, {
           id_device : 14,
           time_start : dateTime,
           status : 0
@@ -227,16 +233,17 @@ export class Dashboard extends Component {
         .then(
           changeStatus= [0,0,0,0]
         )
+        
       }
       if (changeStatus[2] != 0){
-        axios.post(`http://localhost:5000/schedule/?condition=${factorChange[2]}&increased=${changeStatus[2]}`, {
+        axios.post(`http://localhost:5000/schedule/?condition=${factorChange['temp']}&increased=${changeStatus[2]}`, {
           id_device : 15,
           time_start : dateTime,
           status : 0
         })
       }
       if (changeStatus[3] != 0){
-        axios.post(`http://localhost:5000/schedule/?condition=${factorChange[3]}&increased=${changeStatus[3]}`, {
+        axios.post(`http://localhost:5000/schedule/?condition=${factorChange['light']}&increased=${changeStatus[3]}`, {
           id_device : 13,
           time_start : dateTime,
           status : 0

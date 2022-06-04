@@ -36,8 +36,6 @@ class TimeSetting extends Component {
     
 
     render(){
-
-      
       const handleDeleteSchedule = (e) => {
         let index = e.target.value
         axios.delete(`http://localhost:5000/schedule/${deviceInSchedule[e.target.value]['id']}`)

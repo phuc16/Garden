@@ -33,7 +33,7 @@ export class Dashboard extends Component {
   }
 
   componentDidMount() {
-    axios.get(`http://localhost:5000/device`)
+    axios.get(`https://universe-smart-garden.herokuapp.com/device`)
       .then(res => {
         const temp = res.data;
         
@@ -41,13 +41,13 @@ export class Dashboard extends Component {
         console.log(this.state.newProducts)
       })
     
-    axios.get(`http://localhost:5000/data/`)
+    axios.get(`https://universe-smart-garden.herokuapp.com/data/`)
     .then(res => {
       this.setState({allData: res.data})
       let temp = this.state.allData
     })
 
-    axios.get(`http://localhost:5000/data/last`)
+    axios.get(`https://universe-smart-garden.herokuapp.com/data/last`)
       .then(res => {
         let x = []
         x = res.data
@@ -55,7 +55,7 @@ export class Dashboard extends Component {
         console.log(this.state.temp)
       })
 
-    axios.get(`http://localhost:5000/data/before-last`)
+    axios.get(`https://universe-smart-garden.herokuapp.com/data/before-last`)
       .then(res => {
         let x = res.data
         this.setState({nearestAir: x['Humidity'], nearestLight: x['Light'], nearestTemp: x['Temp'], nearestSoil: x.length == 4 ? x['Soil']: 0})
@@ -109,7 +109,7 @@ export class Dashboard extends Component {
       let stat = this.state.newProducts[e.target.value]['status']
       let index = e.target.value
       if (stat == 0){
-        axios.put(`http://localhost:5000/device/${this.state.newProducts[e.target.value]['id']}`, {status: 1})
+        axios.put(`https://universe-smart-garden.herokuapp.com/device/${this.state.newProducts[e.target.value]['id']}`, {status: 1})
         .then(res => {
           this.setState({ newProducts : [
             ...this.state.newProducts.slice(0, index), 
@@ -119,7 +119,7 @@ export class Dashboard extends Component {
         })
       }
       else{
-        await axios.put(`http://localhost:5000/device/${this.state.newProducts[e.target.value]['id']}`, {status: 0})
+        await axios.put(`https://universe-smart-garden.herokuapp.com/device/${this.state.newProducts[e.target.value]['id']}`, {status: 0})
         .then(res => {
           this.setState({ newProducts : [
             ...this.state.newProducts.slice(0, index), 
@@ -211,7 +211,7 @@ export class Dashboard extends Component {
       
       
       if (changeStatus[0] != 0){
-        axios.post(`http://localhost:5000/schedule/?condition=${factorChange['soil']}&increased=${changeStatus[0]}`, {
+        axios.post(`https://universe-smart-garden.herokuapp.com/schedule/?condition=${factorChange['soil']}&increased=${changeStatus[0]}`, {
           id_device : 0,
           time_start : dateTime,
           status : 0
@@ -225,7 +225,7 @@ export class Dashboard extends Component {
       if (changeStatus[1] != 0){
         console.log(factorChange['air'])
 
-          axios.post(`http://localhost:5000/schedule/?condition=${factorChange['air']}&increased=${changeStatus[1]}`, {
+          axios.post(`https://universe-smart-garden.herokuapp.com/schedule/?condition=${factorChange['air']}&increased=${changeStatus[1]}`, {
           id_device : 14,
           time_start : dateTime,
           status : 0
@@ -236,14 +236,14 @@ export class Dashboard extends Component {
         
       }
       if (changeStatus[2] != 0){
-        axios.post(`http://localhost:5000/schedule/?condition=${factorChange['temp']}&increased=${changeStatus[2]}`, {
+        axios.post(`https://universe-smart-garden.herokuapp.com/schedule/?condition=${factorChange['temp']}&increased=${changeStatus[2]}`, {
           id_device : 15,
           time_start : dateTime,
           status : 0
         })
       }
       if (changeStatus[3] != 0){
-        axios.post(`http://localhost:5000/schedule/?condition=${factorChange['light']}&increased=${changeStatus[3]}`, {
+        axios.post(`https://universe-smart-garden.herokuapp.com/schedule/?condition=${factorChange['light']}&increased=${changeStatus[3]}`, {
           id_device : 13,
           time_start : dateTime,
           status : 0

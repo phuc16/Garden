@@ -19,14 +19,14 @@ class TimeSetting extends Component {
     }
 
     componentDidMount() {
-      axios.get(`http://localhost:5000/schedule?startDay=2000-01-01&endDay=2023-01-01`)
+      axios.get(`https://universe-smart-garden.herokuapp.com/schedule?startDay=2000-01-01&endDay=2023-01-01`)
         .then(res => {
           const temp = res.data; 
           this.setState({ scheduled : temp });
           console.log(this.state.scheduled)
         })
 
-      axios.get(`http://localhost:5000/device`)
+      axios.get(`https://universe-smart-garden.herokuapp.com/device`)
         .then(res => {
           const temp = res.data; 
           this.setState({ settingDevice : temp });
@@ -38,7 +38,7 @@ class TimeSetting extends Component {
     render(){
       const handleDeleteSchedule = (e) => {
         let index = e.target.value
-        axios.delete(`http://localhost:5000/schedule/${deviceInSchedule[e.target.value]['id']}`)
+        axios.delete(`https://universe-smart-garden.herokuapp.com/schedule/${deviceInSchedule[e.target.value]['id']}`)
         .then(res => {
           console.log(res)
 
@@ -82,7 +82,7 @@ class TimeSetting extends Component {
         //     (endCompare >= schedule[i]['time_start'] && endCompare <= schedule[i]['time_end']) )){
         //       update = true
         //       console.log('update')
-        //       axios.put(`http://localhost:5000/schedule/${deviceInSchedule[index]['id']}`, {
+        //       axios.put(`https://universe-smart-garden.herokuapp.com/schedule/${deviceInSchedule[index]['id']}`, {
         //         id_device: device_id,
         //         time_start: deviceInSetting[index]['time_start'],
         //         time_end: deviceInSetting[index]['time_end'],
@@ -94,7 +94,7 @@ class TimeSetting extends Component {
         // if (!update){
         //   console.log('insert')
           
-          axios.post(`http://localhost:5000/schedule`, {
+          axios.post(`https://universe-smart-garden.herokuapp.com/schedule`, {
             id_device: device_id,
             time_start: deviceInSetting[index]['time_start'],
             time_end: deviceInSetting[index]['time_end'],

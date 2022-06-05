@@ -97,7 +97,7 @@ Content-Type: application/json
 GET http://localhost:5000/device/13
 
 ### 
-GET http://localhost:5000/schedule
+GET http://localhost:5000/schedule?startDay=1000-01-01&endDay=20-03-05
 
 ### 
 POST http://localhost:5000/schedule
@@ -111,12 +111,12 @@ Content-Type: application/json
 
 
 ### 
-POST http://localhost:5000/schedule/?condition=50&increased=-1
+POST http://localhost:5000/schedule/?condition=471&increased=1
 Content-Type: application/json
 
 {
-    "id_device" : 14 ,
-    "time_start" : "2022-05-31 16:19:00",
+    "id_device" : 15 ,
+    "time_start" : "2022-06-01 01:00:00",
     "status" : 0
 }
 

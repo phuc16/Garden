@@ -124,14 +124,14 @@ exports.responseSchedule = (schedule, response) => {
                 let timeForCheck = new Date(schedule[i].time_end.getTime() - schedule[i].time_end.getTimezoneOffset()*60*1000)
                 // console.log(timeForCheck)
                 if (timeForCheck.getTime() >= 0) condition += `>${timeForCheck.getTime()/1000}`
-                else condition += `<${-timeForCheck.getTime()/1000}`
+                else condition += `<${-timeForCheck.getTime()/1000}`   
             }
             // console.log(condition)
             // return
             //`${typeDevice}:1/${typeDevice}:0/FOR/${(schedule[i].time_end - schedule[i].time_start)/1000}`
             responseData['command'] = command + condition
             responseData.time = `${schedule[i].time_start.getDay()}:${schedule[i].time_start.getMonth()+1}:${schedule[i].time_start.getYear()+1900}:` 
-                                + schedule[i].time_start.toLocaleTimeString()
+                                + schedule[i].time_start.toLocaleTimeString() 
             responseData.status = schedule[i].status
             // console.log(responseData)
             myArray.push(responseData)

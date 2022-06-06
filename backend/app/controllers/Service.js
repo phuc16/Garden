@@ -131,9 +131,9 @@ exports.responseSchedule = (schedule, response) => {
             //`${typeDevice}:1/${typeDevice}:0/FOR/${(schedule[i].time_end - schedule[i].time_start)/1000}`
             responseData['command'] = command + condition
             responseData.time = `${schedule[i].time_start.getDay()}:${schedule[i].time_start.getMonth()+1}:${schedule[i].time_start.getYear()+1900}:` 
-                                + schedule[i].time_start.toLocaleTimeString() 
+                                + schedule[i].time_start.toLocaleTimeString().slice(0,-3) 
             responseData.status = schedule[i].status
-            // console.log(responseData)
+            console.log(responseData)
             myArray.push(responseData)
             // response.send(myArray)
             // response.send(responseData)

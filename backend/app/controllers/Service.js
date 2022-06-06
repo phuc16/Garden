@@ -125,15 +125,22 @@ exports.responseSchedule = (schedule, response) => {
                 // console.log(timeForCheck)
                 if (timeForCheck.getTime() >= 0) condition += `>${timeForCheck.getTime()/1000}`
                 else condition += `<${-timeForCheck.getTime()/1000}`   
+
+                responseData['command'] = command + condition + "/90"
+            }
+            else {
+    
+                responseData['command'] = command + `${(schedule[i].time_end - schedule[i].time_start)/1000}`
             }
             // console.log(condition)
             // return
             //`${typeDevice}:1/${typeDevice}:0/FOR/${(schedule[i].time_end - schedule[i].time_start)/1000}`
-            responseData['command'] = command + condition
+            // if (condition.length == 0) condition += 'FOR'
+            // responseData['command'] = command + condition + "/90"
             responseData.time = `${schedule[i].time_start.getDay()}:${schedule[i].time_start.getMonth()+1}:${schedule[i].time_start.getYear()+1900}:` 
                                 + schedule[i].time_start.toLocaleTimeString().slice(0,-3) 
             responseData.status = schedule[i].status
-            console.log(responseData)
+            // console.log(responseData)
             myArray.push(responseData)
             // response.send(myArray)
             // response.send(responseData)

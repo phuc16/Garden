@@ -1,4 +1,4 @@
-POST http://localhost:5000/data
+POST https://universe-smart-garden.herokuapp.com/data
 Content-Type: application/json
 
 {
@@ -9,22 +9,22 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:5000/data/search?idGarden=1&startDay=2000-01-01&endDay=2010-03-05
+GET https://universe-smart-garden.herokuapp.com/data/search?idGarden=1&startDay=2000-01-01&endDay=2010-03-05
 
 ###
-GET http://localhost:5000/data
+GET https://universe-smart-garden.herokuapp.com/data
 
 ###
-GET http://localhost:5000/data/last
+GET https://universe-smart-garden.herokuapp.com/data/last
 
 ###
-GET http://localhost:5000/data/before-last
+GET https://universe-smart-garden.herokuapp.com/data/before-last
 
 ###
-GET http://localhost:5000/garden
+GET https://universe-smart-garden.herokuapp.com/garden
 
 ###
-POST http://localhost:5000/garden
+POST https://universe-smart-garden.herokuapp.com/garden
 Content-Type: application/json
 
 {
@@ -34,7 +34,7 @@ Content-Type: application/json
 }
 
 ###
-PUT http://localhost:5000/garden/2
+PUT https://universe-smart-garden.herokuapp.com/garden/2
 Content-Type: application/json
 
 {
@@ -45,14 +45,14 @@ Content-Type: application/json
 
 
 ###
-DELETE http://localhost:5000/garden/2
+DELETE https://universe-smart-garden.herokuapp.com/garden/2
 
 
 ###
-GET http://localhost:5000/user/search-by-garden/1
+GET https://universe-smart-garden.herokuapp.com/user/search-by-garden/1
 
 ###
-POST http://localhost:5000/user
+POST https://universe-smart-garden.herokuapp.com/user
 Content-Type: application/json
 
 {
@@ -63,18 +63,18 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:5000/user/1
+GET https://universe-smart-garden.herokuapp.com/user/1
 
 
 ### 
-GET http://localhost:5000/device
+GET https://universe-smart-garden.herokuapp.com/device
 
 
 ### 
-DELETE http://localhost:5000/device/12
+DELETE https://universe-smart-garden.herokuapp.com/device/12
 
 ### 
-POST http://localhost:5000/device
+POST https://universe-smart-garden.herokuapp.com/device
 Content-Type: application/json
 
 {
@@ -86,7 +86,7 @@ Content-Type: application/json
 
 
 ### 
-PUT http://localhost:5000/device/13
+PUT https://universe-smart-garden.herokuapp.com/device/13
 Content-Type: application/json
 
 {
@@ -94,13 +94,13 @@ Content-Type: application/json
 }
 
 ### 
-GET http://localhost:5000/device/13
+GET https://universe-smart-garden.herokuapp.com/device/13
 
 ### 
-GET http://localhost:5000/schedule?startDay=1000-01-01&endDay=20-03-05
+GET https://universe-smart-garden.herokuapp.com/schedule?startDay=1000-01-01&endDay=20-03-05
 
 ### 
-POST http://localhost:5000/schedule
+POST https://universe-smart-garden.herokuapp.com/schedule
 Content-Type: application/json
 
 {
@@ -111,7 +111,7 @@ Content-Type: application/json
 
 
 ### 
-POST http://localhost:5000/schedule/?condition=471&increased=1
+POST https://universe-smart-garden.herokuapp.com/schedule/?condition=471&increased=1
 Content-Type: application/json
 
 {
@@ -122,7 +122,7 @@ Content-Type: application/json
 
 
 ### 
-GET http://localhost:5000/schedule/unfulfilled
+GET https://universe-smart-garden.herokuapp.com/schedule/unfulfilled
 
 ### 
 

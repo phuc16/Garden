@@ -1,9 +1,11 @@
 import { Tabs, Tab, Button } from "react-bootstrap"
 import BootstrapTable from "react-bootstrap-table-next"
 import React, { Component } from 'react';
-import './time-setting.css'
+import './schedule.css'
 // import TimePicker from 'react-bootstrap-time-picker';
 import axios from 'axios'
+
+
 
 class TimeSetting extends Component {
     
@@ -19,14 +21,14 @@ class TimeSetting extends Component {
     }
 
     componentDidMount() {
-      axios.get(`http://localhost:5000/schedule?startDay=2000-01-01&endDay=2023-01-01`)
+      axios.get(process.env.REACT_APP_SERVER + `/schedule?startDay=2000-01-01&endDay=2023-01-01`)
         .then(res => {
           const temp = res.data; 
           this.setState({ scheduled : temp });
           console.log(this.state.scheduled)
         })
 
-      axios.get(`http://localhost:5000/device`)
+      axios.get(process.env.REACT_APP_SERVER + `/device`)
         .then(res => {
           const temp = res.data; 
           this.setState({ settingDevice : temp });
@@ -38,7 +40,7 @@ class TimeSetting extends Component {
     render(){
       const handleDeleteSchedule = (e) => {
         let index = e.target.value
-        axios.delete(`http://localhost:5000/schedule/${deviceInSchedule[e.target.value]['id']}`)
+        axios.delete(process.env.REACT_APP_SERVER + `/schedule/${deviceInSchedule[e.target.value]['id']}`)
         .then(res => {
           console.log(res)
 
@@ -94,7 +96,7 @@ class TimeSetting extends Component {
         // if (!update){
         //   console.log('insert')
           
-          axios.post(`http://localhost:5000/schedule`, {
+          axios.post(process.env.REACT_APP_SERVER + `/schedule`, {
             id_device: device_id,
             time_start: deviceInSetting[index]['time_start'],
             time_end: deviceInSetting[index]['time_end'],
@@ -130,7 +132,7 @@ class TimeSetting extends Component {
           setting:  <Button value={i} onClick={handleSetSchedule}>Set</Button> }) 
       }
 
-      console.log(this.state.scheduled[0])
+      // console.log(this.state.scheduled[0])
     const columns = [{
         dataField: 'id',
         text: 'ID'

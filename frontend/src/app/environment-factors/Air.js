@@ -9,8 +9,6 @@ import axios from 'axios';
 
 
 
-
-
 // some position using allAir data instead of todayAir because todayAir now still dont have any data
 class Air extends Component {
   constructor(props){
@@ -29,8 +27,7 @@ class Air extends Component {
     var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
     var nextDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+(today.getDate() + 1);
     // console.log(nextDate)
-
-    await axios.get(`http://localhost:5000/data`)
+    await axios.get(process.env.REACT_APP_SERVER + `/data`)
     .then(res => {
       let temp = []
       for (let i = 0; i<res.data.length; i++){
@@ -42,14 +39,14 @@ class Air extends Component {
     })
     console.log('x')
 
-    await axios.get(`http://localhost:5000/data/last`)
+    await axios.get(process.env.REACT_APP_SERVER + `/data/last`)
     .then(res => {
       let x = res.data
       console.log(x)
       this.setState({lastData: x[0]['value']})
     })
 
-    await axios.get(`http://localhost:5000/data/search?idGarden=1&startDay=${date}&endDay=${nextDate}`)
+    await axios.get(process.env.REACT_APP_SERVER + `/data/search?idGarden=1&startDay=${date}&endDay=${nextDate}`)
     .then(res => {
       let temp = []
       for (let i = 0; i<res.data.length; i++){
@@ -60,7 +57,7 @@ class Air extends Component {
       this.setState({todayAir: temp})
     })
 
-    await axios.get(`http://localhost:5000/data/before-last`)
+    await axios.get(process.env.REACT_APP_SERVER +  `/data/before-last`)
     .then(res => {
       let x = res.data
       this.setState({nearestData: x['Humidity']})

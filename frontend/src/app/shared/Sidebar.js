@@ -34,7 +34,7 @@ class Sidebar extends Component {
 
     const dropdownPaths = [
       {path:'/apps', state: 'appsMenuOpen'},
-      {path:'/basic-ui', state: 'basicUiMenuOpen'},
+      {path:'/environment-factors', state: 'basicUiMenuOpen'},
       {path:'/advanced-ui', state: 'advancedUiMenuOpen'},
       {path:'/form-elements', state: 'formElementsMenuOpen'},
       {path:'/tables', state: 'tablesMenuOpen'},
@@ -67,26 +67,26 @@ class Sidebar extends Component {
             </Link>
           </li>
           <li className="nav-item nav-category"><Trans>Environment Factors</Trans></li>
-          <li className={ this.isPathActive('/basic-ui/soil') ? 'nav-item active soil-bar' : 'nav-item soil-bar' }>
-            <Link className={ this.isPathActive('/basic-ui/soil') ? 'nav-link active ' : 'nav-link' } to="/basic-ui/soil">
+          <li className={ this.isPathActive('/environment-factors/soil') ? 'nav-item active soil-bar' : 'nav-item soil-bar' }>
+            <Link className={ this.isPathActive('/environment-factors/soil') ? 'nav-link active ' : 'nav-link' } to="/environment-factors/soil">
                 <span className="icon-bg"><i className="mdi mdi-waves menu-icon"></i></span>
                 <span className="menu-title"><Trans>Soil Moisture </Trans></span>
             </Link>
           </li>
-          <li className={ this.isPathActive('/basic-ui/air') ? 'nav-item active air-bar' : 'nav-item air-bar' }>
-            <Link className={ this.isPathActive('/basic-ui/air') ? 'nav-link active' : 'nav-link' } to="/basic-ui/air">
+          <li className={ this.isPathActive('/environment-factors/air') ? 'nav-item active air-bar' : 'nav-item air-bar' }>
+            <Link className={ this.isPathActive('/environment-factors/air') ? 'nav-link active' : 'nav-link' } to="/environment-factors/air">
                 <span className="icon-bg"><i className="mdi mdi-weather-rainy menu-icon"></i></span>
                 <span className="menu-title"><Trans>Air</Trans></span>
             </Link>
           </li>
-          <li className={ this.isPathActive('/basic-ui/temperature') ? 'nav-item active temp-bar' : 'nav-item temp-bar' }>
-            <Link className={ this.isPathActive('/basic-ui/temperature') ? 'nav-link active' : 'nav-link' } to="/basic-ui/temperature">
+          <li className={ this.isPathActive('/environment-factors/temperature') ? 'nav-item active temp-bar' : 'nav-item temp-bar' }>
+            <Link className={ this.isPathActive('/environment-factors/temperature') ? 'nav-link active' : 'nav-link' } to="/environment-factors/temperature">
                 <span className="icon-bg"><i className="mdi mdi-coolant-temperature menu-icon"></i></span>
                 <span className="menu-title"><Trans>Temperature</Trans></span>
             </Link>
           </li>
-          <li className={ this.isPathActive('/basic-ui/light') ? 'nav-item active light-bar' : 'nav-item light-bar' }>
-            <Link className={ this.isPathActive('/basic-ui/light') ? 'nav-link active' : 'nav-link' } to="/basic-ui/light">
+          <li className={ this.isPathActive('/environment-factors/light') ? 'nav-item active light-bar' : 'nav-item light-bar' }>
+            <Link className={ this.isPathActive('/environment-factors/light') ? 'nav-link active' : 'nav-link' } to="/environment-factors/light">
               <span className="icon-bg"><i className="mdi mdi-weather-sunny menu-icon"></i></span>
               <span className="menu-title"><Trans>Light Intensity</Trans></span>
             </Link>
@@ -94,8 +94,8 @@ class Sidebar extends Component {
           
 
           <li className="nav-item nav-category"><Trans>Control Scheduler</Trans></li>
-          <li className={ this.isPathActive('/time-setting') ? 'nav-item active' : 'nav-item' }>
-            <Link className={ this.isPathActive('/time-setting/time-setting') ? 'nav-link active' : 'nav-link' } to="/time-setting/time-setting">
+          <li className={ this.isPathActive('/control-scheduler') ? 'nav-item active' : 'nav-item' }>
+            <Link className={ this.isPathActive('/control-scheduler/schedule') ? 'nav-link active' : 'nav-link' } to="/control-scheduler/schedule">
                 <span className="icon-bg"><i className="mdi mdi-chart-bar menu-icon"></i></span>
                 <span className="menu-title"><Trans>Schedule</Trans></span>
             </Link>

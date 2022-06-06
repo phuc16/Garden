@@ -1,80 +1,68 @@
-## Connect Plus React - Free Admin Template
-Presenting Connect Plus React Free, a free beautiful, and easy-to-use admin template with a striking color theme, built with React JS. It comes packed with features and doesn’t feel cramped with too much information. It is an excellent fit to build admin panels, e-commerce systems, project management systems, CMS or CRM.
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-Although the template has a design like none other, it is easily customizable to suit your requirements. Connect Plus React comes with a clean and well-commented code that makes it easy to work with the template. Thus making it an ideal pick for jump-starting your project.
+## Available Scripts
 
-### Demo
-Click the image below to get a live preview.
-[![N|Solid](preview.jpg)](https://bootstrapdash.com/demo/connect-plus-react-free/template/demo_1/preview/dashboard)
+In the project directory, you can run:
 
+### `npm start`
 
-### Credits
+Runs the app in the development mode.<br>
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-- Bootstrap
-- Material Design Icons
-- React
-- Chart.js
+The page will reload if you make edits.<br>
+You will also see any lint errors in the console.
 
-### Browser Support
+### `npm test`
 
-- Chrome (latest)
-- FireFox (latest)
-- Safari (latest)
-- Opera (latest)
-- IE10+
+Launches the test runner in the interactive watch mode.<br>
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### License Information
+### `npm run build`
 
-Connect Plus React free is released under MIT license. This is a free react admin template developed by BootstrapDash. Feel free to download it, use it, share it, and get creative with it.
-  
-## Like what you see?
-Within the download you'll find the following directories and files, logically grouping common assets and providing both compiled and minified variations. You'll see something like this:
+Builds the app for production to the `build` folder.<br>
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
-```
-connect-plus-react-free-admin-template/
-  ├── template
-    ├── demo_1
-        ├── src/
-            ├── app/
-            ├── assets/
-                ├── images/
-                ├── styles/
-            ├── index.js
-        ├── public/
-        ├── .gitignore
-        ├── package.json
-  ├── CHANGELOG.md
-  ├── documentation
-  ├── LICENSE
-  ├── README.md
-```
+The build is minified and the filenames include the hashes.<br>
+Your app is ready to be deployed!
 
-## How to use Connect Plus React Free?
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-- Click the Clone or Download button in GitHub and download as a ZIP file or you can enter the command
-$ git clone https://github.com/BootstrapDash/connect-plus-react-free-admin-template.git in your terminal to get a copy of this template.
+### `npm run eject`
 
-- After the files have been downloaded you will get a folder with all the required files
+**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
-- You can install all the dependencies in the template by running the command 'npm install'. All the required files are in the node modules.
-You can serve the template with the command 'npm start'.
+If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-- Now that your project has now kick-started, all you need to do now is to code, code, and code to your heart's content.
+Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
+You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## How to Contribute?
+## Learn More
 
-We love your contributions and we welcome them wholeheartedly. We believe the more the merrier. To contribute make sure you have Node.js and npm installed.
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-## Next
-After node and npm have been installed, follow the steps below to contribute.
+To learn React, check out the [React documentation](https://reactjs.org/).
 
-- Fork and clone the repo of connect-plus-react-free-admin-template.
-- Run the command 'npm install' to install all the dependencies.
-- Enter the command 'npm start'. This will open connect-plus-react-free-admin-template in your default browser.
-- Make your valuable contribution
-- Submit a pull request.
+### Code Splitting
 
+This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
 
-Do you need a template with more features and functionalities? Get more with our collection of premium templates with more plugins, eye-catching animations, UI components, and sample pages all fitting together with a high-quality design. Visit https://www.bootstrapdash.com for more admin templates.
+### Analyzing the Bundle Size
 
+This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+
+### Making a Progressive Web App
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+
+### Advanced Configuration
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+
+### Deployment
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+
+### `npm run build` fails to minify
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify

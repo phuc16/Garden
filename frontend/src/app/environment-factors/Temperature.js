@@ -5,36 +5,68 @@ import { Tabs, Tab } from 'react-bootstrap';
 import { Line } from 'react-chartjs-2';
 import { Link } from 'react-router-dom';
 import paginationFactory from 'react-bootstrap-table2-paginator';
-
-const products = [
-  {'id': 'Max', 'temp': '31', 'time': 11111111},
-  {'id': 'Min', 'temp': '31', 'time': 11111111},
-  {'id': 'Avarage', 'temp': '31', 'time': 11111111}
-];
-const columns = [{
-  dataField: 'id',
-  text: '',
-  sort: true
-}, {
-  dataField: 'temp',
-  text: 'Temperature',
-  sort: true
-}, {
-  dataField: 'time',
-  text: 'Time',
-  sort: true
-}
-];
-
-
-
+import axios from 'axios';
 
 class Temperature extends Component {
+
+  constructor(props){
+    super(props);
+    this.state = {
+      allTemp: [],
+      todayTemp : [],
+      lastData: 0,
+    };
+  }
+
+
+  async componentDidMount(){
+    var today = new Date();
+    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    var nextDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+(today.getDate() + 1);
+    // console.log(nextDate)
+
+    await axios.get(`http://localhost:5000/data`)
+    .then(res => {
+      let temp = []
+      for (let i = 0; i<res.data.length; i++){
+        if (res.data[i]['category'] == 'Temp'){
+          temp.push(res.data[i])
+        }
+      }
+      this.setState({allTemp: temp})
+    })
+    console.log('x')
+
+    await axios.get(`http://localhost:5000/data/last`)
+    .then(res => {
+      let x = res.data
+      console.log(x)
+      this.setState({lastData: x[2]['value']})
+    })
+
+    await axios.get(`http://localhost:5000/data/search?idGarden=1&startDay=${date}&endDay=${nextDate}`)
+    .then(res => {
+      let temp = []
+      for (let i = 0; i<res.data.length; i++){
+        if (res.data[i]['category'] == 'Temp'){
+         temp.push(res.data[i])
+        }
+      }
+      this.setState({todayTemp: temp})
+    })
+
+    await axios.get(`http://localhost:5000/data/before-last`)
+    .then(res => {
+      let x = res.data
+      this.setState({nearestData: x['Temp']})
+    })
+  }
+
   data = {
-    labels: ["2013", "2014", "2014", "2015", "2016", "2017"],
+    labels: [],
     datasets: [{
-      label: '# of Votes',
-      data: [10, 19, 3, 5, 2, 3],
+      label: 'Today Temporature',
+      data: [],
       backgroundColor: [
         'rgba(255, 99, 132, 0.2)',
         'rgba(54, 162, 235, 0.2)',
@@ -52,7 +84,7 @@ class Temperature extends Component {
         'rgba(255, 159, 64, 1)'
       ],
       borderWidth: 1,
-      fill: false
+      fill: true
     }]
   };
 
@@ -65,7 +97,7 @@ class Temperature extends Component {
         }]
       },
       legend: {
-        display: false
+        display: true
       },
       elements: {
         point: {
@@ -75,7 +107,86 @@ class Temperature extends Component {
 
   };
 
+  showChart(){
+    var todayDataChart = []
+    var todayColumn = []
+    var allDataChart = []
+    var allColumn = []
+    
+    for (let i = 0; i< this.state.todayTemp.length; i++){
+      todayDataChart.push(this.state.todayTemp[i]['value'])
+      todayColumn.push(this.state.todayTemp[0]['time'].slice(11, this.state.todayTemp[0]['time'].length).replace('.000Z', ''))
+    }
+
+    for (let i = 0; i< this.state.allTemp.length; i++){
+      allDataChart.push(this.state.allTemp[i]['value'])
+      allColumn.push(this.state.allTemp[0]['time'].slice(0, 11).replace('T', ''))
+    }
+    this.data.labels = allColumn
+    this.data.datasets[0].data = allDataChart
+    console.log(todayColumn)
+  }
+
   render () {
+    console.log('render')
+    var sumTemp = 0
+    var todayTemp = [];
+    var timeMax = ''
+    var timeMin = ''
+    var today = new Date();
+    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    var changeData = [this.state.lastData - this.state.nearestData]
+    this.showChart()
+
+    for (let i = 0; i < this.state.allTemp.length; i++){
+      sumTemp += this.state.allTemp[i]['value']
+    }
+
+    if (this.state.allTemp.length > 0){
+      var temp = []
+      temp.push(...this.state.allTemp.map(o => o.value))
+      timeMax = this.state.allTemp[temp.indexOf(Math.max(...this.state.allTemp.map(o => o.value)))]['time']
+      timeMax = timeMax.replace('T', ', ').replace('.000Z', '')
+      timeMin = this.state.allTemp[temp.indexOf(Math.min(...this.state.allTemp.map(o => o.value)))]['time']
+      timeMin = timeMin.replace('T', ', ').replace('.000Z', '')
+    }
+
+    const products = [
+      {'id': 'Max', 'temp': Math.max(...this.state.allTemp.map(o => o.value)), 'time': timeMax},
+      {'id': 'Min', 'temp': Math.min(...this.state.allTemp.map(o => o.value)), 'time': timeMin},
+      {'id': 'Avarage', 'temp': Math.round((sumTemp/this.state.allTemp.length)*100)/100 , 'time': date}
+    ];
+
+    const columns = [{
+      dataField: 'id',
+      text: '', 
+      sort: true
+    }, {
+      dataField: 'temp',
+      text: 'Temp',
+      sort: true
+    }, {
+      dataField: 'time',
+      text: 'Time',
+      sort: true
+    }
+    ];
+
+    const StatColumn = [{
+      dataField: 'id',
+      text: 'ID', 
+      sort: true
+    }, {
+      dataField: 'value',
+      text: 'Value',
+      sort: true
+    }, {
+      dataField: 'time',
+      text: 'Time',
+      sort: true
+    }
+    ]
+
     return (
       <div>
         <div className="page-header">
@@ -94,7 +205,7 @@ class Temperature extends Component {
             <div className="card">
               <div className="card-body text-center">
                 <h5 className="mb-2 text-dark font-weight-normal">Temperature</h5>
-                <h2 className="mb-4 text-dark font-weight-bold">100,38</h2>
+                <h2 className="mb-4 text-dark font-weight-bold">{this.state.lastData}</h2>
                   <div className="px-4 d-flex align-items-center">
                     <svg width="0" height="0">
                       <defs>
@@ -105,14 +216,14 @@ class Temperature extends Component {
                       </defs>
                     </svg>
                     <CircularProgressbarWithChildren className="progress-impressions"
-                    value={90}>
+                    value={this.state.lastData}>
                       <div>
                         <i className="mdi mdi-coolant-temperature icon-md absolute-center text-dark"></i>
                       </div>
                     </CircularProgressbarWithChildren>
                   </div>                              
-                <p className="mt-4 mb-0">Increased since yesterday</p>
-                <h3 className="mb-0 font-weight-bold mt-2 text-dark">35%</h3>
+                  <p className="mt-4 mb-0">{changeData >= 0 ? 'Increased since' : 'Decreased since' } last time</p>
+                  <h3 className="mb-0 font-weight-bold mt-2 text-dark">{Math.floor(Math.abs(changeData)/this.state.nearestData*100)} %</h3>
               </div>
             </div>
           </div>
@@ -141,7 +252,7 @@ class Temperature extends Component {
           <div className="card">
           <div className="card-body text-center">
           <h5 className="mb-2 text-dark font-weight-normal">Temperature Stats Today</h5>
-            <BootstrapTable bootstrap4 keyField='id' data={ products } columns={ columns } />
+            <BootstrapTable bootstrap4 keyField='id' data={ this.state.allTemp } columns={ StatColumn } />
             </div>
           </div>
 
@@ -153,8 +264,8 @@ class Temperature extends Component {
                 <BootstrapTable
                   bootstrap4 
                   keyField='id' 
-                  data={ products } 
-                  columns={ columns } 
+                  data={ this.state.allTemp } 
+                  columns={ StatColumn } 
                   pagination={paginationFactory({ sizePerPage: 5 })}/>
               </div>
             </div>

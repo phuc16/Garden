@@ -69,7 +69,7 @@ class Air extends Component {
   data = {
     labels: [],
     datasets: [{
-      label: '# of Votes',
+      label: 'Today Humidity',
       data: [],
       backgroundColor: [
         'rgba(255, 99, 132, 0.2)',
@@ -101,7 +101,7 @@ class Air extends Component {
         }]
       },
       legend: {
-        display: false
+        display: true
       },
       elements: {
         point: {
@@ -127,13 +127,9 @@ class Air extends Component {
       allDataChart.push(this.state.allAir[i]['value'])
       allColumn.push(this.state.allAir[0]['time'].slice(0, 11).replace('T', ''))
     }
-
-
-
-
-      this.data.labels = allColumn
-      this.data.datasets[0].data = allDataChart
-      console.log(todayColumn)
+    this.data.labels = allColumn
+    this.data.datasets[0].data = allDataChart
+    console.log(todayColumn)
   }
 
 

@@ -11,6 +11,8 @@ import axios from 'axios';
 
 
 
+
+//bug update: bug in handle on/off cause delete item
 export class Dashboard extends Component {
 
   constructor(props) {
@@ -31,7 +33,7 @@ export class Dashboard extends Component {
   }
 
   componentDidMount() {
-    console.log(process.env.REACT_APP_SERVER)
+    // console.log(process.env.REACT_APP_SERVER)
     axios.get(process.env.SERVER + `/device`)
       .then(res => {
         const temp = res.data;
@@ -105,28 +107,29 @@ export class Dashboard extends Component {
     
 
     const handleOnOff = async (e) => {
+      var temp = this.state.newProducts
       let stat = this.state.newProducts[e.target.value]['status']
       let index = e.target.value
       if (stat == 0){
         axios.put(process.env.REACT_APP_SERVER + `/device/${this.state.newProducts[e.target.value]['id']}`, {status: 1})
         .then(res => {
-          this.setState({ newProducts : [
-            ...this.state.newProducts.slice(0, index), 
-            {...this.state.newProducts[index], status: res.data.status},
-            ...this.state.newProducts.slice(index+1)
-          ]});
+          temp[index]['status'] = res.data.status
+          // this.setState({ newProducts : [
+          //   ...temp.slice(0, index), 
+          //   {...temp[index], status: res.data.status},
+          //   ...temp.slice(index+1)
+          // ]});
+          this.setState({ newProducts : temp});
         })
       }
       else{
         await axios.put(process.env.REACT_APP_SERVER + `/device/${this.state.newProducts[e.target.value]['id']}`, {status: 0})
         .then(res => {
-          this.setState({ newProducts : [
-            ...this.state.newProducts.slice(0, index), 
-            {...this.state.newProducts[index], status: res.data.status},
-            ...this.state.newProducts.slice(index+1)
-          ]});
+          temp[index]['status'] = res.data.status
+          this.setState({ newProducts : temp});
         })
       }
+      
     }
 
     for (let i = 0; i < this.state.newProducts.length ; i++){
@@ -441,7 +444,7 @@ export class Dashboard extends Component {
                                       </InputGroup>
                                     </ButtonToolbar>
                                     <Button variant="primary" type="submit" onClick={submitFactor}>
-                                      Submit
+                                      SEND
                                     </Button>
                                   </Form>
                                   <BootstrapTable keyField='id' data={productInTable } columns={ this.columns } />

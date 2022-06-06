@@ -2,3 +2,35 @@
     display: none;
 }
 
+.manualForm .input-group input{
+    margin-right: 2vw;
+}
+
+.manualForm button{
+    background-color: white;
+    color: #44ce42!important;
+    border: 1px solid #44ce42!important;
+    border: 1px transparent;
+    width: 5vw;
+    margin-bottom: 5vh;
+    transition: cubic-bezier(0.075, 0.82, 0.165, 1)!important;
+}
+
+.manualForm button:hover{
+    background-color: #44ce42;
+    color: white!important;
+}
+
+table th{
+    font-weight: bold!important;
+    text-align: center;
+}
+
+table td{
+    text-align: center;
+}
+
+table button{
+    background-color: #44ce42!important;
+    border: 1px transparent!important;
+}

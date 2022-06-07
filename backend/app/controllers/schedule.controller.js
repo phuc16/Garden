@@ -163,13 +163,14 @@ exports.insertSchedule = (req, res, err) => {
 
 
     axios.get(`https://io.adafruit.com/api/v2/mp5navy/feeds/sync/data/last`
-            , { headers : { "X-AIO-Key": "aio_rKEU43c1eB2HeL1fYuMm4JPjOket" } })
+            , { headers : { "X-AIO-Key": "aio_mNvl15oDY0UkoCTem5kA4Cc4aoVH" } })
             .then(adafruitResponse => {
                 axios.put(`https://io.adafruit.com/api/v2/mp5navy/feeds/sync/data/${adafruitResponse.data.id}`
                             , { "datum" : { "value" : "1" } }
-                            , { headers : { "X-AIO-Key": "aio_rKEU43c1eB2HeL1fYuMm4JPjOket" } })
+                            , { headers : { "X-AIO-Key": "aio_mNvl15oDY0UkoCTem5kA4Cc4aoVH" } })
                     .catch(err => console.log(err))
             })
+            .catch(err => console.log(err))
     service.insertIntoTable('schedules', req.body)
     res.send(req.body)
 }

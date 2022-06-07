@@ -28,7 +28,7 @@ exports.insertGarden = (req, res) => {
         "datum" : { "value" : "0" }
     },
     { headers : {
-        "X-AIO-Key": "aio_rKEU43c1eB2HeL1fYuMm4JPjOket"
+        "X-AIO-Key": "aio_mNvl15oDY0UkoCTem5kA4Cc4aoVH"
 
     }}
     )

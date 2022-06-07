@@ -138,7 +138,7 @@ exports.responseSchedule = (schedule, response) => {
             // if (condition.length == 0) condition += 'FOR'
             // responseData['command'] = command + condition + "/90"
             responseData.time = `${schedule[i].time_start.getDay()}:${schedule[i].time_start.getMonth()+1}:${schedule[i].time_start.getYear()+1900}:` 
-                                + schedule[i].time_start.toLocaleTimeString().slice(0,-3) 
+                                + schedule[i].time_start.toLocaleTimeString().replace(' AM','').replace(' PM','') 
             responseData.status = schedule[i].status
             // console.log(responseData)
             myArray.push(responseData)

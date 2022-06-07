@@ -140,7 +140,7 @@ exports.responseSchedule = (schedule, response) => {
             console.log(schedule[i].time_start.getUTCDate())
             console.log(schedule[i].time_start)
             responseData.time = `${schedule[i].time_start.getUTCDate()}:${schedule[i].time_start.getMonth()+1}:${schedule[i].time_start.getYear()+1900}:` 
-                                + schedule[i].time_start.toLocaleTimeString().replace(' AM','').replace(' PM','') 
+                                + schedule[i].time_start.toLocaleTimeString('en-US').replace(' AM','').replace(' PM','') 
             responseData.status = schedule[i].status
             // console.log(responseData)
             myArray.push(responseData)

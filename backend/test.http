@@ -111,12 +111,12 @@ Content-Type: application/json
 
 
 ### 
-POST https://universe-smart-garden.herokuapp.com/schedule/?condition=497&increased=-1
+POST https://universe-smart-garden.herokuapp.com/schedule/?condition=346&increased=-1
 Content-Type: application/json
 
 {
     "id_device" : 15 ,
-    "time_start" : "2022-06-07 22:10:00",
+    "time_start" : "2022-06-07 22:12:00",
     "status" : 0
 }
 
@@ -127,7 +127,7 @@ Content-Type: application/json
 
 {
     "id_device" : 15 ,
-    "time_start" : "2022-06-07 22:10:00",
+    "time_start" : "2022-06-07 23:50:00",
     "status" : 0
 }
 

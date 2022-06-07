@@ -65,7 +65,7 @@ exports.getBeforeLastData = (req, res) => {
 
 exports.getAlldata = (req, res) => {
     db.query("SELECT * FROM datas" , (err,result) => {
-        console.log(result.rows);  
+        // console.log(result.rows);  
         res.send(result.rows)
     })
 }

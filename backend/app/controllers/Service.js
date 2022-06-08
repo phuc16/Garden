@@ -129,8 +129,8 @@ exports.responseSchedule = (schedule, response) => {
                 responseData['command'] = command + condition + "/90"
             }
             else {
-    
-                responseData['command'] = command + `${(schedule[i].time_end - schedule[i].time_start)/1000}`
+                if (schedule[i].time_end == undefined) responseData['command'] = command + `/FOR/90`
+                else responseData['command'] = command + `/FOR/${(schedule[i].time_end - schedule[i].time_start)/1000}`
             }
             // console.log(condition)
             // return

@@ -23,17 +23,17 @@ exports.getGardenById = (req, res) => {
 
 
 exports.insertGarden = (req, res) => {
-    axios.put('https://io.adafruit.com/api/v2/mp5navy/feeds/sync/data/0F17Z6X3EZE3TKB5EH0CEM3KTV', 
-    {
-        "datum" : { "value" : "0" }
-    },
-    { headers : {
-        "X-AIO-Key": "aio_mNvl15oDY0UkoCTem5kA4Cc4aoVH"
+    // axios.put('https://io.adafruit.com/api/v2/mp5navy/feeds/sync/data/0F17Z6X3EZE3TKB5EH0CEM3KTV', 
+    // {
+    //     "datum" : { "value" : "0" }
+    // },
+    // { headers : {
+    //     "X-AIO-Key": "aio_mNvl15oDY0UkoCTem5kA4Cc4aoVH"
 
-    }}
-    )
-    .then(res => console.log(res.data))
-    // insertIntoTable('gardens', req.body);
+    // }}
+    // )
+    // .then(res => console.log(res.data))
+    insertIntoTable('gardens', req.body);
     res.send(req.body)
 }
 

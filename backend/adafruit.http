@@ -2,6 +2,15 @@ GET https://io.adafruit.com/api/v2/mp5navy/feeds/sync/data/last
 X-AIO-Key: aio_mNvl15oDY0UkoCTem5kA4Cc4aoVH
 
 ###
+POST https://io.adafruit.com/api/v2/mp5navy/feeds/sync/data
+X-AIO-Key: aio_mNvl15oDY0UkoCTem5kA4Cc4aoVH
+Content-Type: application/json
+
+{
+    "datum" : { "value" : "1" }
+}
+
+###
 PUT https://io.adafruit.com/api/v2/mp5navy/feeds/sync/data/0F17Z6X3EZE3TKB5EH0CEM3KTV
 X-AIO-Key: aio_mNvl15oDY0UkoCTem5kA4Cc4aoVH
 Content-Type: application/json
@@ -17,6 +26,15 @@ Content-Type: application/json
 
 {
     "datum" : { "value" : "0" }
+}
+
+###
+POST https://io.adafruit.com/api/v2/mp5navy/feeds/pump/data
+X-AIO-Key: aio_mNvl15oDY0UkoCTem5kA4Cc4aoVH
+Content-Type: application/json
+
+{
+    "datum" : { "value" : "1" }
 }
 
 ###

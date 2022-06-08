@@ -7,29 +7,6 @@ import { Link } from 'react-router-dom';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import axios from 'axios';
 
-const products = [
-  {'id': 'Max', 'light': '31', 'time': 11111111},
-  {'id': 'Min', 'light': '31', 'time': 11111111},
-  {'id': 'Avarage', 'light': '31', 'time': 11111111}
-];
-const columns = [{
-  dataField: 'id',
-  text: '',
-  sort: true
-}, {
-  dataField: 'light',
-  text: 'Light',
-  sort: true
-
-}, {
-  dataField: 'time',
-  text: 'Time',
-  sort: true
-
-}
-];
-
-
 
 class Light extends Component {
   constructor(props){
@@ -46,7 +23,7 @@ class Light extends Component {
     var nextDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+(today.getDate() + 1);
     // console.log(nextDate)
 
-    await axios.get(`http://localhost:5000/data`)
+    await axios.get(process.env.REACT_APP_SERVER + `/data`)
     .then(res => {
       let temp = []
       for (let i = 0; i<res.data.length; i++){
@@ -56,16 +33,20 @@ class Light extends Component {
       }
       this.setState({allLight: temp})
     })
-    console.log('x')
 
-    await axios.get(`http://localhost:5000/data/last`)
+    await axios.get(process.env.REACT_APP_SERVER + `/data/last`)
     .then(res => {
-      let x = res.data
+      var x = 0
+      for (let i = 0; i < res.data.length; i++){
+        if (res.data[i]['category'] == 'Light'){
+          x = res.data[i]['value']
+        }
+      }
       console.log(x)
-      this.setState({lastData: x[1]['value']})
+      this.setState({lastData: x})
     })
 
-    await axios.get(`http://localhost:5000/data/search?idGarden=1&startDay=${date}&endDay=${nextDate}`)
+    await axios.get(process.env.REACT_APP_SERVER + `/data/search?idGarden=1&startDay=${date}&endDay=${nextDate}`)
     .then(res => {
       let temp = []
       for (let i = 0; i<res.data.length; i++){
@@ -76,7 +57,7 @@ class Light extends Component {
       this.setState({todayLight: temp})
     })
 
-    await axios.get(`http://localhost:5000/data/before-last`)
+    await axios.get(process.env.REACT_APP_SERVER +  `/data/before-last`)
     .then(res => {
       let x = res.data
       this.setState({nearestData: x['Light']})
@@ -136,15 +117,15 @@ class Light extends Component {
     
     for (let i = 0; i< this.state.todayLight.length; i++){
       todayDataChart.push(this.state.todayLight[i]['value'])
-      todayColumn.push(this.state.todayLight[0]['time'].slice(11, this.state.todayLight[0]['time'].length).replace('.000Z', ''))
+      todayColumn.push(this.state.todayLight[i]['time'].slice(11, this.state.todayLight[i]['time'].length).replace('.000Z', ''))
     }
 
-    for (let i = 0; i< this.state.allLight.length; i++){
-      allDataChart.push(this.state.allLight[i]['value'])
-      allColumn.push(this.state.allLight[0]['time'].slice(0, 11).replace('T', ''))
+    for (let i = 0; i< this.state.todayLight.length; i++){
+      allDataChart.push(this.state.todayLight[i]['value'])
+      allColumn.push(this.state.todayLight[i]['time'].slice(0, 11).replace('T', ''))
     }
-    this.data.labels = allColumn
-    this.data.datasets[0].data = allDataChart
+    this.data.labels = todayColumn
+    this.data.datasets[0].data = todayDataChart
     console.log(todayColumn)
   }
 
@@ -160,23 +141,23 @@ class Light extends Component {
     this.showChart()
 
 
-    for (let i = 0; i < this.state.allLight.length; i++){
-      sumLight += this.state.allLight[i]['value']
+    for (let i = 0; i < this.state.todayLight.length; i++){
+      sumLight += this.state.todayLight[i]['value']
     }
 
-    if (this.state.allLight.length > 0){
+    if (this.state.todayLight.length > 0){
       var temp = []
-      temp.push(...this.state.allLight.map(o => o.value))
-      timeMax = this.state.allLight[temp.indexOf(Math.max(...this.state.allLight.map(o => o.value)))]['time']
+      temp.push(...this.state.todayLight.map(o => o.value))
+      timeMax = this.state.todayLight[temp.indexOf(Math.max(...this.state.todayLight.map(o => o.value)))]['time']
       timeMax = timeMax.replace('T', ', ').replace('.000Z', '')
-      timeMin = this.state.allLight[temp.indexOf(Math.min(...this.state.allLight.map(o => o.value)))]['time']
+      timeMin = this.state.todayLight[temp.indexOf(Math.min(...this.state.todayLight.map(o => o.value)))]['time']
       timeMin = timeMin.replace('T', ', ').replace('.000Z', '')
     }
 
     const products = [
-      {'id': 'Max', 'light': Math.max(...this.state.allLight.map(o => o.value)), 'time': timeMax},
-      {'id': 'Min', 'light': Math.min(...this.state.allLight.map(o => o.value)), 'time': timeMin},
-      {'id': 'Avarage', 'light': Math.round((sumLight/this.state.allLight.length)*100)/100 , 'time': date}
+      {'id': 'Max', 'light': Math.max(...this.state.todayLight.map(o => o.value)), 'time': timeMax},
+      {'id': 'Min', 'light': Math.min(...this.state.todayLight.map(o => o.value)), 'time': timeMin},
+      {'id': 'Avarage', 'light': Math.round((sumLight/this.state.todayLight.length)*100)/100 , 'time': date}
     ];
 
 
@@ -275,7 +256,7 @@ class Light extends Component {
           <div className="card">
           <div className="card-body text-center">
           <h5 className="mb-2 text-dark font-weight-normal">Light Intensity Stats Today</h5>
-            <BootstrapTable bootstrap4 keyField='id' data={ this.state.allLight } columns={ StatColumn } />
+            <BootstrapTable bootstrap4 keyField='id' data={ this.state.todayLight } columns={ StatColumn } />
             </div>
           </div>
 

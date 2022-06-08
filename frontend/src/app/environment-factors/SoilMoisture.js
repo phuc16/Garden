@@ -5,37 +5,73 @@ import { Tabs, Tab } from 'react-bootstrap';
 import { Line } from 'react-chartjs-2';
 import { Link } from 'react-router-dom';
 import paginationFactory from "react-bootstrap-table2-paginator";
-
-
-
-const products = [
-  {'id': 'Max', 'soil': '31', 'time': 11111111},
-  {'id': 'Min', 'soil': '31', 'time': 11111111},
-  {'id': 'Avarage', 'soil': '31', 'time': 11111111}
-];
-const columns = [{
-  dataField: 'id',
-  text: '',
-  sort: true
-}, {
-  dataField: 'soil',
-  text: 'Soil Moisture',
-  sort: true
-}, {
-  dataField: 'time',
-  text: 'Time',
-  sort: true
-}
-];
-
+import axios from 'axios';
 
 
 class SoilMoisture extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      allSoil: [],
+      todaySoil : [],
+      lastData: 0,
+    };
+
+  }
+  async componentDidMount(){
+
+    var today = new Date();
+    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    var nextDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+(today.getDate() + 1);
+    // console.log(nextDate)
+    await axios.get(process.env.REACT_APP_SERVER + `/data`)
+    .then(res => {
+      let temp = []
+      for (let i = 0; i<res.data.length; i++){
+        if (res.data[i]['category'] == 'Moist'){
+          temp.push(res.data[i])
+        }
+      }
+      this.setState({allSoil: temp})
+    })
+    console.log('x')
+
+    await axios.get(process.env.REACT_APP_SERVER + `/data/last`)
+    .then(res => {
+      var x = 0
+      for (let i = 0; i < res.data.length; i++){
+        if (res.data[i]['category'] == 'Moist'){
+          x = res.data[i]['value']
+        }
+      }
+      console.log(x)
+      this.setState({lastData: x})
+    })
+
+    await axios.get(process.env.REACT_APP_SERVER + `/data/search?idGarden=1&startDay=${date}&endDay=${nextDate}`)
+    .then(res => {
+      let temp = []
+      for (let i = 0; i<res.data.length; i++){
+        if (res.data[i]['category'] == 'Moist'){
+         temp.push(res.data[i])
+        }
+      }
+      this.setState({todaySoil: temp})
+    })
+
+    await axios.get(process.env.REACT_APP_SERVER +  `/data/before-last`)
+    .then(res => {
+      let x = res.data
+      this.setState({nearestData: x['Moist']})
+    })
+
+    
+  }
   data = {
-    labels: ["2013", "2014", "2014", "2015", "2016", "2017"],
+    labels: [],
     datasets: [{
-      label: '# of Votes',
-      data: [10, 19, 3, 5, 2, 3],
+      label: 'Today Soil Moisture',
+      data: [],
       backgroundColor: [
         'rgba(255, 99, 132, 0.2)',
         'rgba(54, 162, 235, 0.2)',
@@ -53,7 +89,7 @@ class SoilMoisture extends Component {
         'rgba(255, 159, 64, 1)'
       ],
       borderWidth: 1,
-      fill: false
+      fill: true
     }]
   };
 
@@ -66,7 +102,7 @@ class SoilMoisture extends Component {
         }]
       },
       legend: {
-        display: false
+        display: true
       },
       elements: {
         point: {
@@ -76,7 +112,87 @@ class SoilMoisture extends Component {
 
   };
 
+  showChart(){
+    var todayDataChart = []
+    var todayColumn = []
+    var allDataChart = []
+    var allColumn = []
+    
+    for (let i = 0; i< this.state.todaySoil.length; i++){
+      todayDataChart.push(this.state.todaySoil[i]['value'])
+      todayColumn.push(this.state.todaySoil[i]['time'].slice(11, this.state.todaySoil[i]['time'].length).replace('.000Z', ''))
+    }
+
+    for (let i = 0; i< this.state.allSoil.length; i++){
+      allDataChart.push(this.state.allSoil[i]['value'])
+      allColumn.push(this.state.allSoil[i]['time'].slice(0, 11).replace('T', ''))
+    }
+    this.data.labels = todayColumn
+    this.data.datasets[0].data = todayDataChart
+    console.log(todayColumn)
+  }
   render () {
+    console.log('render')
+    var sumSoil = 0
+    var todaySoil = [];
+    var timeMax = ''
+    var timeMin = ''
+    var today = new Date();
+    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    var changeData = [this.state.lastData - this.state.nearestData]
+    this.showChart()
+
+    for (let i = 0; i < this.state.todaySoil.length; i++){
+      sumSoil += this.state.todaySoil[i]['value']
+    }
+
+    if (this.state.todaySoil.length > 0){
+      var temp = []
+      temp.push(...this.state.todaySoil.map(o => o.value))
+      timeMax = this.state.todaySoil[temp.indexOf(Math.max(...this.state.todaySoil.map(o => o.value)))]['time']
+      timeMax = timeMax.replace('T', ', ').replace('.000Z', '')
+      timeMin = this.state.todaySoil[temp.indexOf(Math.min(...this.state.todaySoil.map(o => o.value)))]['time']
+      timeMin = timeMin.replace('T', ', ').replace('.000Z', '')
+    }
+
+    console.log(this.state.lastData)
+    
+    const products = [
+      {'id': 'Max', 'soil': Math.max(...this.state.todaySoil.map(o => o.value)), 'time': timeMax},
+      {'id': 'Min', 'soil': Math.min(...this.state.todaySoil.map(o => o.value)), 'time': timeMin},
+      {'id': 'Avarage', 'soil': Math.round((sumSoil/this.state.todaySoil.length)*100)/100 , 'time': date}
+    ];
+
+    const columns = [{
+      dataField: 'id',
+      text: '', 
+      sort: true
+    }, {
+      dataField: 'soil',
+      text: 'Moist',
+      sort: true
+    }, {
+      dataField: 'time',
+      text: 'Time',
+      sort: true
+    }
+    ];
+
+    const StatColumn = [{
+      dataField: 'id',
+      text: 'ID', 
+      sort: true
+    }, {
+      dataField: 'value',
+      text: 'Value',
+      sort: true
+    }, {
+      dataField: 'time',
+      text: 'Time',
+      sort: true
+    }
+    ]
+
     return (
       <div>
         <div className="page-header">
@@ -95,7 +211,7 @@ class SoilMoisture extends Component {
             <div className="card">
               <div className="card-body text-center">
                 <h5 className="mb-2 text-dark font-weight-normal">Soil Moisture</h5>
-                <h2 className="mb-4 text-dark font-weight-bold">1%</h2>
+                <h2 className="mb-4 text-dark font-weight-bold">{this.state.lastData}</h2>
                 <div className="px-4 d-flex align-items-center">
                   <svg width="0" height="0">
                     <defs>
@@ -106,7 +222,7 @@ class SoilMoisture extends Component {
                     </defs>
                   </svg>
                   <CircularProgressbarWithChildren className="progress-order"
-                  value={70}>
+                  value={this.state.lastData/10}>
                     <div>
                       <i className="mdi mdi-waves icon-md absolute-center text-dark"></i>
                     </div>
@@ -140,7 +256,7 @@ class SoilMoisture extends Component {
           <div className="card">
           <div className="card-body text-center">
           <h5 className="mb-2 text-dark font-weight-normal">Soil Moisture Stats Today</h5>
-            <BootstrapTable keyField='id' data={ products } columns={ columns } />
+            <BootstrapTable keyField='id' data={ this.state.todaySoil } columns={ StatColumn  } />
             </div>
           </div>
 
@@ -152,8 +268,8 @@ class SoilMoisture extends Component {
               <BootstrapTable
                 bootstrap4 
                 keyField='id' 
-                data={ products } 
-                columns={ columns } 
+                data={ this.state.allSoil } 
+                columns={ StatColumn  } 
                 pagination={paginationFactory({ sizePerPage: 5 })}/>
             </div>
           </div>

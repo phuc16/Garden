@@ -25,7 +25,7 @@ class Temperature extends Component {
     var nextDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+(today.getDate() + 1);
     // console.log(nextDate)
 
-    await axios.get(`http://localhost:5000/data`)
+    await axios.get(process.env.REACT_APP_SERVER + `/data`)
     .then(res => {
       let temp = []
       for (let i = 0; i<res.data.length; i++){
@@ -37,14 +37,19 @@ class Temperature extends Component {
     })
     console.log('x')
 
-    await axios.get(`http://localhost:5000/data/last`)
+    await axios.get(process.env.REACT_APP_SERVER + `/data/last`)
     .then(res => {
-      let x = res.data
+      var x = 0
+      for (let i = 0; i < res.data.length; i++){
+        if (res.data[i]['category'] == 'Temp'){
+          x = res.data[i]['value']
+        }
+      }
       console.log(x)
-      this.setState({lastData: x[2]['value']})
+      this.setState({lastData: x})
     })
 
-    await axios.get(`http://localhost:5000/data/search?idGarden=1&startDay=${date}&endDay=${nextDate}`)
+    await axios.get(process.env.REACT_APP_SERVER + `/data/search?idGarden=1&startDay=${date}&endDay=${nextDate}`)
     .then(res => {
       let temp = []
       for (let i = 0; i<res.data.length; i++){
@@ -55,7 +60,7 @@ class Temperature extends Component {
       this.setState({todayTemp: temp})
     })
 
-    await axios.get(`http://localhost:5000/data/before-last`)
+    await axios.get(process.env.REACT_APP_SERVER +  `/data/before-last`)
     .then(res => {
       let x = res.data
       this.setState({nearestData: x['Temp']})
@@ -115,15 +120,15 @@ class Temperature extends Component {
     
     for (let i = 0; i< this.state.todayTemp.length; i++){
       todayDataChart.push(this.state.todayTemp[i]['value'])
-      todayColumn.push(this.state.todayTemp[0]['time'].slice(11, this.state.todayTemp[0]['time'].length).replace('.000Z', ''))
+      todayColumn.push(this.state.todayTemp[i]['time'].slice(11, this.state.todayTemp[i]['time'].length).replace('.000Z', ''))
     }
 
     for (let i = 0; i< this.state.allTemp.length; i++){
       allDataChart.push(this.state.allTemp[i]['value'])
-      allColumn.push(this.state.allTemp[0]['time'].slice(0, 11).replace('T', ''))
+      allColumn.push(this.state.allTemp[i]['time'].slice(0, 11).replace('T', ''))
     }
-    this.data.labels = allColumn
-    this.data.datasets[0].data = allDataChart
+    this.data.labels = todayColumn
+    this.data.datasets[0].data = todayDataChart
     console.log(todayColumn)
   }
 
@@ -142,19 +147,19 @@ class Temperature extends Component {
       sumTemp += this.state.allTemp[i]['value']
     }
 
-    if (this.state.allTemp.length > 0){
+    if (this.state.todayTemp.length > 0){
       var temp = []
-      temp.push(...this.state.allTemp.map(o => o.value))
-      timeMax = this.state.allTemp[temp.indexOf(Math.max(...this.state.allTemp.map(o => o.value)))]['time']
+      temp.push(...this.state.todayTemp.map(o => o.value))
+      timeMax = this.state.todayTemp[temp.indexOf(Math.max(...this.state.todayTemp.map(o => o.value)))]['time']
       timeMax = timeMax.replace('T', ', ').replace('.000Z', '')
-      timeMin = this.state.allTemp[temp.indexOf(Math.min(...this.state.allTemp.map(o => o.value)))]['time']
+      timeMin = this.state.todayTemp[temp.indexOf(Math.min(...this.state.todayTemp.map(o => o.value)))]['time']
       timeMin = timeMin.replace('T', ', ').replace('.000Z', '')
     }
 
     const products = [
-      {'id': 'Max', 'temp': Math.max(...this.state.allTemp.map(o => o.value)), 'time': timeMax},
-      {'id': 'Min', 'temp': Math.min(...this.state.allTemp.map(o => o.value)), 'time': timeMin},
-      {'id': 'Avarage', 'temp': Math.round((sumTemp/this.state.allTemp.length)*100)/100 , 'time': date}
+      {'id': 'Max', 'temp': Math.max(...this.state.todayTemp.map(o => o.value)), 'time': timeMax},
+      {'id': 'Min', 'temp': Math.min(...this.state.todayTemp.map(o => o.value)), 'time': timeMin},
+      {'id': 'Avarage', 'temp': Math.round((sumTemp/this.state.todayTemp.length)*100)/100 , 'time': date}
     ];
 
     const columns = [{
@@ -252,7 +257,7 @@ class Temperature extends Component {
           <div className="card">
           <div className="card-body text-center">
           <h5 className="mb-2 text-dark font-weight-normal">Temperature Stats Today</h5>
-            <BootstrapTable bootstrap4 keyField='id' data={ this.state.allTemp } columns={ StatColumn } />
+            <BootstrapTable bootstrap4 keyField='id' data={ this.state.todayTemp } columns={ StatColumn } />
             </div>
           </div>
 

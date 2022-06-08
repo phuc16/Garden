@@ -41,9 +41,14 @@ class Air extends Component {
 
     await axios.get(process.env.REACT_APP_SERVER + `/data/last`)
     .then(res => {
-      let x = res.data
+      var x = 0
+      for (let i = 0; i < res.data.length; i++){
+        if (res.data[i]['category'] == 'Humidity'){
+          x = res.data[i]['value']
+        }
+      }
       console.log(x)
-      this.setState({lastData: x[0]['value']})
+      this.setState({lastData: x})
     })
 
     await axios.get(process.env.REACT_APP_SERVER + `/data/search?idGarden=1&startDay=${date}&endDay=${nextDate}`)
@@ -119,16 +124,15 @@ class Air extends Component {
     
     for (let i = 0; i< this.state.todayAir.length; i++){
       todayDataChart.push(this.state.todayAir[i]['value'])
-      todayColumn.push(this.state.todayAir[0]['time'].slice(11, this.state.todayAir[0]['time'].length).replace('.000Z', ''))
+      todayColumn.push(this.state.todayAir[i]['time'].slice(11, this.state.todayAir[i]['time'].length).replace('.000Z', ''))
     }
 
     for (let i = 0; i< this.state.allAir.length; i++){
-     
       allDataChart.push(this.state.allAir[i]['value'])
-      allColumn.push(this.state.allAir[0]['time'].slice(0, 11).replace('T', ''))
+      allColumn.push(this.state.allAir[i]['time'].slice(0, 11).replace('T', ''))
     }
-    this.data.labels = allColumn
-    this.data.datasets[0].data = allDataChart
+    this.data.labels = todayColumn
+    this.data.datasets[0].data = todayDataChart
     console.log(todayColumn)
   }
 
@@ -163,21 +167,21 @@ class Air extends Component {
         sumAir += this.state.allAir[i]['value']
       }
 
-      if (this.state.allAir.length > 0){
+      if (this.state.todayAir.length > 0){
         var temp = []
-        temp.push(...this.state.allAir.map(o => o.value))
-        timeMax = this.state.allAir[temp.indexOf(Math.max(...this.state.allAir.map(o => o.value)))]['time']
+        temp.push(...this.state.todayAir.map(o => o.value))
+        timeMax = this.state.todayAir[temp.indexOf(Math.max(...this.state.todayAir.map(o => o.value)))]['time']
         timeMax = timeMax.replace('T', ', ').replace('.000Z', '')
-        timeMin = this.state.allAir[temp.indexOf(Math.min(...this.state.allAir.map(o => o.value)))]['time']
+        timeMin = this.state.todayAir[temp.indexOf(Math.min(...this.state.todayAir.map(o => o.value)))]['time']
         timeMin = timeMin.replace('T', ', ').replace('.000Z', '')
       }
   
       console.log(this.state.lastData)
       
       const products = [
-        {'id': 'Max', 'air': Math.max(...this.state.allAir.map(o => o.value)), 'time': timeMax},
-        {'id': 'Min', 'air': Math.min(...this.state.allAir.map(o => o.value)), 'time': timeMin},
-        {'id': 'Avarage', 'air': Math.round((sumAir/this.state.allAir.length)*100)/100 , 'time': date}
+        {'id': 'Max', 'air': Math.max(...this.state.todayAir.map(o => o.value)), 'time': timeMax},
+        {'id': 'Min', 'air': Math.min(...this.state.todayAir.map(o => o.value)), 'time': timeMin},
+        {'id': 'Avarage', 'air': Math.round((sumAir/this.state.todayAir.length)*100)/100 , 'time': date}
       ];
   
       const columns = [{
@@ -239,7 +243,7 @@ class Air extends Component {
                     </defs>
                   </svg>
                   <CircularProgressbarWithChildren className="progress-visitors"
-                  value={this.state.lastData*10}>
+                  value={this.state.lastData}>
                     <div>
                       <i className="mdi mdi-weather-rainy icon-md absolute-center text-dark"></i>
                     </div>
@@ -275,7 +279,7 @@ class Air extends Component {
           <div className="card">
           <div className="card-body text-center">
           <h5 className="mb-2 text-dark font-weight-normal">Air Stats Today</h5>
-            <BootstrapTable bootstrap4 keyField='id' data={ this.state.allAir} columns={ StatColumn } />
+            <BootstrapTable bootstrap4 keyField='id' data={ this.state.todayAir} columns={ StatColumn } />
             </div>
           </div>
 

@@ -71,44 +71,16 @@ class TimeSetting extends Component {
         let index = e.target.value
         let device_id = deviceInSetting[index]['id']
 
-        let  update = false
-        let startCompare = deviceInSetting[index]['time_start'] + '.000Z'
-        let endCompare = deviceInSetting[index]['time_end'] + '.000Z'
-        let schedule = this.state.scheduled
-
-        
-        // if (deviceInSchedule.some(x => x['id_device'] == device_id)){
-        //   for (let i = 0; i < deviceInSchedule.length; i++){
-        //     if (
-        //     ((startCompare >= schedule[i]['time_start'] && startCompare <= schedule[i]['time_end']) ||
-        //     (endCompare >= schedule[i]['time_start'] && endCompare <= schedule[i]['time_end']) )){
-        //       update = true
-        //       console.log('update')
-        //       axios.put(`http://localhost:5000/schedule/${deviceInSchedule[index]['id']}`, {
-        //         id_device: device_id,
-        //         time_start: deviceInSetting[index]['time_start'],
-        //         time_end: deviceInSetting[index]['time_end'],
-        //         status: deviceInSetting[index]['status']
-        //     })
-        //     }
-        //   }
-        // }
-        // if (!update){
-        //   console.log('insert')
-          
-          axios.post(process.env.REACT_APP_SERVER + `/schedule`, {
-            id_device: device_id,
-            time_start: deviceInSetting[index]['time_start'],
-            time_end: deviceInSetting[index]['time_end'],
-            status: deviceInSetting[index]['status']
-          })
+        axios.post(process.env.REACT_APP_SERVER + `/schedule`, {
+          id_device: device_id,
+          time_start: deviceInSetting[index]['time_start'],
+          time_end: deviceInSetting[index]['time_end'],
+          status: 0
+        })
         
       }
 
       const deviceInSchedule = [
-        // {'id': 1, 'function': 'fan setting', 'on': <input type="datetime-local" onChange={handleChangeTimeOn}></input>, 'off': '2222222', '':'Setting'},
-        // {'id': 2, 'function': 'mist setting', 'on': <input type="datetime-local" onChange={handleChangeTimeOn}></input>, 'off': '2222222', '':'Setting'},
-        // {'id': 3, 'function': 'pumb setting', 'on': <input type="datetime-local" onChange={handleChangeTimeOn}></input>, 'off': '2222222', '':'Setting'},
       ];
 
 
@@ -122,7 +94,7 @@ class TimeSetting extends Component {
         : (this.state.scheduled[i]['status'] == 1? 'Đang thực hiện' : 
         ((this.state.scheduled[i]['status'] == 2? 'Hoàn thành' : 
         (this.state.scheduled[i]['status'] == 3? 'Time Out' : 'Task LTT')))), 
-        setting:  this.state.scheduled[i]['status'] == 2 ?<Button value={i} onClick={handleDeleteSchedule}>Delete</Button>: '' })
+        setting:  this.state.scheduled[i]['status'] != 2 ?<Button style={{backgroundColor: 'white', border: '1px solid red', color: 'red'}} value={i} onClick={handleDeleteSchedule}>Delete</Button>: '' })
       }
 
       for (let i = 0; i < this.state.settingDevice.length ; i++){

@@ -18,7 +18,7 @@ export class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      auto: true,
+      auto: false,
       soil: 0,
       air: 0,
       temp: 0,
@@ -34,7 +34,7 @@ export class Dashboard extends Component {
 
   componentDidMount() {
     // console.log(process.env.REACT_APP_SERVER)
-    axios.get(process.env.SERVER + `/device`)
+    axios.get(process.env.REACT_APP_SERVER + `/device`)
       .then(res => {
         const temp = res.data;
         
@@ -50,20 +50,32 @@ export class Dashboard extends Component {
 
     axios.get(process.env.REACT_APP_SERVER + `/data/last`)
       .then(res => {
-        let x = []
-        x = res.data
-        this.setState({air: x[0]['value'], light: x[1]['value'], temp: x[2]['value']})
+        var x = {'soil': 0, 'air': 0, 'temp': 0, 'light': 0}
+        for (let i = 0; i < res.data.length; i++){
+          if (res.data[i]['category'] == 'Moist'){
+            x['soil'] = res.data[i]['value']
+          }
+          if (res.data[i]['category'] == 'Humidity'){
+            x['air'] = res.data[i]['value']
+          }
+          if (res.data[i]['category'] == 'Temp'){
+            x['temp'] = res.data[i]['value']
+          }
+          if (res.data[i]['category'] == 'Light'){
+            x['light'] = res.data[i]['value']
+          }
+        }
+        console.log(x)
+        this.setState({soil: x['soil'], air: x['air'], light: x['light'], temp: x['temp']})
         console.log(this.state.temp)
       })
 
     axios.get(process.env.REACT_APP_SERVER + `/data/before-last`)
       .then(res => {
         let x = res.data
-        this.setState({nearestAir: x['Humidity'], nearestLight: x['Light'], nearestTemp: x['Temp'], nearestSoil: x.length == 4 ? x['Soil']: 0})
+        this.setState({nearestAir: x['Humidity'], nearestLight: x['Light'], nearestTemp: x['Temp'], nearestSoil: x['Moist']})
         console.log(this.state.temp)
       })
-    
-
     }
 
   
@@ -214,7 +226,7 @@ export class Dashboard extends Component {
       
       if (changeStatus[0] != 0){
         axios.post(process.env.REACT_APP_SERVER + `/schedule/?condition=${factorChange['soil']}&increased=${changeStatus[0]}`, {
-          id_device : 0,
+          id_device : 14,
           time_start : dateTime,
           status : 0
         })
@@ -228,7 +240,7 @@ export class Dashboard extends Component {
         console.log(factorChange['air'])
 
           axios.post(process.env.REACT_APP_SERVER + `/schedule/?condition=${factorChange['air']}&increased=${changeStatus[1]}`, {
-          id_device : 14,
+          id_device : 15,
           time_start : dateTime,
           status : 0
         })
@@ -284,7 +296,7 @@ export class Dashboard extends Component {
                                   </defs>
                                 </svg>
                                 <CircularProgressbarWithChildren className="progress-order"
-                                value={this.state.soil}>
+                                value={this.state.soil/10}>
                                   <div>
                                     <i className="mdi mdi-waves icon-md absolute-center text-dark"></i>
                                   </div>
@@ -312,7 +324,7 @@ export class Dashboard extends Component {
                                     </defs>
                                 </svg>
                                 <CircularProgressbarWithChildren className="progress-visitors"
-                                value={this.state.air*10}>
+                                value={this.state.air}>
                                   <div>
                                     <i className="mdi mdi-weather-rainy icon-md absolute-center text-dark"></i>
                                   </div>

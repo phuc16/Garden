@@ -15,7 +15,7 @@ exports.insertIntoTable = (tableName, data) => {
             let datas = ""
             for (let x of result.rows) {
                 if (x.column_name === 'id') continue;
-                console.log(x.column_name)
+                // console.log(x.column_name)
 
                 // if (x.column_name.includes('time')){
                 //     day = new Date(data[x.column_name])
@@ -33,14 +33,14 @@ exports.insertIntoTable = (tableName, data) => {
                 else datas += "," + (data[x.column_name])
                 columns += "," + x.column_name
             }
-            console.log(columns.slice(1))
-            console.log(datas.slice(1))
+            // console.log(columns.slice(1))
+            // console.log(datas.slice(1))
             let queryString = `INSERT INTO ${tableName}(${columns.slice(1)}) VALUES (${datas.slice(1)})`
             console.log(queryString)
             db.query(queryString, (err,result) => {
                 if (err) throw err 
                 else {
-                    console.log(result);  
+                    // console.log(result);  
                 }
             })
         }

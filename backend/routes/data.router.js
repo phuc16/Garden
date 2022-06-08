@@ -11,9 +11,12 @@ router.get('/before-last', data.getBeforeLastData)
 
 router.get('/:id', data.getDatabyGarden)
 
+router.post('/full-type', data.insertDataFullType)
+
+router.post('/', data.insertData)
+
 router.get('/', data.getAlldata)
 
-router.post('', data.insertData)
 
 
 module.exports = router;

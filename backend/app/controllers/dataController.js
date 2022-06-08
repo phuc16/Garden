@@ -11,7 +11,7 @@ exports.getDataInfo = (req, res) => {
 
     db.query(`SELECT * FROM datas WHERE time > '${req.query.startDay}' AND time < '${req.query.endDay}'`, (err,result) => {
         for (let data of result.rows) {
-            data.time = data.time.toLocaleString('en-US')
+            data.time = data.time.toLocaleString()
         }
         res.send(result.rows)
     })
@@ -21,7 +21,7 @@ exports.getDataInfo = (req, res) => {
 exports.getDatabyGarden = (req, res) => {
     db.query(`SELECT * FROM datas WHERE id_garden = ${req.params.id}` , (err,result) => {
         for (let data of result.rows) {
-            data.time = data.time.toLocaleString('en-US')
+            data.time = data.time.toLocaleString()
         }
         res.send(result.rows)
     })
@@ -37,7 +37,7 @@ exports.getAllLastData = (req, res) => {
             if (result.rows.length == 0 ) res.send({"message" : "Data unfulfilled not found"})
             else {
                 for (let data of result.rows) {
-                    data.time = data.time.toLocaleString('en-US')
+                    data.time = data.time.toLocaleString()
                 }
                 res.send(result.rows)
             }
@@ -79,7 +79,7 @@ exports.getBeforeLastData = (req, res) => {
 exports.getAlldata = (req, res) => {
     db.query("SELECT * FROM datas" , (err,result) => {
         for (let data of result.rows) {
-            data.time = data.time.toLocaleString('en-US')
+            data.time = data.time.toLocaleString()
         }
         res.send(result.rows)
     })

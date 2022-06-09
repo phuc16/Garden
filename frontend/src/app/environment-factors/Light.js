@@ -155,9 +155,9 @@ class Light extends Component {
     }
 
     const products = [
-      {'id': 'Max', 'light': Math.max(...this.state.todayLight.map(o => o.value)), 'time': timeMax},
-      {'id': 'Min', 'light': Math.min(...this.state.todayLight.map(o => o.value)), 'time': timeMin},
-      {'id': 'Avarage', 'light': Math.round((sumLight/this.state.todayLight.length)*100)/100 , 'time': date}
+      {'id': 'Max', 'light': this.state.todayLight.length >0 ?Math.max(...this.state.todayLight.map(o => o.value)) : 'No data', 'time': timeMax},
+      {'id': 'Min', 'light': this.state.todayLight.length >0 ?Math.min(...this.state.todayLight.map(o => o.value)) : 'No data', 'time': timeMin},
+      {'id': 'Avarage', 'light': this.state.todayLight.length>0? Math.round((sumLight/this.state.todayLight.length)*100)/100 : 'No data', 'time': date}
     ];
 
 

@@ -459,7 +459,7 @@ export class Dashboard extends Component {
                                       SEND
                                     </Button>
                                   </Form>
-                                  <BootstrapTable keyField='id' data={productInTable } columns={ this.columns } />
+                                  <BootstrapTable classes='device-table' keyField='id' data={productInTable } columns={ this.columns } />
                                   
                                   
                                 </div>

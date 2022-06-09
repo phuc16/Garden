@@ -158,9 +158,9 @@ class SoilMoisture extends Component {
     console.log(this.state.lastData)
     
     const products = [
-      {'id': 'Max', 'soil': Math.max(...this.state.todaySoil.map(o => o.value)), 'time': timeMax},
-      {'id': 'Min', 'soil': Math.min(...this.state.todaySoil.map(o => o.value)), 'time': timeMin},
-      {'id': 'Avarage', 'soil': Math.round((sumSoil/this.state.todaySoil.length)*100)/100 , 'time': date}
+      {'id': 'Max', 'soil': this.state.todaySoil.length > 0 ? Math.max(...this.state.todaySoil.map(o => o.value)) : 'No data', 'time': timeMax},
+      {'id': 'Min', 'soil': this.state.todaySoil.length > 0 ? Math.min(...this.state.todaySoil.map(o => o.value)) : 'No data', 'time': timeMin},
+      {'id': 'Avarage', 'soil': this.state.todaySoil.length > 0 ? Math.round((sumSoil/this.state.todaySoil.length)*100)/100  : 'No data' , 'time': date}
     ];
 
     const columns = [{
@@ -192,6 +192,8 @@ class SoilMoisture extends Component {
       sort: true
     }
     ]
+
+    
 
     return (
       <div>
@@ -228,6 +230,8 @@ class SoilMoisture extends Component {
                     </div>
                   </CircularProgressbarWithChildren>
                 </div>
+                  <p className="mt-4 mb-0">{changeData >= 0 ? 'Increased since' : 'Decreased since' } last time</p>
+                  <h3 className="mb-0 font-weight-bold mt-2 text-dark">{Math.floor(Math.abs(changeData)/this.state.nearestData*100)} %</h3>
               </div>
             </div>
           </div>

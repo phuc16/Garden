@@ -179,10 +179,10 @@ class Air extends Component {
       console.log(this.state.lastData)
       
       const products = [
-        {'id': 'Max', 'air': Math.max(...this.state.todayAir.map(o => o.value)), 'time': timeMax},
-        {'id': 'Min', 'air': Math.min(...this.state.todayAir.map(o => o.value)), 'time': timeMin},
-        {'id': 'Avarage', 'air': Math.round((sumAir/this.state.todayAir.length)*100)/100 , 'time': date}
-      ];
+        {'id': 'Max', 'air': this.state.todayAir.length>0 ? Math.max(...this.state.todayAir.map(o => o.value)) : 'No data', 'time': timeMax},
+        {'id': 'Min', 'air': this.state.todayAir.length>0 ? Math.min(...this.state.todayAir.map(o => o.value)) : 'No data', 'time': timeMin},
+        {'id': 'Avarage', 'air': this.state.todayAir.length>0 ? Math.round((sumAir/this.state.todayAir.length)*100)/100 : 'No data' , 'time': date}
+      ]; 
   
       const columns = [{
         dataField: 'id',

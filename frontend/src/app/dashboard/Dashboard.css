@@ -30,7 +30,7 @@ table td{
     text-align: center;
 }
 
-table button{
+.device-table button{
     background-color: #44ce42!important;
     border: 1px transparent!important;
 }

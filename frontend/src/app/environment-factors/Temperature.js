@@ -157,9 +157,9 @@ class Temperature extends Component {
     }
 
     const products = [
-      {'id': 'Max', 'temp': Math.max(...this.state.todayTemp.map(o => o.value)), 'time': timeMax},
-      {'id': 'Min', 'temp': Math.min(...this.state.todayTemp.map(o => o.value)), 'time': timeMin},
-      {'id': 'Avarage', 'temp': Math.round((sumTemp/this.state.todayTemp.length)*100)/100 , 'time': date}
+      {'id': 'Max', 'temp': this.state.todayTemp.length >0 ? Math.max(...this.state.todayTemp.map(o => o.value)) : 'No data', 'time': timeMax},
+      {'id': 'Min', 'temp': this.state.todayTemp.length >0 ? Math.min(...this.state.todayTemp.map(o => o.value)) : 'No data', 'time': timeMin},
+      {'id': 'Avarage', 'temp': this.state.todayTemp.length >0 ? Math.round((sumTemp/this.state.todayTemp.length)*100)/100 : 'No data', 'time': date}
     ];
 
     const columns = [{

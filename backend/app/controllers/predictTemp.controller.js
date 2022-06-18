@@ -61,16 +61,16 @@ exports.predictTemperature = (req, res) => {
         })
         console.log(filterResult)
 
-        // result.forEach((data) => {
-        //     axios.post('https://universe-smart-garden.herokuapp.com', {
-        //         "id_device" : req.body.id_device ,
-        //         "time_start" : data.date,
-        //         "status" : 0
-        //     })
-        //     .then(res => {
-        //         console.log(res)
-        //     })
-        // })
+        result.forEach((data) => {
+            axios.post('https://universe-smart-garden.herokuapp.com', {
+                "id_device" : req.body.id_device ,
+                "time_start" : data.date,
+                "status" : 0
+            })
+            .then(res => {
+                console.log(res)
+            })
+        })
 
         res.send({ result: result })
         console.log(`child process exited with code ${code}`);

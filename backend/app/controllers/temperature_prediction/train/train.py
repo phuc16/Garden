@@ -9,21 +9,21 @@ import pickle
 
 
 def read_temp_mid():
-    with open('../../data/additional_info.json') as f:
+    with open('./app/controllers/temperature_prediction/data/additional_info.json') as f:
         additional_data = json.load(f)
     devices = additional_data['offices']['office_1']['devices']
     sn_temp_mid = [d['serialNumber'] for d in devices if d['description'] == 'temperature_middle'][0]
     return sn_temp_mid
 
 def read_temp_wall():
-    with open('../../data/additional_info.json') as f:
+    with open('./app/controllers/temperature_prediction/data/additional_info.json') as f:
         additional_data = json.load(f)
     devices = additional_data['offices']['office_1']['devices']
     sn_temp_wall = [d['serialNumber'] for d in devices if d['description'] == 'temperature_wall'][0]
     return sn_temp_wall
 
 def read_temp_window():
-    with open('../../data/additional_info.json') as f:
+    with open('./app/controllers/temperature_prediction/data/additional_info.json') as f:
         additional_data = json.load(f)
     devices = additional_data['offices']['office_1']['devices']
     sn_temp_window = [d['serialNumber'] for d in devices if d['description'] == 'temperature_window'][0]
@@ -36,8 +36,8 @@ def data_collect():
     sn_temp_wall = read_temp_wall()
     sn_temp_window = read_temp_window()
 
-    df_temp_01 = pd.read_csv('../../data/office_1_temperature_supply_points_data_2020-10-13_2020-11-02.csv')
-    df_temp_02 = pd.read_csv('../../data/office_1_temperature_supply_points_data_2020-03-05_2020-03-19.csv')
+    df_temp_01 = pd.read_csv('./app/controllers/temperature_prediction/data/office_1_temperature_supply_points_data_2020-10-13_2020-11-02.csv')
+    df_temp_02 = pd.read_csv('./app/controllers/temperature_prediction/data/office_1_temperature_supply_points_data_2020-03-05_2020-03-19.csv')
     df_temp = pd.concat([df_temp_01, df_temp_02], axis=0, ignore_index=True)
     df_temp.rename(columns={'Unnamed: 0': 'time', 'value': 'temp'}, inplace=True)
     df_temp['time'] = pd.to_datetime(df_temp['time'])
@@ -56,8 +56,8 @@ def data_collect():
     # print(df_temp)
 
 
-    df_temp_target_01 = pd.read_csv('../../data/office_1_targetTemperature_supply_points_data_2020-10-13_2020-11-01.csv')
-    df_temp_target_02 = pd.read_csv('../../data/office_1_targetTemperature_supply_points_data_2020-03-05_2020-03-19.csv')
+    df_temp_target_01 = pd.read_csv('./app/controllers/temperature_prediction/data/office_1_targetTemperature_supply_points_data_2020-10-13_2020-11-01.csv')
+    df_temp_target_02 = pd.read_csv('./app/controllers/temperature_prediction/data/office_1_targetTemperature_supply_points_data_2020-03-05_2020-03-19.csv')
     df_temp_target = pd.concat([df_temp_target_01, df_temp_target_02], axis=0, ignore_index=True)
     df_temp_target.rename(columns={'Unnamed: 0': 'time', 'value': 'target_temp'}, inplace=True)
     df_temp_target['time'] = pd.to_datetime(df_temp_target['time'])
@@ -65,8 +65,8 @@ def data_collect():
     df_temp_target.set_index('time', inplace=True)
 
 
-    df_valve_01 = pd.read_csv('../../data/office_1_valveLevel_supply_points_data_2020-10-13_2020-11-01.csv', index_col=0, parse_dates=True)
-    df_valve_02 = pd.read_csv('../../data/office_1_valveLevel_supply_points_data_2020-03-05_2020-03-19.csv', index_col=0, parse_dates=True)
+    df_valve_01 = pd.read_csv('./app/controllers/temperature_prediction/data/office_1_valveLevel_supply_points_data_2020-10-13_2020-11-01.csv', index_col=0, parse_dates=True)
+    df_valve_02 = pd.read_csv('./app/controllers/temperature_prediction/data/office_1_valveLevel_supply_points_data_2020-03-05_2020-03-19.csv', index_col=0, parse_dates=True)
     df_valve = pd.concat([df_valve_01, df_valve_02], axis=0, ignore_index=False)
     df_valve.rename(columns={'value': 'opened[%]'}, inplace=True)
     df_valve.drop(columns=['unit'], inplace=True)

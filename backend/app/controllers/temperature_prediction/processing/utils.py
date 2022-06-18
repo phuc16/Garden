@@ -2,8 +2,8 @@ from typing import Tuple
 import pickle
 import pandas as pd
 
-model_temp = pickle.load(open('processing/model.p', 'rb'))
-model_valve = pickle.load(open('processing/model_valve.p', 'rb'))
+model_temp = pickle.load(open('./app/controllers/temperature_prediction/processing/model.p', 'rb'))
+model_valve = pickle.load(open('./app/controllers/temperature_prediction/processing/model_valve.p', 'rb'))
 
 def perform_processing(
         temperature: pd.DataFrame,

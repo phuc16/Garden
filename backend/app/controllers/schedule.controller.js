@@ -162,9 +162,9 @@ exports.insertSchedule = (req, res, err) => {
     }
 
 
-    axios.post(`https://io.adafruit.com/api/v2/mp5navy/feeds/sync/data`
+    axios.post(`https://io.adafruit.com/api/v2/${process.env.USER_NAME_ADAFRUIT}/feeds/sync/data`
                             , { "datum" : { "value" : "1" } }
-                            , { headers : { "X-AIO-Key": "aio_mNvl15oDY0UkoCTem5kA4Cc4aoVH" } })
+                            , { headers : { "X-AIO-Key": `${process.env.KEY_ADAFRUIT}` } })
                     .catch(err => console.log(err))
     service.insertIntoTable('schedules', req.body)
     res.send(req.body)

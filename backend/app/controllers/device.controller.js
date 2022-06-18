@@ -69,9 +69,9 @@ exports.updateDevice = (req, res) => {
             let feed_key = data.rows[0].category.toLowerCase()
             
             if (req.body.status != undefined) {
-                axios.post(`https://io.adafruit.com/api/v2/mp5navy/feeds/${feed_key}/data`
+                axios.post(`https://io.adafruit.com/api/v2/${process.env.USER_NAME_ADAFRUIT}/feeds/${feed_key}/data`
                 , { "datum" : { "value" : `${req.body.status}` } }
-                , { headers : { "X-AIO-Key": "aio_mNvl15oDY0UkoCTem5kA4Cc4aoVH" } })
+                , { headers : { "X-AIO-Key": `${process.env.KEY_ADAFRUIT}` } })
                     .catch(err => console.log(err))
             }
         }

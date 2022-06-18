@@ -1,9 +1,9 @@
-GET https://io.adafruit.com/api/v2/mp5navy/feeds/sync/data/last
-X-AIO-Key: aio_mNvl15oDY0UkoCTem5kA4Cc4aoVH
+GET https://io.adafruit.com/api/v2/${process.env.USER_NAME_ADAFRUIT}/feeds/sync/data/last
+X-AIO-Key: `${process.env.KEY_ADAFRUIT}`
 
 ###
-POST https://io.adafruit.com/api/v2/mp5navy/feeds/sync/data
-X-AIO-Key: aio_mNvl15oDY0UkoCTem5kA4Cc4aoVH
+POST https://io.adafruit.com/api/v2/${process.env.USER_NAME_ADAFRUIT}/feeds/sync/data
+X-AIO-Key: `${process.env.KEY_ADAFRUIT}`
 Content-Type: application/json
 
 {
@@ -11,8 +11,8 @@ Content-Type: application/json
 }
 
 ###
-PUT https://io.adafruit.com/api/v2/mp5navy/feeds/sync/data/0F17Z6X3EZE3TKB5EH0CEM3KTV
-X-AIO-Key: aio_mNvl15oDY0UkoCTem5kA4Cc4aoVH
+PUT https://io.adafruit.com/api/v2/${process.env.USER_NAME_ADAFRUIT}/feeds/sync/data/0F17Z6X3EZE3TKB5EH0CEM3KTV
+X-AIO-Key: `${process.env.KEY_ADAFRUIT}`
 Content-Type: application/json
 
 {
@@ -20,8 +20,8 @@ Content-Type: application/json
 }
 
 ###
-PUT https://io.adafruit.com/api/v2/mp5navy/feeds/pump/data/0F18WS8B5YE3NRPZ62K6KH18SH
-X-AIO-Key: aio_mNvl15oDY0UkoCTem5kA4Cc4aoVH
+PUT https://io.adafruit.com/api/v2/${process.env.USER_NAME_ADAFRUIT}/feeds/pump/data/0F18WS8B5YE3NRPZ62K6KH18SH
+X-AIO-Key: `${process.env.KEY_ADAFRUIT}`
 Content-Type: application/json
 
 {
@@ -29,8 +29,8 @@ Content-Type: application/json
 }
 
 ###
-POST https://io.adafruit.com/api/v2/mp5navy/feeds/pump/data
-X-AIO-Key: aio_mNvl15oDY0UkoCTem5kA4Cc4aoVH
+POST https://io.adafruit.com/api/v2/${process.env.USER_NAME_ADAFRUIT}/feeds/pump/data
+X-AIO-Key: `${process.env.KEY_ADAFRUIT}`
 Content-Type: application/json
 
 {
@@ -38,6 +38,6 @@ Content-Type: application/json
 }
 
 ###
-GET https://io.adafruit.com/api/v2/mp5navy/feeds/pump/data/last
-X-AIO-Key: aio_mNvl15oDY0UkoCTem5kA4Cc4aoVH
+GET https://io.adafruit.com/api/v2/${process.env.USER_NAME_ADAFRUIT}/feeds/pump/data/last
+X-AIO-Key: `${process.env.KEY_ADAFRUIT}`
 

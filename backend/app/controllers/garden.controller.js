@@ -23,12 +23,12 @@ exports.getGardenById = (req, res) => {
 
 
 exports.insertGarden = (req, res) => {
-    // axios.put('https://io.adafruit.com/api/v2/mp5navy/feeds/sync/data/0F17Z6X3EZE3TKB5EH0CEM3KTV', 
+    // axios.put('https://io.adafruit.com/api/v2/${process.env.USER_NAME_ADAFRUIT}/feeds/sync/data/0F17Z6X3EZE3TKB5EH0CEM3KTV', 
     // {
     //     "datum" : { "value" : "0" }
     // },
     // { headers : {
-    //     "X-AIO-Key": "aio_mNvl15oDY0UkoCTem5kA4Cc4aoVH"
+    //     "X-AIO-Key": `${process.env.KEY_ADAFRUIT}`
 
     // }}
     // )

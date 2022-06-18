@@ -59,7 +59,6 @@ exports.predictTemperature = (req, res) => {
         let filterResult = result.filter((temp) => {
             return temp.tempPredict >= 25
         })
-        console.log(filterResult)
 
         filterResult.forEach((data) => {
             axios.post('https://universe-smart-garden.herokuapp.com/schedule/?condition=24&increased=-1', {

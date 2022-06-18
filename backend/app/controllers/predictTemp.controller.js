@@ -61,9 +61,9 @@ exports.predictTemperature = (req, res) => {
         })
         console.log(filterResult)
 
-        result.forEach((data) => {
-            axios.post('https://universe-smart-garden.herokuapp.com', {
-                "id_device" : req.body.id_device ,
+        filterResult.forEach((data) => {
+            axios.post('https://universe-smart-garden.herokuapp.com/schedule/?condition=24&increased=-1', {
+                "id_device" : 15,
                 "time_start" : data.date,
                 "status" : 0
             })

@@ -10,7 +10,9 @@ exports.getDataInfo = (req, res) => {
     }
 
     db.query(`SELECT * FROM datas WHERE time > '${req.query.startDay}' AND time < '${req.query.endDay}'`, (err,result) => {
-        console.log(result.rows);  
+        for (let data of result.rows) {
+            data.time = data.time.toLocaleString('en-GB')
+        }
         res.send(result.rows)
     })
 }
@@ -18,7 +20,9 @@ exports.getDataInfo = (req, res) => {
 
 exports.getDatabyGarden = (req, res) => {
     db.query(`SELECT * FROM datas WHERE id_garden = ${req.params.id}` , (err,result) => {
-        console.log(result.rows);  
+        for (let data of result.rows) {
+            data.time = data.time.toLocaleString('en-GB')
+        }
         res.send(result.rows)
     })
 }
@@ -29,7 +33,16 @@ exports.getDatabyGarden = (req, res) => {
 exports.getAllLastData = (req, res) => {
     db.query(`SELECT * FROM datas WHERE time IN (SELECT MAX(time) FROM datas GROUP BY category)` , (err,result) => {
         if (err) res.send(err)
-        else res.send(result.rows)
+        else {
+            if (result.rows.length == 0 ) res.send({"message" : "Data not found"})
+            else {
+                for (let data of result.rows) {
+                    data.time = data.time.toLocaleString('en-GB')
+                }
+                res.send(result.rows)
+            }
+        }
+        
     })
 }
 
@@ -65,11 +78,28 @@ exports.getBeforeLastData = (req, res) => {
 
 exports.getAlldata = (req, res) => {
     db.query("SELECT * FROM datas" , (err,result) => {
-        console.log(result.rows);  
+        for (let data of result.rows) {
+            data.time = data.time.toLocaleString('en-GB')
+        }
         res.send(result.rows)
     })
 }
 
+exports.insertDataFullType = (req, res) => {
+
+    for (let data of req.body){
+        console.log(data)
+        // insertIntoTable('datas', data)
+    }
+    res.send(req.body)
+    // db.query("INSERT INTO datas(id,category,value,id_garden,time) VALUES (1,'Temp',100.2,1,'2001-08-20') ", (err,result) => {
+    //     if (err) console.log(err)
+    //                     else {
+    //                         console.log(result);  
+    //                         res.send(req.body)
+    //                     }
+    // })
+}
 
 exports.insertData = (req, res) => {
 

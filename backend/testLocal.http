@@ -1,0 +1,161 @@
+POST https://universe-smart-garden.herokuapp.com/data
+POST http://localhost:5000/data/full-type
+Content-Type: application/json
+
+[{
+    "category": "Temp",
+    "value" : 37,
+    "id_garden" : 1,
+    "time" : "2022-06-08 20:15:00"
+},
+
+{
+    "category": "Light",
+    "value" : 267,
+    "id_garden" : 1,
+    "time" : "2022-06-08 20:15:00"
+},
+
+{
+    "category": "Humid",
+    "value" : 145,
+    "id_garden" : 1,
+    "time" : "2022-06-08 20:15:00"
+}
+]
+
+###
+GET https://universe-smart-garden.herokuapp.com/data/search?idGarden=1&startDay=2000-01-01&endDay=2010-03-05
+
+###
+GET https://universe-smart-garden.herokuapp.com/data
+
+###
+GET https://universe-smart-garden.herokuapp.com/data/last
+
+###
+GET https://universe-smart-garden.herokuapp.com/data/before-last
+
+###
+GET https://universe-smart-garden.herokuapp.com/garden
+
+###
+POST https://universe-smart-garden.herokuapp.com/garden
+Content-Type: application/json
+
+{
+    "id": 2,
+    "area": 100,
+    "name": "TM"
+}
+
+###
+PUT https://universe-smart-garden.herokuapp.com/garden/2
+Content-Type: application/json
+
+{
+    "id": 2,
+    "area": 1111,
+    "name": "hehehe siuuuuu"
+}
+
+
+###
+DELETE https://universe-smart-garden.herokuapp.com/garden/2
+
+
+###
+GET https://universe-smart-garden.herokuapp.com/user/search-by-garden/1
+
+###
+POST https://universe-smart-garden.herokuapp.com/user
+Content-Type: application/json
+
+{
+    "account": "tienhoang",
+    "password": "password",
+    "role" : "ADMIN",
+    "id_garden" : [10,20,30] 
+}
+
+###
+GET https://universe-smart-garden.herokuapp.com/user/1
+
+
+### 
+GET https://universe-smart-garden.herokuapp.com/device
+
+
+### 
+DELETE https://universe-smart-garden.herokuapp.com/device/12
+
+### 
+POST https://universe-smart-garden.herokuapp.com/device
+Content-Type: application/json
+
+{
+    "name" : "LAMP_TIENMINH",
+    "category" : "LAMP",
+    "status" : 0,
+    "id_garden" : 1
+}
+
+
+### 
+PUT https://universe-smart-garden.herokuapp.com/device/13
+PUT http://localhost:5000/device/15
+Content-Type: application/json
+
+{
+    "status" : "0"
+}
+
+### 
+GET https://universe-smart-garden.herokuapp.com/device/13
+
+### 
+GET https://universe-smart-garden.herokuapp.com/schedule?startDay=1000-01-01&endDay=20-03-05
+GET http://localhost:5000/schedule?startDay=1000-01-01&endDay=2023-03-05
+
+### 
+POST https://universe-smart-garden.herokuapp.com/schedule
+Content-Type: application/json
+
+{
+    "id_device" : 13 ,
+    "time_start" : "2022-05-30 00:41:00",
+    "status" : 0
+}
+
+
+### 
+POST https://universe-smart-garden.herokuapp.com/schedule/?condition=471&increased=1
+POST http://localhost:5000/schedule/?condition=346&increased=-1
+Content-Type: application/json
+
+{
+    "id_device" : 15 ,
+    "time_start" : "2022-06-07 22:12:00",
+    "status" : 0
+}
+
+
+### 
+POST http://localhost:5000/schedule/?condition=497&increased=-1
+Content-Type: application/json
+
+{
+    "id_device" : 15 ,
+    "time_start" : "2022-06-07 23:50:00",
+    "status" : 0
+}
+
+
+### 
+GET https://universe-smart-garden.herokuapp.com/schedule/unfulfilled
+
+### 
+GET http://localhost:5000/schedule/unfulfilled
+
+### 
+

@@ -15,7 +15,7 @@ exports.insertIntoTable = (tableName, data) => {
             let datas = ""
             for (let x of result.rows) {
                 if (x.column_name === 'id') continue;
-                console.log(x.column_name)
+                // console.log(x.column_name)
 
                 // if (x.column_name.includes('time')){
                 //     day = new Date(data[x.column_name])
@@ -33,14 +33,14 @@ exports.insertIntoTable = (tableName, data) => {
                 else datas += "," + (data[x.column_name])
                 columns += "," + x.column_name
             }
-            console.log(columns.slice(1))
-            console.log(datas.slice(1))
+            // console.log(columns.slice(1))
+            // console.log(datas.slice(1))
             let queryString = `INSERT INTO ${tableName}(${columns.slice(1)}) VALUES (${datas.slice(1)})`
             console.log(queryString)
             db.query(queryString, (err,result) => {
                 if (err) throw err 
                 else {
-                    console.log(result);  
+                    // console.log(result);  
                 }
             })
         }
@@ -124,14 +124,22 @@ exports.responseSchedule = (schedule, response) => {
                 let timeForCheck = new Date(schedule[i].time_end.getTime() - schedule[i].time_end.getTimezoneOffset()*60*1000)
                 // console.log(timeForCheck)
                 if (timeForCheck.getTime() >= 0) condition += `>${timeForCheck.getTime()/1000}`
-                else condition += `<${-timeForCheck.getTime()/1000}`
+                else condition += `<${-timeForCheck.getTime()/1000}`   
+
+                responseData['command'] = command + condition + "/90"
+            }
+            else {
+                if (schedule[i].time_end == undefined) responseData['command'] = command + `/FOR/90`
+                else responseData['command'] = command + `/FOR/${(schedule[i].time_end - schedule[i].time_start)/1000}`
             }
             // console.log(condition)
             // return
             //`${typeDevice}:1/${typeDevice}:0/FOR/${(schedule[i].time_end - schedule[i].time_start)/1000}`
-            responseData['command'] = command + condition
-            responseData.time = `${schedule[i].time_start.getDay()}:${schedule[i].time_start.getMonth()+1}:${schedule[i].time_start.getYear()+1900}:` 
-                                + schedule[i].time_start.toLocaleTimeString()
+            // if (condition.length == 0) condition += 'FOR'
+            // responseData['command'] = command + condition + "/90"
+            console.log(schedule[i].time_start.toTimeString().substring(0,8) )
+            responseData.time = `${schedule[i].time_start.getUTCDate()}:${schedule[i].time_start.getMonth()+1}:${schedule[i].time_start.getYear()+1900}:` 
+                                + schedule[i].time_start.toTimeString().substring(0,8) 
             responseData.status = schedule[i].status
             // console.log(responseData)
             myArray.push(responseData)

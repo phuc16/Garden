@@ -65,6 +65,13 @@ class Sidebar extends Component {
               <span className="icon-bg"><i className="mdi mdi-cube menu-icon"></i></span>
               <span className="menu-title"><Trans>Device Control Center</Trans></span>
             </Link>
+            
+          </li>
+          <li className={ this.isPathActive('/prediction') ? 'nav-item active' : 'nav-item' }>
+            <Link className="nav-link" to="/prediction">
+                <span className="icon-bg"><i className="mdi mdi-desktop-mac-dashboard menu-icon"></i></span>
+                <span className="menu-title"><Trans>Prediction</Trans></span>
+            </Link>
           </li>
           <li className="nav-item nav-category"><Trans>Environment Factors</Trans></li>
           <li className={ this.isPathActive('/environment-factors/soil') ? 'nav-item active soil-bar' : 'nav-item soil-bar' }>

@@ -10,7 +10,7 @@ const Temperature = lazy(() => import('./environment-factors/Temperature'));
 const Air = lazy(() => import('./environment-factors/Air'));
 const Light = lazy(() => import('./environment-factors/Light'));
 const Schedule = lazy(() => import('./control-scheduler/schedule'));
-
+const Prediction = lazy(() => import('./prediction/Prediction'));
 const Error404 = lazy(() => import('./error-pages/Error404'));
 const Error500 = lazy(() => import('./error-pages/Error500'));
 const Login = lazy(() => import('./user-pages/Login'));
@@ -30,6 +30,7 @@ class AppRoutes extends Component {
           <Route path="/environment-factors/air" component={ Air }/>
           
           <Route path="/control-scheduler/schedule" component={ Schedule }/>
+          <Route path="/prediction" component={ Prediction }/>
 
 
           <Route path="/user-pages/login-1" component={ Login } />

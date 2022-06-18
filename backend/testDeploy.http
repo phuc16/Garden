@@ -71,7 +71,7 @@ GET https://universe-smart-garden.herokuapp.com/device
 
 
 ### 
-DELETE https://universe-smart-garden.herokuapp.com/device/12
+DELETE https://universe-smart-garden.herokuapp.com/device/24
 
 ### 
 POST https://universe-smart-garden.herokuapp.com/device
@@ -94,7 +94,7 @@ Content-Type: application/json
 }
 
 ### 
-GET https://universe-smart-garden.herokuapp.com/device/13
+GET https://universe-smart-garden.herokuapp.com/device
 
 ### 
 GET https://universe-smart-garden.herokuapp.com/schedule?startDay=1000-01-01&endDay=2023-03-05

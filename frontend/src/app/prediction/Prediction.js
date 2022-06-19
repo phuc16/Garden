@@ -82,16 +82,16 @@ class Temperature extends Component {
         this.setState({ predictSetting : temp });
     })
 
-    axios.post(process.env.REACT_APP_SERVER + `/predict?startTime=2020-10-14%208:00&endTime=2020-10-14%2013:00&timeGap=15`, {
-      id_device: 15
-    })
-    .then(res => {
-      let temp = res.data.result
-      for (let i = 0; i < temp.length; i++){
-        temp[i]["date"] = temp[i]["date"].replace('2020', 2022)
-      }
-      this.setState({predictData: temp})
-    })
+    // axios.post(process.env.REACT_APP_SERVER + `/predict?startTime=2020-10-14%208:00&endTime=2020-10-14%2013:00&timeGap=15`, {
+    //   id_device: 15
+    // })
+    // .then(res => {
+    //   let temp = res.data.result
+    //   for (let i = 0; i < temp.length; i++){
+    //     temp[i]["date"] = temp[i]["date"].replace('2020', 2022)
+    //   }
+    //   this.setState({predictData: temp})
+    // })
   }
 
   data = {
@@ -241,7 +241,9 @@ class Temperature extends Component {
               for (let i = 0; i < temp.length; i++){
                 temp[i]["date"] = temp[i]["date"].replace('2020', 2022)
               }
+              alert(`${temp.length} new schedules updated! Check Schedule now`)
               this.setState({predictData: temp})
+
             })
         }
         else {
@@ -272,7 +274,7 @@ class Temperature extends Component {
       <div>
         <div className="page-header">
           <h3 className="page-title">
-            Temperature Prediction
+            Temperature Prediction (Be awareness! predict temperature feature allows the system schedule the sensor automatically.)
           </h3>
         </div>
         <div className="row"> 

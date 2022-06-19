@@ -11,8 +11,8 @@ class Navbar extends Component {
     return (
       <nav className="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
         <div className="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-          <Link className="navbar-brand brand-logo" to="/"><img src={require('../../assets/images/logo.svg')} alt="logo" /></Link>
-          <Link className="navbar-brand brand-logo-mini" to="/"><img src={require('../../assets/images/logo-mini.svg')} alt="logo" /></Link>
+          <Link className="navbar-brand brand-logo" to="/"> <span class="mdi mdi-tree-outline" style={{color: '#46c35f'}}>Smart Garden</span></Link>
+          <Link className="navbar-brand brand-logo-mini" to="/"><span class="mdi mdi-tree-outline mini-logo"  style={{color: '#46c35f'}}></span></Link>
         </div>
         <div className="navbar-menu-wrapper d-flex align-items-stretch">
           <button className="navbar-toggler navbar-toggler align-self-center" type="button" onClick={ () => document.body.classList.toggle('sidebar-icon-only') }>

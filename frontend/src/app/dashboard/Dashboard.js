@@ -33,7 +33,7 @@ export class Dashboard extends Component {
   }
 
   componentDidMount() {
-    // console.log(process.env.REACT_APP_SERVER)
+    console.log(process.env.REACT_APP_SERVER)
     axios.get(process.env.REACT_APP_SERVER + `/device`)
       .then(res => {
         const temp = res.data;

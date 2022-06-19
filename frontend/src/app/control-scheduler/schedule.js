@@ -12,7 +12,7 @@ class TimeSetting extends Component {
   constructor(props) {
       super(props);
       this.state = {
-        reload: new Date(),
+        reload: false,
         scheduled: [], 
         settingDevice: [],
         // time_start: [],
@@ -38,16 +38,24 @@ class TimeSetting extends Component {
     
 
     render(){
+      console.log(this.state.scheduled)
       const handleDeleteSchedule = (e) => {
         let index = e.target.value
         axios.delete(process.env.REACT_APP_SERVER + `/schedule/${deviceInSchedule[e.target.value]['id']}`)
         .then(res => {
-          console.log(res)
+          // this.setState((prevState) => {
+          //   console.log(prevState)
+          //   return {scheduled: [
+          //     ...prevState.scheduled.slice(0, index), 
+          //     ...prevState.scheduled.slice(index+1)
+          //   ]}
+          // })
+        axios.get(process.env.REACT_APP_SERVER + `/schedule?startDay=2000-01-01&endDay=2023-01-01`)
+        .then(res => {
+          const temp = res.data; 
+          this.setState({ scheduled : temp });
+        })
 
-          this.setState({ scheduled : [
-            ...this.state.scheduled.slice(0, index), 
-            ...this.state.scheduled.slice(index+1)
-          ]})
 
           
         })
@@ -77,19 +85,23 @@ class TimeSetting extends Component {
           time_end: deviceInSetting[index]['time_end'],
           status: 0
         })
+        .then(res => {
+          this.setState({ scheduled : [
+            ...this.state.scheduled.slice(0, index), 
+            ...this.state.scheduled.slice(index+1)
+          ]})
+          window.location.replace('/control-scheduler/schedule')
+        })
         
       }
 
-      const deviceInSchedule = [
-      ];
-
-
+      const deviceInSchedule = [];
       const deviceInSetting = []
 
       for (let i = 0; i < this.state.scheduled.length ; i++){
         deviceInSchedule.push({...this.state.scheduled[i],  
         time_start: this.state.scheduled[i]['time_start'].replace('T', ', ').replace('.000Z', '') ,
-        time_end: this.state.scheduled[i]['time_end'].replace('T', ', ').replace('.000Z', '') ,
+        time_end: this.state.scheduled[i]['time_end'] == 'null' ? 'Chưa xác định' : this.state.scheduled[i]['time_end'].replace('T', ', ').replace('.000Z', '') ,
         status: this.state.scheduled[i]['status'] == 0 ? 'Chưa thực thi' 
         : (this.state.scheduled[i]['status'] == 1? 'Đang thực hiện' : 
         ((this.state.scheduled[i]['status'] == 2? 'Hoàn thành' : 
@@ -166,7 +178,7 @@ class TimeSetting extends Component {
                                 </div>
                             </div>
                             </Tab>
-                            <Tab eventKey="setting" title="Setting">
+                            <Tab eventKey="setting" title="Setting" className="setting">
                             <div className="card">
                             <div className="card-body text-center">
                             <h5 className="mb-2 text-dark font-weight-normal">Schedule Setting</h5>

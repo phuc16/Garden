@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
 import BootstrapTable from 'react-bootstrap-table-next';
-import { Tabs, Tab } from 'react-bootstrap';
+import { Tabs, Tab, Button } from 'react-bootstrap';
 import { Line } from 'react-chartjs-2';
 import { Link } from 'react-router-dom';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import axios from 'axios';
-
+import './prediction.css'
 class Temperature extends Component {
 
   constructor(props){
@@ -15,62 +15,89 @@ class Temperature extends Component {
       allTemp: [],
       todayTemp : [],
       lastData: 0,
+      predictSetting: [],
+      reload: false,
+      predictData: []
     };
   }
 
 
   async componentDidMount(){
-    var today = new Date();
-    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-    var nextDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+(today.getDate() + 1);
-    // console.log(nextDate)
+    // var today = new Date();
+    // var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    // var nextDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+(today.getDate() + 1);
+    // // console.log(nextDate)
 
-    await axios.get(process.env.REACT_APP_SERVER + `/data`)
+    // await axios.get(process.env.REACT_APP_SERVER + `/data`)
+    // .then(res => {
+    //   let temp = []
+    //   for (let i = 0; i<res.data.length; i++){
+    //     if (res.data[i]['category'] == 'Temp'){
+    //       temp.push(res.data[i])
+    //     }
+    //   }
+    //   this.setState({allTemp: temp})
+    // })
+    // console.log('x')
+
+    // await axios.get(process.env.REACT_APP_SERVER + `/data/last`)
+    // .then(res => {
+    //   var x = 0
+    //   for (let i = 0; i < res.data.length; i++){
+    //     if (res.data[i]['category'] == 'Temp'){
+    //       x = res.data[i]['value']
+    //     }
+    //   }
+    //   console.log(x)
+    //   this.setState({lastData: x})
+    // })
+
+    // await axios.get(process.env.REACT_APP_SERVER + `/data/search?idGarden=1&startDay=${date}&endDay=${nextDate}`)
+    // .then(res => {
+    //   let temp = []
+    //   for (let i = 0; i<res.data.length; i++){
+    //     if (res.data[i]['category'] == 'Temp'){
+    //      temp.push(res.data[i])
+    //     }
+    //   }
+    //   this.setState({todayTemp: temp})
+    // })
+
+    // await axios.get(process.env.REACT_APP_SERVER +  `/data/before-last`)
+    // .then(res => {
+    //   let x = res.data
+    //   this.setState({nearestData: x['Temp']})
+    // })
+
+    // axios.get(process.env.REACT_APP_SERVER + `/schedule?startDay=2000-01-01&endDay=2023-01-01`)
+    // .then(res => {
+    //     const temp = res.data; 
+    //     this.setState({ scheduled : temp });
+    //     console.log(this.state.scheduled)
+    // })
+
+    axios.get(process.env.REACT_APP_SERVER + `/device`)
     .then(res => {
-      let temp = []
-      for (let i = 0; i<res.data.length; i++){
-        if (res.data[i]['category'] == 'Temp'){
-          temp.push(res.data[i])
-        }
-      }
-      this.setState({allTemp: temp})
+        const temp = res.data; 
+        this.setState({ predictSetting : temp });
     })
-    console.log('x')
 
-    await axios.get(process.env.REACT_APP_SERVER + `/data/last`)
-    .then(res => {
-      var x = 0
-      for (let i = 0; i < res.data.length; i++){
-        if (res.data[i]['category'] == 'Temp'){
-          x = res.data[i]['value']
-        }
-      }
-      console.log(x)
-      this.setState({lastData: x})
+    axios.post(process.env.REACT_APP_SERVER + `/predict?startTime=2020-10-14%208:00&endTime=2020-10-14%2013:00&timeGap=15`, {
+      id_device: 15
     })
-
-    await axios.get(process.env.REACT_APP_SERVER + `/data/search?idGarden=1&startDay=${date}&endDay=${nextDate}`)
     .then(res => {
-      let temp = []
-      for (let i = 0; i<res.data.length; i++){
-        if (res.data[i]['category'] == 'Temp'){
-         temp.push(res.data[i])
-        }
+      let temp = res.data.result
+      for (let i = 0; i < temp.length; i++){
+        temp[i]["date"] = temp[i]["date"].replace('2020', 2022)
       }
-      this.setState({todayTemp: temp})
-    })
-
-    await axios.get(process.env.REACT_APP_SERVER +  `/data/before-last`)
-    .then(res => {
-      let x = res.data
-      this.setState({nearestData: x['Temp']})
+      this.setState({predictData: temp})
     })
   }
 
   data = {
     labels: [],
     datasets: [{
-      label: 'Today Temporature',
+      label: 'Predict Temperature',
       data: [],
       backgroundColor: [
         'rgba(255, 99, 132, 0.2)',
@@ -113,107 +140,154 @@ class Temperature extends Component {
   };
 
   showChart(){
-    var todayDataChart = []
-    var todayColumn = []
-    var allDataChart = []
-    var allColumn = []
+    var predictDataChart = []
+    var predictColumn = []
+
     
-    for (let i = 0; i< this.state.todayTemp.length; i++){
-      todayDataChart.push(this.state.todayTemp[i]['value'])
-      todayColumn.push(this.state.todayTemp[i]['time'].slice(11, this.state.todayTemp[i]['time'].length).replace('.000Z', ''))
+    for (let i = 0; i< this.state.predictData.length; i++){
+      predictDataChart.push(this.state.predictData[i]['tempPredict'])
+      predictColumn.push(this.state.predictData[i]['date'].slice(0, 16).replace('2020', '2022'))
     }
 
-    for (let i = 0; i< this.state.allTemp.length; i++){
-      allDataChart.push(this.state.allTemp[i]['value'])
-      allColumn.push(this.state.allTemp[i]['time'].slice(0, 11).replace('T', ''))
-    }
-    this.data.labels = todayColumn
-    this.data.datasets[0].data = todayDataChart
-    console.log(todayColumn)
+    this.data.labels = predictColumn
+    this.data.datasets[0].data = predictDataChart
+    console.log(predictColumn)
   }
 
   render () {
     console.log('render')
-    var sumTemp = 0
-    var todayTemp = [];
-    var timeMax = ''
-    var timeMin = ''
-    var today = new Date();
-    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-    var changeData = [this.state.lastData - this.state.nearestData]
     this.showChart()
 
-    for (let i = 0; i < this.state.allTemp.length; i++){
-      sumTemp += this.state.allTemp[i]['value']
-    }
 
-    if (this.state.todayTemp.length > 0){
-      var temp = []
-      temp.push(...this.state.todayTemp.map(o => o.value))
-      timeMax = this.state.todayTemp[temp.indexOf(Math.max(...this.state.todayTemp.map(o => o.value)))]['time']
-      timeMax = timeMax.replace('T', ', ').replace('.000Z', '')
-      timeMin = this.state.todayTemp[temp.indexOf(Math.min(...this.state.todayTemp.map(o => o.value)))]['time']
-      timeMin = timeMin.replace('T', ', ').replace('.000Z', '')
-    }
-
-    const products = [
-      {'id': 'Max', 'temp': this.state.todayTemp.length >0 ? Math.max(...this.state.todayTemp.map(o => o.value)) : 'No data', 'time': timeMax},
-      {'id': 'Min', 'temp': this.state.todayTemp.length >0 ? Math.min(...this.state.todayTemp.map(o => o.value)) : 'No data', 'time': timeMin},
-      {'id': 'Avarage', 'temp': this.state.todayTemp.length >0 ? Math.round((sumTemp/this.state.todayTemp.length)*100)/100 : 'No data', 'time': date}
-    ];
-
-    const columns = [{
-      dataField: 'id',
-      text: '', 
-      sort: true
-    }, {
-      dataField: 'temp',
-      text: 'Temp',
-      sort: true
-    }, {
-      dataField: 'time',
+    const StatColumn = [
+      {
+      dataField: 'date',
       text: 'Time',
       sort: true
-    }
-    ];
-
-    const StatColumn = [{
-      dataField: 'id',
-      text: 'ID', 
-      sort: true
-    }, {
-      dataField: 'value',
+      }, {
+      dataField: 'tempPredict',
       text: 'Value',
-      sort: true
-    }, {
-      dataField: 'time',
-      text: 'Time',
       sort: true
     }
     ]
 
+    const columns2 = [{
+        dataField: 'id',
+        text: 'ID'
+      }, 
+      {
+        dataField: 'name',
+        text: 'Device Name'
+      },
+      {
+        dataField: 'time_start',
+        text: 'Time Start'
+      },
+      {
+        dataField: 'time_end',
+        text: 'Time End'
+      },
+      {
+        dataField: 'time_gap',
+        text: 'Time Gap',
+      },
+      {
+        dataField: 'setting',
+        text: 'Setting'
+      }
+    ];
+
+    const handleTimeStart = e => {
+        let index = parseInt(e.target.className)
+        console.log((e.target.value))
+        predictInsetting[index]['time_start'] = e.target.value
+      }
+
+      const handleTimeEnd = e => {
+        let index = parseInt(e.target.className)
+        predictInsetting[index]['time_end'] = e.target.value
+      }
+
+      const handleTimeGap = e => {
+        let index = parseInt(e.target.className)
+        predictInsetting[index]['time_gap'] = e.target.value
+      }
+
+      const handleHour = (hour) => {
+        console.log(hour)
+        if (hour[0] == 0) return hour.slice(1,6)
+        else return hour
+      }
+      const handlePredict = (e) => {
+        let index = e.target.value
+        console.log(predictInsetting[index]['time_end'])
+        let device_id = predictInsetting[index]['id']
+        let timeStart = predictInsetting[index]['time_start']
+        let timeEnd = predictInsetting[index]['time_end']
+        let timeGap = predictInsetting[index]['time_gap']
+        let endDay = timeEnd.slice(0,10)
+        let startDay = timeStart.slice(0,10)
+        let startHour = handleHour(timeStart.slice(11,16))
+        let endHour = handleHour(timeEnd.slice(11,16))
+
+        timeStart = startDay + ' ' + startHour
+        timeEnd = endDay + ' ' + endHour
+        if (timeGap != 15){
+            axios.post(process.env.REACT_APP_SERVER + `/predict?startTime=${timeStart}&endTime=${timeEnd}&timeGap=15`, {
+              id_device: device_id
+            })
+            .then(res => {
+              let temp = res.data.result
+              for (let i = 0; i < temp.length; i++){
+                temp[i]["date"] = temp[i]["date"].replace('2020', 2022)
+              }
+              this.setState({predictData: temp})
+            })
+        }
+        else {
+            axios.post(process.env.REACT_APP_SERVER + `/predict?startTime=${timeStart}&endTime=${timeEnd}`, {
+              id_device: device_id
+            })
+            .then(res => {
+              let temp = res.data.result
+              for (let i = 0; i < temp.length; i++){
+                temp[i]["date"] = temp[i]["date"].replace('2020', 2022)
+              }
+              this.setState({predictData: temp})
+            })
+        }       
+      }
+    
+    const predictInsetting = []
+
+    for (let i = 0; i < this.state.predictSetting.length ; i++){
+        predictInsetting.push({...this.state.predictSetting[i], 
+        time_start: <input type="datetime-local" onChange={handleTimeStart} className={i} step={1}></input>, 
+        time_end: <input type="datetime-local" onChange={handleTimeEnd}  className={i} step={1} ></input>,
+        time_gap:  <input type="number" onChange={handleTimeGap}  className={i}></input>,
+        setting:  <Button value={i} onClick={handlePredict} defaultValue={15}>Predict</Button> }) 
+    }
+    console.log(this.state.predictData)
     return (
       <div>
         <div className="page-header">
           <h3 className="page-title">
-            Temperature
+            Temperature Prediction
           </h3>
-          <nav aria-label="breadcrumb">
-            <ol className="breadcrumb">
-            <li className="breadcrumb-item"><Link to='/dashboard'>Device Control Center</Link></li>
-            <li className="breadcrumb-item active" aria-current="page">Temperature</li>
-            </ol>
-          </nav>
         </div>
         <div className="row"> 
-          <div className="col-xl-12 col-lg-12 col-sm-12 grid-margin stretch-card">
-          <div className="card">
-          <div className="card-body text-center">
-          <h5 className="mb-2 text-dark font-weight-normal">Temperature Overview</h5>
-            <BootstrapTable bootstrap4 keyField='id' data={ products } columns={ columns } />
+            <div className="col-xl-12 col-lg-12 col-sm-12 grid-margin stretch-card">
+                <div className="card">
+                    <div className="card-body text-center">
+                    <div className="card predict">
+                            <div className="card-body text-center">
+                            <h5 className="mb-2 text-dark font-weight-normal ">Predict Setting</h5>
+                                <BootstrapTable keyField='id' data={ predictInsetting } columns={ columns2 } />
+                                </div>
+                            </div>
+                    </div>
+                </div>
             </div>
-          </div>
-          </div>
         </div>
         <div className='row'>
         <div className="col-md-12">
@@ -231,23 +305,10 @@ class Temperature extends Component {
           <div className="card">
           <div className="card-body text-center">
           <h5 className="mb-2 text-dark font-weight-normal">Temperature Stats Today</h5>
-            <BootstrapTable bootstrap4 keyField='id' data={ this.state.todayTemp } columns={ StatColumn } />
+            <BootstrapTable bootstrap4 keyField='id' data={ this.state.predictData } columns={ StatColumn }  pagination={paginationFactory({ sizePerPage: 5 })}/>
             </div>
           </div>
 
-          </Tab>
-          <Tab eventKey="data" title="Data">
-            <div className="card">
-              <div className="card-body text-center">
-                <h5 className="mb-2 text-dark font-weight-normal">Temperature Stats</h5>
-                <BootstrapTable
-                  bootstrap4 
-                  keyField='id' 
-                  data={ this.state.allTemp } 
-                  columns={ StatColumn } 
-                  pagination={paginationFactory({ sizePerPage: 5 })}/>
-              </div>
-            </div>
           </Tab>
         </Tabs>
         </div>

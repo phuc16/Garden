@@ -59,6 +59,7 @@ exports.getAllScheduleUnfulfilled = (res) =>{
             return;
         }
         // console.log("schedules: ", result);
+        if (result.rows.length == 0 ) res.send({"message" : "Data unfulfilled not found"})
         service.responseSchedule(result.rows,res)
     });
 }

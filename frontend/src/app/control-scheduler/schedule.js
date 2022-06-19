@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import './schedule.css'
 // import TimePicker from 'react-bootstrap-time-picker';
 import axios from 'axios'
+import paginationFactory from 'react-bootstrap-table2-paginator';
 
 
 
@@ -174,7 +175,7 @@ class TimeSetting extends Component {
                             <div className="card">
                             <div className="card-body text-center">
                             <h5 className="mb-2 text-dark font-weight-normal">Device Schedule</h5>
-                                <BootstrapTable keyField='id' data={ deviceInSchedule } columns={ columns } />
+                                <BootstrapTable bootstrap4 keyField='id' data={ deviceInSchedule } columns={ columns } pagination={paginationFactory({ sizePerPage: 5 })} />
                                 </div>
                             </div>
                             </Tab>

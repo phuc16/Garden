@@ -3,6 +3,12 @@ const device = require('../models/device.model')
 
 
 exports.insertIntoTable = (tableName, data) => {
+    if (tableName == 'schedules') {
+        db.query(`DELETE FROM schedules WHERE time_start = ${data.time_start}`, (err, result) => {
+            if (err) console.log(err)
+            else console.log("deleted duplicate ")
+        })
+    }
     db.query(`
         SELECT column_name 
         FROM information_schema.columns 
@@ -15,14 +21,6 @@ exports.insertIntoTable = (tableName, data) => {
             let datas = ""
             for (let x of result.rows) {
                 if (x.column_name === 'id') continue;
-                // console.log(x.column_name)
-
-                // if (x.column_name.includes('time')){
-                //     day = new Date(data[x.column_name])
-                //     day.setDate(day.getDate() + 1);
-                //     data[x.column_name] = day.toISOString()
-                //     console.log(data[x.column_name])
-                // }
                 
                 if (data[x.column_name] === 'NULL'){
                     datas += "," + (data[x.column_name])

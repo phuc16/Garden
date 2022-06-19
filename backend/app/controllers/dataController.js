@@ -112,7 +112,7 @@ exports.insertDataFullType = (req, res) => {
 
     for (let data of req.body){
         console.log(data)
-        // insertIntoTable('datas', data)
+        insertIntoTable('datas', data)
     }
     res.send(req.body)
     // db.query("INSERT INTO datas(id,category,value,id_garden,time) VALUES (1,'Temp',100.2,1,'2001-08-20') ", (err,result) => {

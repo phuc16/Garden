@@ -158,4 +158,10 @@ GET https://universe-smart-garden.herokuapp.com/schedule/unfulfilled
 GET http://localhost:5000/schedule/unfulfilled
 
 ### 
+POST http://localhost:5000/predict?startTime=2022-10-14 9:30&endTime=2022-10-14 12:30
+Content-Type: application/json
+
+{
+    "id_device" : 13
+}
 

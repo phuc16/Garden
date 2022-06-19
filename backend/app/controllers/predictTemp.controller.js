@@ -34,7 +34,7 @@ exports.predictTemperature = (req, res) => {
         fs.createReadStream("./app/controllers/temperature_prediction/result.csv")
             .pipe(parse({ delimiter: ",", from_line: 2 }))
             .on("data", function (row) {
-                result.push({ date: row[0], tempPredict: row[5] })
+                result.push({ date: row[0], tempPredict: row[4] })
                 console.log
             })
 
@@ -57,7 +57,7 @@ exports.predictTemperature = (req, res) => {
 
     predict.on("close", code => {
         let filterResult = result.filter((temp) => {
-            return temp.tempPredict >= 25
+            return temp.tempPredict >= 20
         })
 
         filterResult.forEach((data) => {
@@ -70,7 +70,6 @@ exports.predictTemperature = (req, res) => {
                 console.log(res)
             })
         })
-
         res.send({ result: result })
         console.log(`child process exited with code ${code}`);
     });

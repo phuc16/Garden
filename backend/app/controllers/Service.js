@@ -114,7 +114,7 @@ exports.responseSchedule = (schedule, response) => {
             var condition = ``
             let command = ``
             if (typeDevice == 'PUMP' || typeDevice == 'MIST' ) command += `${typeDevice}:1/${typeDevice}:0`
-            else if (typeDevice == 'LAMP') command += 'LAMP:150/LAMP:0'
+            else if (typeDevice == 'LAMP') command += 'INC:1/INC:0'
             if (schedule[i].time_end && schedule[i].time_end.getYear() < 100) {
                 if (typeDevice == 'PUMP') condition += `/MOIST`
                 else if (typeDevice == 'MIST') condition += `/HUMID`

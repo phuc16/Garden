@@ -4,7 +4,7 @@ const device = require('../models/device.model')
 
 exports.insertIntoTable = (tableName, data) => {
     if (tableName == 'schedules') {
-        db.query(`DELETE FROM schedules WHERE time_start = ${data.time_start}`, (err, result) => {
+        db.query(`DELETE FROM schedules WHERE time_start = ${data.time_start} AND id_device = ${data.id_device}`, (err, result) => {
             if (err) console.log(err)
             else console.log("deleted duplicate ")
         })

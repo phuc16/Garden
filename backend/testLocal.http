@@ -115,6 +115,7 @@ GET https://universe-smart-garden.herokuapp.com/device/13
 
 ### 
 GET https://universe-smart-garden.herokuapp.com/schedule?startDay=1000-01-01&endDay=20-03-05
+###
 GET http://localhost:5000/schedule?startDay=1000-01-01&endDay=2023-03-05
 
 ### 
@@ -127,6 +128,14 @@ Content-Type: application/json
     "status" : 0
 }
 
+###
+PUT http://localhost:5000/schedule/1326
+Content-Type: application/json
+
+{
+    "time_start" : "2022-05-30 00:41:00",
+    "status" : 0
+}
 
 ### 
 POST https://universe-smart-garden.herokuapp.com/schedule/?condition=471&increased=1

@@ -191,8 +191,30 @@ exports.updateSchedule = (req, res, err) => {
         return
     }
 
-    service.updateById('schedules', req.body, req.params.id)
-    res.send(req.body)
+    schedule.findById(req.params.id, (err, data) => {
+        if (err) {
+            if (err.kind === "not_found") {
+                res.status(404).send({
+                    message: `Not found schedule with id ${req.params.id}.`
+                });
+            } 
+            else {
+                res.status(500).send({
+                    message: `Error retrieving schedule with id ${req.params.id}.`
+                });
+            }
+        } 
+        else {
+            // for (let row of data.rows){
+            //     row['time_start'] = row['time_start'].toLocaleString('en-GB');
+            //     row['time_end'] = row['time_end'].toLocaleString('en-GB');
+            // }
+            req.body.id_device = data.rows[0].id_device
+            console.log(req.body)
+            service.updateById('schedules', req.body, req.params.id)
+            res.send(req.body)
+        }
+    })
 }
 
 exports.deleteAll = (req, res) => {

@@ -29,7 +29,7 @@ class Navbar extends Component {
             </form>
           </div> */}
           <ul className="navbar-nav navbar-nav-right">
-            <li className="nav-item nav-profile d-none d-xl-flex">
+            {/* <li className="nav-item nav-profile d-none d-xl-flex">
               <Dropdown alignRight>
                 <Dropdown.Toggle className="nav-link count-indicator">
                   <Trans>Reports</Trans>
@@ -48,7 +48,7 @@ class Navbar extends Component {
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
-            </li>
+            </li> */}
             {/* <li className="nav-item nav-profile d-none d-xl-flex">
               <Dropdown alignRight>
                 <Dropdown.Toggle className="nav-link count-indicator">
@@ -97,7 +97,7 @@ class Navbar extends Component {
               </Dropdown>
             </li> */}
 
-            <li className="nav-item nav-profile nav-language">
+            {/* <li className="nav-item nav-profile nav-language">
               <Dropdown alignRight>
                 <Dropdown.Toggle className="nav-link count-indicator">
                   <div className="nav-profile-img">
@@ -246,7 +246,7 @@ class Navbar extends Component {
                   <h6 className="p-3 mb-0 text-center cursor-pointer"><Trans>See all notifications</Trans></h6>
                 </Dropdown.Menu>
               </Dropdown>
-            </li>
+            </li> */}
           </ul>
           <button className="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" onClick={this.toggleOffcanvas}>
             <span className="mdi mdi-menu"></span>

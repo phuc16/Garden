@@ -15,3 +15,20 @@
 .setting .table th:first-child, .table tr td:first-child{
     width: 2%;
 }
+
+.dropdown-toggle{
+    position: relative;
+    top: 2vh;
+    left: -5vw
+}
+
+.dropdown-menu{
+    top: 5vh;
+    left: -5vw
+}
+
+.react-bootstrap-table-pagination-list {
+    position: relative;
+    top: 2vh;
+    right: -15vw
+}

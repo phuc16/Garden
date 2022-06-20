@@ -120,7 +120,8 @@ class TimeSetting extends Component {
       // console.log(this.state.scheduled[0])
     const columns = [{
         dataField: 'id',
-        text: 'ID'
+        text: 'ID',
+        sort: true
       }, {
         dataField: 'id_device',
         text: 'Device ID'

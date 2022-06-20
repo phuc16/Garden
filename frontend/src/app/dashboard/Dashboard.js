@@ -1,20 +1,17 @@
 import React, { Component } from 'react';
-import { ProgressBar, ButtonToolbar, InputGroup, FormControl, Form, Button } from 'react-bootstrap';
-import { Dropdown, Tabs, Tab, Row } from 'react-bootstrap';
-import {CircularProgressbarWithChildren} from 'react-circular-progressbar';
+import { ButtonToolbar, InputGroup, FormControl, Form, Button } from 'react-bootstrap';
+import { Tabs, Tab } from 'react-bootstrap';
+import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import BootstrapTable from 'react-bootstrap-table-next';
 import './Dashboard.css';
-import { Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
-
-
 
 
 
 //bug update: bug in handle on/off cause delete item
 export class Dashboard extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -37,50 +34,49 @@ export class Dashboard extends Component {
     axios.get(process.env.REACT_APP_SERVER + `/device`)
       .then(res => {
         const temp = res.data;
-        
-        this.setState({ newProducts : temp });
+        this.setState({ newProducts: temp });
         console.log(this.state.newProducts)
       })
-    
+
     axios.get(process.env.REACT_APP_SERVER + `/data/`)
-    .then(res => {
-      this.setState({allData: res.data})
-      let temp = this.state.allData
-    })
+      .then(res => {
+        this.setState({ allData: res.data })
+        // let temp = this.state.allData
+      })
 
     axios.get(process.env.REACT_APP_SERVER + `/data/last`)
       .then(res => {
-        var x = {'soil': 0, 'air': 0, 'temp': 0, 'light': 0}
-        for (let i = 0; i < res.data.length; i++){
-          if (res.data[i]['category'] == 'Moist'){
+        var x = { 'soil': 0, 'air': 0, 'temp': 0, 'light': 0 }
+        for (let i = 0; i < res.data.length; i++) {
+          if (res.data[i]['category'] === 'Moist') {
             x['soil'] = res.data[i]['value']
           }
-          if (res.data[i]['category'] == 'Humidity'){
+          if (res.data[i]['category'] === 'Humidity') {
             x['air'] = res.data[i]['value']
           }
-          if (res.data[i]['category'] == 'Temp'){
+          if (res.data[i]['category'] === 'Temp') {
             x['temp'] = res.data[i]['value']
           }
-          if (res.data[i]['category'] == 'Light'){
+          if (res.data[i]['category'] === 'Light') {
             x['light'] = res.data[i]['value']
           }
         }
         console.log(x)
-        this.setState({soil: x['soil'], air: x['air'], light: x['light'], temp: x['temp']})
+        this.setState({ soil: x['soil'], air: x['air'], light: x['light'], temp: x['temp'] })
         console.log(this.state.temp)
       })
 
     axios.get(process.env.REACT_APP_SERVER + `/data/before-last`)
       .then(res => {
         let x = res.data
-        this.setState({nearestAir: x['Humidity'], nearestLight: x['Light'], nearestTemp: x['Temp'], nearestSoil: x['Moist']})
+        this.setState({ nearestAir: x['Humidity'], nearestLight: x['Light'], nearestTemp: x['Temp'], nearestSoil: x['Moist'] })
         console.log(this.state.temp)
       })
-    }
+  }
 
-  
-  
-  
+
+
+
   columns = [{
     dataField: 'id',
     text: 'Device ID'
@@ -100,11 +96,7 @@ export class Dashboard extends Component {
     text: 'Toggle On/Off'
   }];
 
-  
 
-  
-
-  
   render () {
     const changeData =[
       this.state.soil - this.state.nearestSoil, //save the gap between last 2 value
@@ -112,160 +104,148 @@ export class Dashboard extends Component {
       this.state.temp - this.state.nearestTemp,
       this.state.light - this.state.nearestLight,
     ]
-    var factorChange = {soil: this.state.soil, air: this.state.air, temp: this.state.temp, light: this.state.light}
-    var changeStatus = [0,0,0,0] //save as order soil, air, temp, light
+    var factorChange = { soil: this.state.soil, air: this.state.air, temp: this.state.temp, light: this.state.light }
+    var changeStatus = [0, 0, 0, 0] //save as order soil, air, temp, light
     const productInTable = [] //using for display data in table
     
-    
+    console.log(changeStatus)
 
     const handleOnOff = async (e) => {
       var temp = this.state.newProducts
       let stat = this.state.newProducts[e.target.value]['status']
       let index = e.target.value
       if (stat == 0){
-        axios.put(process.env.REACT_APP_SERVER + `/device/${this.state.newProducts[e.target.value]['id']}`, {status: 1})
-        .then(res => {
-          temp[index]['status'] = res.data.status
-          // this.setState({ newProducts : [
-          //   ...temp.slice(0, index), 
-          //   {...temp[index], status: res.data.status},
-          //   ...temp.slice(index+1)
-          // ]});
-          this.setState({ newProducts : temp});
-        })
+        if (this.state.newProducts[e.target.value]['id'] != 13){
+          axios.put(process.env.REACT_APP_SERVER + `/device/${this.state.newProducts[e.target.value]['id']}`, {status: 1})
+          .then(res => {
+            temp[index]['status'] = res.data.status
+            this.setState({ newProducts : temp});
+          })
+        }
+        else {
+          axios.put(process.env.REACT_APP_SERVER + `/device/${this.state.newProducts[e.target.value]['id']}`, {status: 150})
+          .then(res => {
+            temp[index]['status'] = res.data.status
+            this.setState({ newProducts : temp});
+          })
+        }
       }
-      else{
-        await axios.put(process.env.REACT_APP_SERVER + `/device/${this.state.newProducts[e.target.value]['id']}`, {status: 0})
-        .then(res => {
-          temp[index]['status'] = res.data.status
-          this.setState({ newProducts : temp});
-        })
+      else {
+        await axios.put(process.env.REACT_APP_SERVER + `/device/${this.state.newProducts[e.target.value]['id']}`, { status: 0 })
+          .then(res => {
+            temp[index]['status'] = res.data.status
+            this.setState({ newProducts: temp });
+          })
       }
-      
     }
 
     for (let i = 0; i < this.state.newProducts.length ; i++){
         productInTable.push({...this.state.newProducts[i], 
-          status : this.state.newProducts[i]['status'] == 1 
+          status : this.state.newProducts[i]['status'] != 0 
           ? 'On' : 'Off', toggle: this.state.auto ? <Button>Auto</Button> 
-          :(this.state.newProducts[i]['status'] == 1 ? 
-          <Button value={i}  onClick={handleOnOff} >OFF</Button> 
-          : <Button value={i}  onClick={handleOnOff}>ON</Button>) })
+          :(this.state.newProducts[i]['status'] != 0 ? 
+          <Button value={i} variant="danger" onClick={handleOnOff}>OFF</Button> 
+          : <Button value={i} variant="success" onClick={handleOnOff}>ON</Button>) })
     }
 
-    
+
     const showManual = () => {
-      this.setState({auto: false})
-      if (document.querySelector('.manualForm') !== null){
+      this.setState({ auto: false })
+      if (document.querySelector('.manualForm') !== null) {
         document.querySelector('.manualForm').classList.remove('hideManual');
       }
     }
-    
-    const hideManual = () =>{
-      this.setState({auto: true})
-      if (document.querySelector('.manualForm') !== null){
+
+    const hideManual = () => {
+      this.setState({ auto: true })
+      if (document.querySelector('.manualForm') !== null) {
         document.querySelector('.manualForm').classList.add('hideManual');
       }
     }
 
     const handleChangeValue = (e) => {
-      if (e.target.className == 'soil-input form-control'){
-        if (this.state.soil < e.target.value){
+      if (e.target.className === 'soil-input form-control') {
+        if (this.state.soil < e.target.value) {
           changeStatus[0] = 1
-        } else if (this.state.soil > e.target.value){
+        } else if (this.state.soil > e.target.value) {
           changeStatus[0] = -1
         } else changeStatus[0] = 0
-
         factorChange['soil'] = e.target.value
         // this.setState({soil: e.target.value});
         
       } 
       if (e.target.className == 'air-input form-control'){
-        
         if (this.state.air < e.target.value){
           changeStatus[1] = 1
-        } else if (this.state.air > e.target.value){
+        } else if (this.state.air > e.target.value) {
           changeStatus[1] = -1
         } else changeStatus[1] = 0
         factorChange['air'] = e.target.value
 
         // this.setState({air: e.target.value});
-      } 
-      if (e.target.className == 'temp-input form-control'){
-        if (this.state.temp < e.target.value){
+      }
+      if (e.target.className === 'temp-input form-control') {
+        if (this.state.temp < e.target.value) {
           changeStatus[2] = 1
-        } else if (this.state.temp > e.target.value){
+        } else if (this.state.temp > e.target.value) {
           changeStatus[2] = -1
         } else changeStatus[2] = 0
         factorChange['temp'] = e.target.value
         // this.setState({temp: e.target.value});
-      } 
-      if (e.target.className == 'light-input form-control'){
-        if (this.state.light < e.target.value){
+      }
+      if (e.target.className === 'light-input form-control') {
+        if (this.state.light < e.target.value) {
           changeStatus[3] = 1
-        } else if (this.state.light > e.target.value){
+        } else if (this.state.light > e.target.value) {
           changeStatus[3] = -1
         } else changeStatus[3] = 0
-
         factorChange['light'] = e.target.value
+        console.log(factorChange['light'])
         // this.setState({light: e.target.value});
-      } 
-      
+      }
+
     }
     var today = new Date();
-    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
     var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    var dateTime = date+' '+time;
+    var dateTime = date + ' ' + time;
     console.log(date)
+    
     const submitFactor = () => {
-      // var today = new Date();
-      // var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-      // var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-      // var dateTime = date+' '+time;
-      
-      
-      if (changeStatus[0] != 0){
+      console.log(changeStatus)
+
+      if (changeStatus[0] !== 0) {
         axios.post(process.env.REACT_APP_SERVER + `/schedule/?condition=${factorChange['soil']}&increased=${changeStatus[0]}`, {
-          id_device : 14,
-          time_start : dateTime,
-          status : 0
+          id_device: 14,
+          time_start: dateTime,
+          status: 0
         })
-        .then(
-          changeStatus= [0,0,0,0]
-        )
-          
-        
       }
       if (changeStatus[1] != 0){
-        console.log(factorChange['air'])
-
           axios.post(process.env.REACT_APP_SERVER + `/schedule/?condition=${factorChange['air']}&increased=${changeStatus[1]}`, {
           id_device : 15,
           time_start : dateTime,
           status : 0
         })
-        .then(
-          changeStatus= [0,0,0,0]
-        )
-        
       }
       if (changeStatus[2] != 0){
         axios.post(process.env.REACT_APP_SERVER + `/schedule/?condition=${factorChange['temp']}&increased=${changeStatus[2]}`, {
-          id_device : 15,
-          time_start : dateTime,
-          status : 0
+          id_device: 15,
+          time_start: dateTime,
+          status: 0
         })
       }
       if (changeStatus[3] != 0){
+        console.log(process.env.REACT_APP_SERVER + `/schedule/?condition=${factorChange['light']}&increased=${changeStatus[3]}`)
         axios.post(process.env.REACT_APP_SERVER + `/schedule/?condition=${factorChange['light']}&increased=${changeStatus[3]}`, {
-          id_device : 13,
-          time_start : dateTime,
-          status : 0
+          id_device: 13,
+          time_start: dateTime,
+          status: 0
         })
       }
-      
+      changeStatus = [0,0,0,0]
     }
-    
+
     return (
       <div>
         <div>
@@ -276,127 +256,124 @@ export class Dashboard extends Component {
             <div className="col-md-12">
               <div className="justify-content-between align-items-center tab-transparent">
                 <Tabs defaultActiveKey="garden1" className="nav">
-                  
                   <Tab eventKey="garden1" title="Garden 1">
                     <div>
                       <div className="row">
                         <div className="col-xl-3 col-lg-6 col-sm-6 grid-margin stretch-card">
-                          <Link to="/environment-factors/soil" style={{ color: 'inherit', textDecoration: 'inherit'}} >
-                          <div className="card">
-                            <div className="card-body text-center">
-                              <h5 className="mb-2 text-dark font-weight-normal">Soil Moisture</h5>
-                              <h2 className="mb-4 text-dark font-weight-bold">{this.state.soil}</h2>
-                              <div className="px-4 d-flex align-items-center">
-                                <svg width="0" height="0">
-                                  <defs>
-                                    <linearGradient id="progress-order">
-                                      <stop offset="0%" stopColor="#1579ff"/>
-                                      <stop offset="100%" stopColor="#7922e5"/>
-                                    </linearGradient>
-                                  </defs>
-                                </svg>
-                                <CircularProgressbarWithChildren className="progress-order"
-                                value={this.state.soil/10}>
-                                  <div>
-                                    <i className="mdi mdi-waves icon-md absolute-center text-dark"></i>
-                                  </div>
-                                </CircularProgressbarWithChildren>
+                          <Link to="/environment-factors/soil" style={{ color: 'inherit', textDecoration: 'inherit' }} >
+                            <div className="card">
+                              <div className="card-body text-center">
+                                <h5 className="mb-2 text-dark font-weight-normal">Soil Moisture</h5>
+                                <h2 className="mb-4 text-dark font-weight-bold">{this.state.soil}</h2>
+                                <div className="px-4 d-flex align-items-center">
+                                  <svg width="0" height="0">
+                                    <defs>
+                                      <linearGradient id="progress-order">
+                                        <stop offset="0%" stopColor="#1579ff" />
+                                        <stop offset="100%" stopColor="#7922e5" />
+                                      </linearGradient>
+                                    </defs>
+                                  </svg>
+                                  <CircularProgressbarWithChildren className="progress-order"
+                                    value={this.state.soil / 10}>
+                                    <div>
+                                      <i className="mdi mdi-waves icon-md absolute-center text-dark"></i>
+                                    </div>
+                                  </CircularProgressbarWithChildren>
+                                </div>
+                                <p className="mt-4 mb-0"> {changeData[0] >= 0 ? 'Increased since' : 'Decreased since'} last time</p>
+                                <h3 className="mb-0 font-weight-bold mt-2 text-dark">{Math.floor(Math.abs(changeData[0]) / this.state.nearestSoil * 100)} %</h3>
                               </div>
-                               <p className="mt-4 mb-0"> {changeData[0] >= 0 ? 'Increased since' : 'Decreased since' } last time</p>
-                              <h3 className="mb-0 font-weight-bold mt-2 text-dark">{Math.floor(Math.abs(changeData[0])/this.state.nearestSoil*100)} %</h3>
                             </div>
-                          </div>
                           </Link>
                         </div>
                         <div className="col-xl-3 col-lg-6 col-sm-6 grid-margin stretch-card">
-                          <Link to="/environment-factors/air" style={{ color: 'inherit', textDecoration: 'inherit'}} >
-                          <div className="card">
-                            <div className="card-body text-center">
-                              <h5 className="mb-2 text-dark font-weight-normal">Air</h5>
-                              <h2 className="mb-4 text-dark font-weight-bold">{this.state.air}</h2>
+                          <Link to="/environment-factors/air" style={{ color: 'inherit', textDecoration: 'inherit' }} >
+                            <div className="card">
+                              <div className="card-body text-center">
+                                <h5 className="mb-2 text-dark font-weight-normal">Air</h5>
+                                <h2 className="mb-4 text-dark font-weight-bold">{this.state.air}</h2>
                                 <div className="px-4 d-flex align-items-center">
                                   <svg width="0" height="0">
                                     <defs>
                                       <linearGradient id="progress-visitors" x1="0%" y1="0%" x2="100%" y2="0%">
-                                        <stop offset="0%" stopColor="#b4ec51"/>
-                                        <stop offset="100%" stopColor="#429321"/>
+                                        <stop offset="0%" stopColor="#b4ec51" />
+                                        <stop offset="100%" stopColor="#429321" />
                                       </linearGradient>
                                     </defs>
-                                </svg>
-                                <CircularProgressbarWithChildren className="progress-visitors"
-                                value={this.state.air}>
-                                  <div>
-                                    <i className="mdi mdi-weather-rainy icon-md absolute-center text-dark"></i>
-                                  </div>
-                                </CircularProgressbarWithChildren>
+                                  </svg>
+                                  <CircularProgressbarWithChildren className="progress-visitors"
+                                    value={this.state.air}>
+                                    <div>
+                                      <i className="mdi mdi-weather-rainy icon-md absolute-center text-dark"></i>
+                                    </div>
+                                  </CircularProgressbarWithChildren>
                                 </div>
-                              <p className="mt-4 mb-0">{changeData[1] >= 0 ? 'Increased since' : 'Decreased since' } last time</p>
-                              <h3 className="mb-0 font-weight-bold mt-2 text-dark">{Math.floor(Math.abs(changeData[1])/this.state.nearestAir*100)} %</h3>
+                                <p className="mt-4 mb-0">{changeData[1] >= 0 ? 'Increased since' : 'Decreased since'} last time</p>
+                                <h3 className="mb-0 font-weight-bold mt-2 text-dark">{Math.floor(Math.abs(changeData[1]) / this.state.nearestAir * 100)} %</h3>
+                              </div>
                             </div>
-                          </div>
                           </Link>
                         </div>
                         <div className="col-xl-3  col-lg-6 col-sm-6 grid-margin stretch-card">
-                        <Link to="/environment-factors/temperature" style={{ color: 'inherit', textDecoration: 'inherit'}} >
-                          <div className="card">
-                            <div className="card-body text-center">
-                              <h5 className="mb-2 text-dark font-weight-normal">Temperature</h5>
-                              <h2 className="mb-4 text-dark font-weight-bold">{this.state.temp}{'\u00b0'}C </h2>
+                          <Link to="/environment-factors/temperature" style={{ color: 'inherit', textDecoration: 'inherit' }} >
+                            <div className="card">
+                              <div className="card-body text-center">
+                                <h5 className="mb-2 text-dark font-weight-normal">Temperature</h5>
+                                <h2 className="mb-4 text-dark font-weight-bold">{this.state.temp}{'\u00b0'}C </h2>
                                 <div className="px-4 d-flex align-items-center">
                                   <svg width="0" height="0">
                                     <defs>
                                       <linearGradient id="progress-impressions" x1="0%" y1="0%" x2="100%" y2="0%">
-                                        <stop offset="0%" stopColor="#fad961"/>
-                                        <stop offset="100%" stopColor="#f76b1c"/>
+                                        <stop offset="0%" stopColor="#fad961" />
+                                        <stop offset="100%" stopColor="#f76b1c" />
                                       </linearGradient>
                                     </defs>
                                   </svg>
                                   <CircularProgressbarWithChildren className="progress-impressions"
-                                  value={this.state.temp}>
+                                    value={this.state.temp}>
                                     <div>
                                       <i className="mdi mdi-coolant-temperature icon-md absolute-center text-dark"></i>
                                     </div>
                                   </CircularProgressbarWithChildren>
-                                </div>                              
-                              <p className="mt-4 mb-0">{changeData[2] >= 0 ? 'Increased since' : 'Decreased since' } last time</p>
-                              <h3 className="mb-0 font-weight-bold mt-2 text-dark">{Math.floor(Math.abs(changeData[2])/this.state.nearestTemp*100)}%</h3>
+                                </div>
+                                <p className="mt-4 mb-0">{changeData[2] >= 0 ? 'Increased since' : 'Decreased since'} last time</p>
+                                <h3 className="mb-0 font-weight-bold mt-2 text-dark">{Math.floor(Math.abs(changeData[2]) / this.state.nearestTemp * 100)}%</h3>
+                              </div>
                             </div>
-                          </div>
-                        </Link>
+                          </Link>
                         </div>
                         <div className="col-xl-3 col-lg-6 col-sm-6 grid-margin stretch-card">
-                        <Link to="/environment-factors/light" style={{ color: 'inherit', textDecoration: 'inherit'}} >
-
-                          <div className="card">
-                            <div className="card-body text-center">
-                              <h5 className="mb-2 text-dark font-weight-normal">Light intensity</h5>
-                              <h2 className="mb-4 text-dark font-weight-bold">{this.state.light}</h2>
+                          <Link to="/environment-factors/light" style={{ color: 'inherit', textDecoration: 'inherit' }} >
+                            <div className="card">
+                              <div className="card-body text-center">
+                                <h5 className="mb-2 text-dark font-weight-normal">Light intensity</h5>
+                                <h2 className="mb-4 text-dark font-weight-bold">{this.state.light}</h2>
                                 <div className="px-4 d-flex align-items-center">
                                   <svg width="0" height="0">
                                     <defs>
                                       <linearGradient id="progress-followers" x1="0%" y1="0%" x2="100%" y2="0%">
-                                        <stop offset="0%" stopColor="#f5515f"/>
-                                        <stop offset="100%" stopColor="#9f041b"/>
+                                        <stop offset="0%" stopColor="#f5515f" />
+                                        <stop offset="100%" stopColor="#9f041b" />
                                       </linearGradient>
                                     </defs>
                                   </svg>
                                   <CircularProgressbarWithChildren className="progress-followers"
-                                  value={this.state.light/10}>
+                                    value={this.state.light / 10}>
                                     <div>
                                       <i className="mdi mdi-weather-sunny icon-md absolute-center text-dark"></i>
                                     </div>
                                   </CircularProgressbarWithChildren>
-                                </div>  
-                              <p className="mt-4 mb-0">{changeData[3] >= 0 ? 'Increased since' : 'Decreased since' } last time</p>
-                              <h3 className="mb-0 font-weight-bold mt-2 text-dark">{Math.floor(Math.abs(changeData[3])/this.state.nearestLight*100)}%</h3>
+                                </div>
+                                <p className="mt-4 mb-0">{changeData[3] >= 0 ? 'Increased since' : 'Decreased since'} last time</p>
+                                <h3 className="mb-0 font-weight-bold mt-2 text-dark">{Math.floor(Math.abs(changeData[3]) / this.state.nearestLight * 100)}%</h3>
+                              </div>
                             </div>
-                          </div>
-                        </Link>
+                          </Link>
                         </div>
                       </div>
                       <div className="row">
                         <div className="col-12 grid-margin">
-
                           <div className="card">
                             <div className="card-body">
                               <div className="row">
@@ -445,7 +422,6 @@ export class Dashboard extends Component {
                                         />
                                         <InputGroup.Text id="btnGroupAddon">Light intensity</InputGroup.Text>
                                         <FormControl
-                                          
                                           className='light-input'
                                           type="number"
                                           placeholder="light"
@@ -455,16 +431,12 @@ export class Dashboard extends Component {
                                         />
                                       </InputGroup>
                                     </ButtonToolbar>
-                                    <Button variant="primary" type="submit" onClick={submitFactor}>
+                                    <Button variant="primary" onClick={submitFactor}>
                                       SEND
                                     </Button>
                                   </Form>
-                                  <BootstrapTable classes='device-table' keyField='id' data={productInTable } columns={ this.columns } />
-                                  
-                                  
+                                  <BootstrapTable classes='device-table' keyField='id' data={productInTable} columns={this.columns} />
                                 </div>
-                                
-                               
                               </div>
                             </div>
                           </div>
@@ -472,8 +444,9 @@ export class Dashboard extends Component {
                       </div>
                     </div>
                   </Tab>
+
                   <Tab eventKey="garden2" title="Garden 2" className="test-tab" >
-                    <p>1</p>  
+                    <p>1</p>
                   </Tab>
                   {/* <Tab eventKey="Performance" title="Performance" >
                   <p>3</p>
@@ -486,8 +459,9 @@ export class Dashboard extends Component {
             </div>
           </div>
         </div>
-      </div> 
+      </div>
     );
   }
 }
-export default Dashboard ;
+
+export default Dashboard;

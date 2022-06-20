@@ -6,7 +6,7 @@ import { Line } from 'react-chartjs-2';
 import { Link } from 'react-router-dom';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import axios from 'axios';
-
+import './factor.css'
 
 class Light extends Component {
   constructor(props){
@@ -256,7 +256,8 @@ class Light extends Component {
           <div className="card">
           <div className="card-body text-center">
           <h5 className="mb-2 text-dark font-weight-normal">Light Intensity Stats Today</h5>
-            <BootstrapTable bootstrap4 keyField='id' data={ this.state.todayLight } columns={ StatColumn } />
+            <BootstrapTable bootstrap4 keyField='id' data={ this.state.todayLight } columns={ StatColumn } 
+            pagination={paginationFactory({ sizePerPage: 5 })}/>
             </div>
           </div>
 

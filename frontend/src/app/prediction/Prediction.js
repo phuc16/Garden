@@ -232,7 +232,10 @@ class Temperature extends Component {
 
         timeStart = startDay + ' ' + startHour
         timeEnd = endDay + ' ' + endHour
-        if (timeGap != 15){
+        console.log(timeGap.key)
+        debugger
+        if (timeGap == 15 || (timeGap.key == null && typeof(timeGap) != 'string')){
+            debugger
             axios.post(process.env.REACT_APP_SERVER + `/predict?startTime=${timeStart}&endTime=${timeEnd}&timeGap=15`, {
               id_device: device_id
             })
@@ -246,8 +249,9 @@ class Temperature extends Component {
 
             })
         }
-        else {
-            axios.post(process.env.REACT_APP_SERVER + `/predict?startTime=${timeStart}&endTime=${timeEnd}`, {
+        else{
+          debugger
+            axios.post(process.env.REACT_APP_SERVER + `/predict?startTime=${timeStart}&endTime=${timeEnd}&timeGap=${timeGap}`, {
               id_device: device_id
             })
             .then(res => {
@@ -255,6 +259,7 @@ class Temperature extends Component {
               for (let i = 0; i < temp.length; i++){
                 temp[i]["date"] = temp[i]["date"].replace('2020', 2022)
               }
+              alert(`${temp.length} new schedules updated! Check Schedule now`)
               this.setState({predictData: temp})
             })
         }       

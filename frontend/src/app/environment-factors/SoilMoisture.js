@@ -6,7 +6,7 @@ import { Line } from 'react-chartjs-2';
 import { Link } from 'react-router-dom';
 import paginationFactory from "react-bootstrap-table2-paginator";
 import axios from 'axios';
-
+import './factor.css'
 
 class SoilMoisture extends Component {
   constructor(props){
@@ -260,7 +260,8 @@ class SoilMoisture extends Component {
           <div className="card">
           <div className="card-body text-center">
           <h5 className="mb-2 text-dark font-weight-normal">Soil Moisture Stats Today</h5>
-            <BootstrapTable keyField='id' data={ this.state.todaySoil } columns={ StatColumn  } />
+            <BootstrapTable keyField='id' data={ this.state.todaySoil } columns={ StatColumn  } 
+            pagination={paginationFactory({ sizePerPage: 5 })}/>
             </div>
           </div>
 
